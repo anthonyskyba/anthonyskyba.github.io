@@ -1,0 +1,17 @@
+<h1>The Something Something</h1>
+<h2>Click on a button to change its text!</h2>
+
+<div><button>The</button></div>
+<div><button>Big</button></div>
+<div><button>Frog</button></div>
+<div><button>Hopped</button></div>
+<div><button>Over</button></div>
+<div><button>The</button></div>
+<div><button>Log</button></div>
+
+<script>
+    let buttons = document.querySelectorAll("button")
+    for (const button of buttons) {
+        button.addEventListener("click", () => event.currentTarget.textContent = prompt("Choose your new label!"))
+    }
+</script>
