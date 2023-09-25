@@ -3,14 +3,13 @@
     <head>
         <title>Poke the Pig!</title>
         <style>
-
             img {
                 position: absolute;
                 border: black 1px;
                 width: 500px;
                 height: 500px;
                 top: 55%;
-                left: 32.8%;
+                left: 36%;
             }
 
             button {
@@ -30,7 +29,7 @@
 
             #pigButton {
                 top: 20%;
-                left: 43%;
+                left: 42.5%;
                 background-color: pink;
             }
 
@@ -76,6 +75,7 @@
         <center>
             <h1>Poke the Pig</h1>
             <h2>Click on your favourite animal!</h2>
+            <h1 id="soundLabel"">Your sound will appear here</h1>
                 <button id="pigButton">Pig</button>
                 <button id="dolphinButton">Dolphin</button>
                 <button id="elephantButton">Elephant</button>
@@ -99,8 +99,10 @@
                     image.alt = "image failed to load"
                     document.querySelector("center").appendChild(image)
 
-                    audio.src = "/home/anthony/Downloads/Pig Oink Sound Effect.mp3"
+                    audio.src = "pigSound.mp3"
                     audio.play()
+
+                    document.getElementById("soundLabel").nodeValue = "Oink!"
                 }
 
                 if (id == "dolphinButton") {
@@ -109,8 +111,10 @@
                     image.alt = "image failed to load"
                     document.querySelector("center").appendChild(image)
 
-                    audio.src = "/home/anthony/Downloads/Dolphin Sounds Effects No Copyright Free HD.mp3"
+                    audio.src = "dolphinSound.mp3"
                     audio.play()
+
+                    document.getElementById("soundLabel").nodeValue = "kakadaKKAdaKADa!"
                 }
 
                 if (id == "elephantButton") {
@@ -119,8 +123,10 @@
                     image.alt = "image failed to load"
                     document.querySelector("center").appendChild(image)
 
-                    audio.src = "https://www.youtube.com/embed/OUuuazpUPXI?si=OfUufqX8QYrwvgC3"
+                    audio.src = "elephantSound.mp3"
                     audio.play()
+
+                    document.getElementById("soundLabel").nodeValue = "UUHHErrrrrrrrrrrRRRRRRRR!"
                 }
 
                 if (id == "duckButton") {
@@ -129,8 +135,10 @@
                     image.alt = "image failed to load"
                     document.querySelector("center").appendChild(image)
 
-                    audio.src = "https://www.youtube.com/embed/OUuuazpUPXI?si=OfUufqX8QYrwvgC3"
+                    audio.src = "duckSound.mp3"
                     audio.play()
+
+                    document.getElementById("soundLabel").nodeValue = "Quack!"
                 }
 
                 if (id == "snakeButton") {
@@ -139,8 +147,10 @@
                     image.alt = "image failed to load"
                     document.querySelector("center").appendChild(image)
 
-                    audio.src = "https://www.youtube.com/embed/OUuuazpUPXI?si=OfUufqX8QYrwvgC3"
+                    audio.src = "snakeSound.mp3"
                     audio.play()
+
+                    document.getElementById("soundLabel").nodeValue = "ssssSSSSSSssSSs!"
                 }
 
                 if (id == "horseButton") {
@@ -149,9 +159,13 @@
                     image.alt = "image failed to load"
                     document.querySelector("center").appendChild(image)
 
-                    audio.src = "https://www.youtube.com/embed/OUuuazpUPXI?si=OfUufqX8QYrwvgC3"
+                    audio.src = "horseSound.mp3"
                     audio.play()
+
+                    document.getElementById("soundLabel").nodeValue = "Neeiggghh!"
                 }
+
+                if (id == "clearButton") document.getElementById("soundLabel").nodeValue = "Your sound will appear here"
             }
 
             for (let button of document.querySelectorAll("button")) {
