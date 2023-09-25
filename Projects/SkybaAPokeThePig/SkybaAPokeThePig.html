@@ -28,44 +28,44 @@
             }
 
             #pigButton {
-                top: 20%;
+                top: 25%;
                 left: 42.5%;
                 background-color: pink;
             }
 
             #dolphinButton {
-                top: 20%;
+                top: 25%;
                 left: 52%;
                 background-color: aqua;
             }
 
             #elephantButton {
-                top: 30%;
+                top: 35%;
                 left: 41.5%;
                 background-color: gray;
             }
 
             #duckButton {
-                top: 30%;
+                top: 35%;
                 left: 52.8%;
                 background-color: yellow;
             }
 
             #snakeButton {
-                top: 40%;
+                top: 45%;
                 left: 42.2%;
                 background-color: green;
             }
 
             #horseButton {
-                top: 40%;
+                top: 45%;
                 left: 52.7%;
                 background-color: brown;
             }
 
             #clearButton {
                 background-color: burlywood;
-                top: 50%;
+                top: 55%;
                 left: 47.8%;
             }
 
@@ -103,7 +103,7 @@
                     audio.src = "pigSound.mp3"
                     audio.play()
 
-                    document.getElementById("soundLabel").nodeValue = "Oink!"
+                    document.getElementById("soundLabel").innerText = "Oink!"
                 }
 
                 if (id == "dolphinButton") {
@@ -115,7 +115,7 @@
                     audio.src = "dolphinSound.mp3"
                     audio.play()
 
-                    document.getElementById("soundLabel").nodeValue = "kakadaKKAdaKADa!"
+                    document.getElementById("soundLabel").innerText = "kakadaKKAdaKADa!"
                 }
 
                 if (id == "elephantButton") {
@@ -127,7 +127,7 @@
                     audio.src = "elephantSound.mp3"
                     audio.play()
 
-                    document.getElementById("soundLabel").nodeValue = "UUHHErrrrrrrrrrrRRRRRRRR!"
+                    document.getElementById("soundLabel").innerText = "UUHHErrrrrrrrrrrRRRRRRRR!"
                 }
 
                 if (id == "duckButton") {
@@ -139,7 +139,7 @@
                     audio.src = "duckSound.mp3"
                     audio.play()
 
-                    document.getElementById("soundLabel").nodeValue = "Quack!"
+                    document.getElementById("soundLabel").innerText = "Quack!"
                 }
 
                 if (id == "snakeButton") {
@@ -151,7 +151,7 @@
                     audio.src = "snakeSound.mp3"
                     audio.play()
 
-                    document.getElementById("soundLabel").nodeValue = "ssssSSSSSSssSSs!"
+                    document.getElementById("soundLabel").innerText = "ssssSSSSSSssSSs!"
                 }
 
                 if (id == "horseButton") {
@@ -163,10 +163,10 @@
                     audio.src = "horseSound.mp3"
                     audio.play()
 
-                    document.getElementById("soundLabel").nodeValue = "Neeiggghh!"
+                    document.getElementById("soundLabel").innerText = "Neeiggghh!"
                 }
 
-                if (id == "clearButton") document.getElementById("soundLabel").nodeValue = "Your sound will appear here"
+                if (id == "clearButton") document.getElementById("soundLabel").innerText = "Your sound will appear here"
             }
 
             for (let button of document.querySelectorAll("button")) {
