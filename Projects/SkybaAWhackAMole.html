@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Whack A Mole</title>
+        <style>
+            #box {
+                width: 650px;
+                height: 450px;
+                border: 5px solid gray;
+            }
+
+            image {
+                position: absolute;
+            }
+        </style>
+    </head>
+    <body>
+        <p>by Anthony Skyba</p>
+        <center>
+            <h1>Whack A Mole</h1>
+            <h3>Click on the apples, avoid the bombs</h3>
+            <h3>Press Play to start and get as many points as you can within the time limit</h3>
+            <div id="box"></div>
+        </center>
+        
+        <script>
+
+            let counter = 0
+
+            function spawnApple() {
+                let image = document.createElement("img")
+                image.src = "https://static.vecteezy.com/system/resources/thumbnails/008/848/360/small/fresh-apple-fruit-free-png.png"
+                image.alt = "image not loaded"
+
+                image.style.left = String(Math.random() * 550c) + "px"
+                image.style.top = String(Math.random() * 350) + "px"
+
+                /* I tried setting the size automatically in the css
+                but for some reason it wasn't working so I resorted to this */
+                image.style.width = String(100) + "px"
+                image.style.height = String(100) + "px"
+
+                document.querySelector("#box").appendChild(image)
+
+                counter++
+                if (counter < 5)
+                    setTimeout(spawnApple, 1000)
+            }
+
+            spawnApple()
+        </script>
+    </body>
+</html>
