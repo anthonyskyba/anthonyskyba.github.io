@@ -5,7 +5,7 @@
         <style>
             #box {
                 width: 800px;
-                height: 300px;
+                height: 320px;
                 border: 5px solid gray;
                 position: relative;
                 display: none;
@@ -50,9 +50,12 @@
             <h3>Click on the apples, avoid the bombs</h3>
             <h3>Press Play to start and get as many points as you can within the time limit</h3>
             <button id="startButton">Play</button>
+            <h1 id="bombText" style="display: none;">Oops! You clicked a bomb</h1>
+            <h1 id="endScreenText" style="display: none;"></h1>
+            <button id="playAgainButton" style="display: none;">Play Again</button>
         </center>
         <div id="box">
-            <p id="time">Time: 15</p>
+            <p id="time">Time: 20</p>
             <p id="score" style="top: 25px;">Score: 0</p>
         </div>
 
@@ -61,10 +64,29 @@
             let startButton = document.getElementById("startButton")
             let playAgainButton = document.getElementById("playAgainButton")
             let counter = 0
+            let stopSpawning = false
+
+            document.getElementById("playAgainButton").addEventListener("click", function() {
+                document.getElementById("bombText").style.display = "none"
+                document.getElementById("endScreenText").style.display = "none"
+                document.getElementById("playAgainButton").style.display = "none"
+                box.style.display = "block"
+
+                document.getElementById("score").innerText = "Score: 0"
+                document.getElementById("time").innerText = "Time: 20"
+                
+                console.log(document.getElementsByTagName("img"))
+
+                stopSpawning = false
+                startGame()
+            })
             
-            function spawnApple() {
+            function startGame() {
+                if (stopSpawning) return
+
                 let timeArray = document.getElementById("time").innerText.split(" ")
                 let image = document.createElement("img")
+                let bomb = false
 
                 if (counter == 2) {
                     counter = 0
@@ -72,39 +94,59 @@
                 }
                 
                 if (Number(timeArray[1]) == 0) {
-                    endGame(scoreArray[1])
+                    endGame()
                     return
                 }
 
-                image.src = "https://static.vecteezy.com/system/resources/thumbnails/008/848/360/small/fresh-apple-fruit-free-png.png"
+                if (Math.floor((Math.random() * 3)) == 0) {
+                    image.src = "https://imgs.search.brave.com/PfK556c_yssCW8eKH20hg-t9hhZHAdO0Iited5uFczc/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9wbmdp/bWcuY29tL3VwbG9h/ZHMvYm9tYi9zbWFs/bC9ib21iX1BORzM5/LnBuZw"
+                    bomb = true
+                } else
+                    image.src = "https://static.vecteezy.com/system/resources/thumbnails/008/848/360/small/fresh-apple-fruit-free-png.png"
+
                 image.alt = "image not loaded"
                 image.style.left = Math.floor(Math.random() * (box.clientWidth - 70)) + "px"
                 image.style.top = Math.floor(Math.random() * (box.clientHeight - 70)) + "px" 
 
                 document.querySelector("div").appendChild(image)
 
-                let createdApple = Array.from(document.querySelectorAll("img"))[Array.from(document.querySelectorAll("img")).length - 1]
-                createdApple.addEventListener("click", function() {
+                let createdImage = Array.from(document.querySelectorAll("img"))[Array.from(document.querySelectorAll("img")).length - 1]
+                createdImage.addEventListener("click", function() {
+                    if (bomb) {
+                        stopSpawning = true
+                        endGame(true)
+                        return
+                    }
+                    
                     let scoreArray = document.getElementById("score").innerText.split(" ")
-                    createdApple.remove()
+                    createdImage.remove()
                     document.getElementById("score").innerText = scoreArray[0] + " " + (Number(scoreArray[1]) + 1)
                 })
 
-                counter++
-                setTimeout(spawnApple, 500)
+                counter++   
+                setTimeout(startGame, 500)
             }
 
-            function endGame(score) {
-                console.log(11)
+            function endGame(bomb) {
+                for (let image of Array.from(document.getElementsByTagName("img")))
+                    image.remove()
+                
+                if (bomb) document.getElementById("bombText").style.display = "block"
+
+                document.getElementById("endScreenText").style.display = "block"
+                document.getElementById("endScreenText").innerText = "You clicked " + document.getElementById("score").innerText.split(" ")[1] + " apples!"
+                
+                document.getElementById("playAgainButton").style.display = "block"        
+                
+                document.getElementById("box").style.display = "none"
             }
 
             document.querySelector("button").addEventListener("click", function() {
                 startButton.style.display = "none"
                 box.style.display = "block"
 
-                spawnApple()
+                startGame()
             })
-
         </script>
     </body>
 </html>
