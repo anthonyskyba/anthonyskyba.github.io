@@ -4,50 +4,107 @@
         <title>Whack A Mole</title>
         <style>
             #box {
-                width: 650px;
-                height: 450px;
+                width: 800px;
+                height: 400px;
                 border: 5px solid gray;
+                position: relative;
+                display: none;
+                background-color: lightblue;
+                margin: 0 auto;
             }
 
-            image {
+            img {
                 position: absolute;
+                width: 70px;
+                height: 70px;
+            }
+
+            button {
+                width: 150px;
+                height: 50px;
+                font-size: larger;
+                background-color: lightblue;
+                border: none;
+                transition-duration: 0.4s;
+                border-radius: 4px;
+                display: block;
+            }
+
+            button:hover {
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+                transform: translateY(-2px);
+            }
+
+            p {
+                position: absolute;
+                left: 10px;
+                z-index: 999;
+                font-size: larger;
             }
         </style>
     </head>
     <body>
         <p>by Anthony Skyba</p>
         <center>
-            <h1>Whack A Mole</h1>
+            <h1>Whack An Apple</h1>
             <h3>Click on the apples, avoid the bombs</h3>
             <h3>Press Play to start and get as many points as you can within the time limit</h3>
-            <div id="box"></div>
+            <button id="startButton">Play</button>
         </center>
-        
+        <div id="box">
+            <p id="time">Time: 15</p>
+            <p id="score" style="top: 25px;">Score: 0</p>
+        </div>
+
         <script>
-
+            let box = document.querySelector("div")
+            let startButton = document.getElementById("startButton")
+            let playAgainButton = document.getElementById("playAgainButton")
             let counter = 0
-
+            
             function spawnApple() {
+                let timeArray = document.getElementById("time").innerText.split(" ")
                 let image = document.createElement("img")
+
+                if (counter == 2) {
+                    counter = 0
+                    document.getElementById("time").innerText = timeArray[0] + " " + (Number(timeArray[1]) - 1)
+                }
+                
+                if (Number(timeArray[1]) == 0) {
+                    endGame(scoreArray[1])
+                    return
+                }
+
                 image.src = "https://static.vecteezy.com/system/resources/thumbnails/008/848/360/small/fresh-apple-fruit-free-png.png"
                 image.alt = "image not loaded"
+                image.style.left = Math.floor(Math.random() * (box.clientWidth - 70)) + "px"
+                image.style.top = Math.floor(Math.random() * (box.clientHeight - 70)) + "px" 
 
-                image.style.left = String(Math.random() * 550c) + "px"
-                image.style.top = String(Math.random() * 350) + "px"
+                document.querySelector("div").appendChild(image)
 
-                /* I tried setting the size automatically in the css
-                but for some reason it wasn't working so I resorted to this */
-                image.style.width = String(100) + "px"
-                image.style.height = String(100) + "px"
-
-                document.querySelector("#box").appendChild(image)
+                let createdApple = Array.from(document.querySelectorAll("img"))[Array.from(document.querySelectorAll("img")).length - 1]
+                createdApple.addEventListener("click", function() {
+                    let scoreArray = document.getElementById("score").innerText.split(" ")
+                    createdApple.remove()
+                    document.getElementById("score").innerText = scoreArray[0] + " " + (Number(scoreArray[1]) + 1)
+                })
 
                 counter++
-                if (counter < 5)
-                    setTimeout(spawnApple, 1000)
+                setTimeout(spawnApple, 500)
             }
 
-            spawnApple()
+            function endGame(score) {
+                console.log(11)
+            }
+
+            document.querySelector("button").addEventListener("click", function() {
+                startButton.style.display = "none"
+                box.style.display = "block"
+
+                spawnApple()
+            })
+
         </script>
     </body>
 </html>
