@@ -65,6 +65,7 @@
             let playAgainButton = document.getElementById("playAgainButton")
             let counter = 0
             let stopSpawning = false
+            let counter2 = 0
 
             document.getElementById("playAgainButton").addEventListener("click", function() {
                 document.getElementById("bombText").style.display = "none"
@@ -79,6 +80,7 @@
 
                 stopSpawning = false
                 startGame()
+                setTimeout(deleteImage, 2000)
             })
             
             function startGame() {
@@ -88,7 +90,7 @@
                 let image = document.createElement("img")
                 let bomb = false
 
-                if (counter == 2) {
+                if (counter == 3) {
                     counter = 0
                     document.getElementById("time").innerText = timeArray[0] + " " + (Number(timeArray[1]) - 1)
                 }
@@ -98,7 +100,7 @@
                     return
                 }
 
-                if (Math.floor((Math.random() * 3)) == 0) {
+                if (Math.floor((Math.random() * 4)) == 0) {
                     image.src = "https://imgs.search.brave.com/PfK556c_yssCW8eKH20hg-t9hhZHAdO0Iited5uFczc/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9wbmdp/bWcuY29tL3VwbG9h/ZHMvYm9tYi9zbWFs/bC9ib21iX1BORzM5/LnBuZw"
                     bomb = true
                 } else
@@ -109,6 +111,7 @@
                 image.style.top = Math.floor(Math.random() * (box.clientHeight - 70)) + "px" 
 
                 document.querySelector("div").appendChild(image)
+                counter2++
 
                 let createdImage = Array.from(document.querySelectorAll("img"))[Array.from(document.querySelectorAll("img")).length - 1]
                 createdImage.addEventListener("click", function() {
@@ -124,7 +127,7 @@
                 })
 
                 counter++   
-                setTimeout(startGame, 500)
+                setTimeout(startGame, 333.333)
             }
 
             function endGame(bomb) {
@@ -145,8 +148,15 @@
                 startButton.style.display = "none"
                 box.style.display = "block"
 
+                setTimeout(deleteImage, 2000)
                 startGame()
             })
+
+            function deleteImage() {
+                if (Array.from(document.getElementsByTagName("img")).length < 1) return
+                document.querySelector("img").remove()
+                setTimeout(deleteImage, 400)
+            }
         </script>
     </body>
 </html>
