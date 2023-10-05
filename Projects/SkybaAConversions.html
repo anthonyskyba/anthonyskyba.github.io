@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Conversions</title>
+        <style>
+            button  {
+                display: inline;
+                width: 160px;
+                height: 60px;
+                border: none;
+                border-radius: 4px;
+                transition-duration: 0.4s;
+                font-size: 25px;
+                background-color: darkslateblue;
+                color: aliceblue;
+            }
+
+            button:hover {
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+                transform: translateY(-2px);
+                background-color: chocolate;
+            }
+
+            #emptySpaces {
+                display: inline;
+            }
+
+        </style>
+    </head>
+    <body>
+        <p style="position: absolute;">by <a href="https://github.com/anthonyskyba">Anthony Skyba</a></p>
+
+        <center>
+            <h1>Conversions</h1>
+            <h3>Click on a conversion and enter your data</h3>
+            <div>
+                <button>Distance</button>
+                <h1 id="emptySpaces">&nbsp;&nbsp;&nbsp;</h1>
+                <button>Temperature</button>
+            </div>
+            <p style="font-size: 10px;">&nbsp;</p>
+            <div>
+                <button>Time</button>
+                <h1 id="emptySpaces">&nbsp;&nbsp;&nbsp;</h1>
+                <button>Mass</button>
+            </div>
+
+            <h3 id="results"></h3>
+        </center>
+
+        <script>
+            
+            for (let button of Array.from(document.querySelectorAll("button"))) {
+
+                button.addEventListener("click", function() {
+                    if (button.innerText == "Distance") {
+                        let meters = Number(prompt("Enter a number of meters"))
+                        if (isNaN(meters)) alert("Please only enter digits")
+                        else {
+                            let s
+                            if (meters == 1) s = ""
+                            else s = "s"
+
+                            document.getElementById("results").innerText = 
+                            `${meters} meter${s} is equal to: \n
+                            ${meters * 1000} kilometers \n
+                            ${meters * 100} hectometers \n
+                            ${meters * 10} decameters \n
+                            ${meters / 10} decimeters \n
+                            ${meters / 100} centimeters \n
+                            ${meters / 1000} millimeters`
+                        }
+                    } else if (button.innerText == "Temperature") {
+                        let celsius = Number(prompt("Enter a number of degrees in celsius"))
+                        if (isNaN(celsius)) alert("Please only enter digits")
+                        else {
+                            let s
+                            if (celsius == 1) s = ""
+                            else s = "s"
+
+                            document.getElementById("results").innerText = 
+                            `${celsius} degree${s} celsius is equal to: \n
+                            ${celsius * (9 / 5) + 32} degrees fahrenheit \n
+                            ${celsius + 273.15} kelvin`
+                        }
+                    } else if (button.innerText == "Time") {
+                        let minutes = Number(prompt("Enter a number of minutes"))
+                        if (isNaN(minutes)) alert("Please only enter digits")
+                        else {
+                            let s
+                            if (minutes == 1) s = ""
+                            else s = "s"
+
+                            document.getElementById("results").innerText = 
+                            `${minutes} minute${s} is equal to: \n
+                            ${minutes * 60000} milliseconds \n
+                            ${minutes * 60} seconds \n
+                            ${minutes / 60} hours \n
+                            ${minutes / 1440} days \n
+                            ${minutes / 10080} weeks \n
+                            ${minutes / 43800} months`
+                        }
+                    } else if (button.innerText == "Mass") {
+                        // used an else if to keep the chain going
+                        let weight = Number(prompt("Enter a number of grams"))
+                        if (isNaN(weight)) alert("Please only enter digits")
+                        else {
+                            let s
+                            if (weight == 1) s = ""
+                            else s = "s"
+                            
+                            document.getElementById("results").innerText = 
+                            `${weight} grams${s} is equal to: \n
+                            ${weight / 1e+6} tonnes \n
+                            ${weight / 1000} kilograms \n
+                            ${weight * 1000} milligrams \n
+                            ${weight * 1e+6} micrograms \n`
+                        }
+                    }
+                })
+            }
+        </script>
+    </body>
+</html>
