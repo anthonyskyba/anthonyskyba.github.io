@@ -130,7 +130,7 @@
                         let CST = date[3].split(":")
                         CST[0] = String(Number(CST[0]) - 1)
 
-                        if (Number(CST[0]) >= 11) {
+                        if (Number(CST[0]) >= 23) {
                             if (date[1][0] == "0") date[1] = "0" + (Number(date[1][1]) - 1)
                             else date[1] = String(Number(date[1] - 1))
                         }
@@ -142,7 +142,7 @@
                         let PST = date[3].split(":")
                         PST[0] = String(Number(PST[0]) - 3)
 
-                        if (Number(PST[0]) >= 9) {
+                        if (Number(PST[0]) >= 21) {
                             if (date[1][0] == "0") date[1] = "0" + (Number(date[1][1]) - 1)
                             else date[1] = String(Number(date[1] - 1))
                         }
