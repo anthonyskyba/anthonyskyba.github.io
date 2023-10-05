@@ -37,12 +37,16 @@
                 <button>Distance</button>
                 <h1 id="emptySpaces">&nbsp;&nbsp;&nbsp;</h1>
                 <button>Temperature</button>
+                <h1 id="emptySpaces">&nbsp;&nbsp;&nbsp;</h1>
+                <button>Timezones</button>
             </div>
             <p style="font-size: 10px;">&nbsp;</p>
             <div>
                 <button>Time</button>
                 <h1 id="emptySpaces">&nbsp;&nbsp;&nbsp;</h1>
                 <button>Mass</button>
+                <h1 id="emptySpaces">&nbsp;&nbsp;&nbsp;</h1>
+                <button>Currency</button>
             </div>
 
             <h3 id="results"></h3>
@@ -51,7 +55,6 @@
         <script>
             
             for (let button of Array.from(document.querySelectorAll("button"))) {
-
                 button.addEventListener("click", function() {
                     if (button.innerText == "Distance") {
                         let meters = Number(prompt("Enter a number of meters"))
@@ -101,7 +104,6 @@
                             ${minutes / 43800} months`
                         }
                     } else if (button.innerText == "Mass") {
-                        // used an else if to keep the chain going
                         let weight = Number(prompt("Enter a number of grams"))
                         if (isNaN(weight)) alert("Please only enter digits")
                         else {
@@ -116,6 +118,46 @@
                             ${weight * 1000} milligrams \n
                             ${weight * 1e+6} micrograms \n`
                         }
+                    } else if (button.innerText == ("Timezones")) {
+                        let date = String(new Date())
+                        date = date.replace(/Daylight/, "Standard")
+                        date = date.split(" ")
+                        date.splice(5, 1)
+                        date.shift()
+
+                        let EST = date.join(" ")
+
+                        let CST = date[3].split(":")
+                        CST[0] = String(Number(CST[0]) - 1)
+
+                        if (Number(CST[0]) >= 11) {
+                            if (date[1][0] == "0") date[1] = "0" + (Number(date[1][1]) - 1)
+                            else date[1] = String(Number(date[1] - 1))
+                        }
+
+                        CST = CST.join(":")
+                        CST = date.join(" ").replace(/\d+[:]\d+[:]\d+/, CST)
+                        CST = CST.replace("Eastern", "Central")
+
+                        let PST = date[3].split(":")
+                        PST[0] = String(Number(PST[0]) - 3)
+
+                        if (Number(PST[0]) >= 9) {
+                            if (date[1][0] == "0") date[1] = "0" + (Number(date[1][1]) - 1)
+                            else date[1] = String(Number(date[1] - 1))
+                        }
+
+                        PST = PST.join(":")
+                        PST = date.join(" ").replace(/\d+[:]\d+[:]\d+/, PST)
+                        PST = PST.replace("Eastern", "Pacific")
+
+                        document.getElementById("results").innerText =
+                        `The current date and time is:\n  
+                        ${EST} \n
+                        ${CST} \n
+                        ${PST}`
+                    } else {
+                        document.getElementById("results").innerText = "All the budget went to the timezones button"
                     }
                 })
             }
