@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <style>
+            html {
+                background-color: burlywood;
+            }
+
+            button:hover {
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+                transform: translateY(-2px);
+                background-color: chocolate;
+            }
+
+            button  {
+                display: none;
+                width: 160px;
+                height: 60px;
+                border: none;
+                border-radius: 4px;
+                transition-duration: 0.4s;
+                font-size: 25px;
+                background-color: rgb(53, 53, 53);
+                color: aliceblue;
+            }
+
+            img {
+                width: 25%;
+                height: auto;
+            }
+
+            #box {
+                height: 500px;
+                width: 500px;
+                border: 2px solid darkslategray;
+                border-radius: 2px;
+                display: none;
+                justify-content: space-between;
+                padding: 10px;
+            }
+
+            .healthBar {
+                background-color: red;
+                width: 150px;
+                height: 25px;
+                display: none;
+            }
+
+        </style>
+    </head>
+    <body>
+        <p style="position: absolute;">made by <a href="https://github.com/anthonyskyba">Anthony Skyba</a></p>
+        <center>
+            <h1 id="heading">Pokémon Battle</h1>
+            <h2 id="instructions">Choose your character!</h2>
+            <img id="bulbasaur" onclick="startGame('bulbasaur')" src="https://pngfre.com/wp-content/uploads/pokemon-png-from-pngfre-17.png">
+            <img id="eevee" onclick="startGame('eevee')" src="https://assets.stickpng.com/images/580b57fcd9996e24bc43c31c.png">
+            <div id="box">
+                <button id="attack1" style="display: none"></button>
+                <button id="attack2" style="display: none"></button>
+                <button id="attack3" style="display: none"></button>
+            </div>
+            <div class="healthBar"></div>
+            <div class="healthBar"></div>
+        </center>  
+        
+        <script>
+            function startGame(pokemon) {
+                let enemyImg
+                let pokemonImg
+                let box = document.getElementById("box")
+                let attacks
+                let pokemonHealth = Array.from(document.getElementsByClassName("healthBar"))[0]
+                let enemyHealth = Array.from(document.getElementsByClassName("healthBar"))[1]
+
+                if (pokemon == "eevee") {
+                    enemyImg = document.getElementById("bulbasaur")
+                    pokemonImg = document.getElementById("eevee") 
+                    attacks = ["Growl", "Tailwhip", "Tackle"]
+                }
+                else {
+                    enemyImg = document.getElementById("eevee")
+                    pokemonImg = document.getElementById("bulbasaur")
+                    attacks = ["Leaf Storm", "Sludge", "Charm"]
+                }
+                
+                pokemonImg.onclick = () => {}
+                pokemonImg.style.transform = "scaleX(-1)"
+                pokemonImg.style.position = "absolute"
+                pokemonImg.style.left = "5%"
+                pokemonImg.style.top = "40%"
+                
+                enemyImg.onclick = () => {}
+                enemyImg.style.position = "absolute"
+                enemyImg.style.left = "70%"
+                enemyImg.style.top = "3%"
+
+                document.getElementById("heading").style.display = "none"
+                document.getElementById("instructions").innerText = "Choose your attack!"
+
+                pokemonHealth
+
+                box.style.display = "flex"
+
+                let buttons = Array.from(document.querySelectorAll("button"))
+                for (let i = 0; i < buttons.length; i++) {
+                    let button = buttons[i]
+                    button.style.display = "block"
+                    button.style.position = "relative"
+                    button.innerText = attacks[i]
+
+                    button.addEventListener("click", () => {
+
+                    })
+                }
+
+
+
+            }
+        </script>
+    </body>
+</html>
