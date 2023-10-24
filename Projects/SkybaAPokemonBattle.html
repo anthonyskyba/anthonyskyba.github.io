@@ -42,10 +42,14 @@
 
             .healthBar {
                 background-color: red;
-                width: 150px;
+                width: 15%;
                 height: 25px;
                 display: none;
+                position: absolute;
+                transition: width 1s ease;
             }
+
+
 
         </style>
     </head>
@@ -60,6 +64,7 @@
                 <button id="attack1" style="display: none"></button>
                 <button id="attack2" style="display: none"></button>
                 <button id="attack3" style="display: none"></button>
+                <h1 id="event" style="position: absolute; top: 30%;"></h1>
             </div>
             <div class="healthBar"></div>
             <div class="healthBar"></div>
@@ -71,18 +76,22 @@
                 let pokemonImg
                 let box = document.getElementById("box")
                 let attacks
+                let enemyAttacks
                 let pokemonHealth = Array.from(document.getElementsByClassName("healthBar"))[0]
                 let enemyHealth = Array.from(document.getElementsByClassName("healthBar"))[1]
+                let eventText = document.getElementById("event")
 
                 if (pokemon == "eevee") {
                     enemyImg = document.getElementById("bulbasaur")
                     pokemonImg = document.getElementById("eevee") 
                     attacks = ["Growl", "Tailwhip", "Tackle"]
+                    enemyAttacks = ["Leaf Storm", "Sludge", "Charm"]
                 }
                 else {
                     enemyImg = document.getElementById("eevee")
                     pokemonImg = document.getElementById("bulbasaur")
                     attacks = ["Leaf Storm", "Sludge", "Charm"]
+                    enemyAttacks = ["Growl", "Tailwhip", "Tackle"]
                 }
                 
                 pokemonImg.onclick = () => {}
@@ -99,8 +108,21 @@
                 document.getElementById("heading").style.display = "none"
                 document.getElementById("instructions").innerText = "Choose your attack!"
 
-                pokemonHealth
-
+                pokemonHealth.style.display = "inline-block"
+                pokemonHealth.style.left = "9%"
+                
+                enemyHealth.style.display = "inline-block"
+                enemyHealth.style.left = "75%"
+                
+                
+                if (pokemon == "eevee") {
+                    pokemonHealth.style.top = (pokemonImg.clientHeight / screen.height) * 100 + 47 + "%"
+                    enemyHealth.style.top = (enemyImg.clientHeight / screen.height) * 100 + 5 + "%"
+                } else {
+                    pokemonHealth.style.top = (pokemonImg.clientHeight / screen.height) * 100 + 43 + "%"
+                    enemyHealth.style.top = (enemyImg.clientHeight / screen.height) * 100 + 10 + "%"
+                }
+                
                 box.style.display = "flex"
 
                 let buttons = Array.from(document.querySelectorAll("button"))
@@ -111,7 +133,24 @@
                     button.innerText = attacks[i]
 
                     button.addEventListener("click", () => {
+                        buttons.map((button) => button.style.display = "none")
+                        let enemyHP = parseInt(getComputedStyle(enemyHealth).width);
+                        let pokemonHP = parseInt(getComputedStyle(pokemonHealth).width);
+                        
+                        console.log(parseInt(getComputedStyle(enemyHealth).height))
+                        let pokemonAttack = Math.floor(Math.random() * enemyHP)
+                        if (pokemonAttack > enemyHP * 0.8) pokemonAttack /= 2
 
+                        eventText.innerText = `${pokemon} used ${button.innerText} and dealt ${pokemonAttack} damage!`
+                        enemyHealth.style.width = (parseInt(enemyHealth.style.width) - pokemonAttack) + 'px';
+
+                        setTimeout(() => {
+                            let enemyAttack = Math.floor(Math.random() * pokemonHP) / 1.1
+                            if (enemyAttack > pokemonHP * 0.8) enemyAttack /= 2
+                            eventText.innerText = `${enemyImg.id} used ${enemyAttacks[Math.floor(Math.random() * 3)]} and dealt ${enemyAttack} damage!`
+                            pokemonHealth.style.width = (parseInt(pokemonHealth.style.width) - enemyAttack) + 'px';
+                            buttons.map((button) => button.style.display = "block")
+                        }, 2000)
                     })
                 }
 
