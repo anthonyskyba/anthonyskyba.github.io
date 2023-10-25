@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Escape Room</title>
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+                overflow-y: hidden;
+                height: 100%;
+            }
+
+            button {
+                font-family: 'Chiller', cursive;
+                background-color: #222;
+                transition: 0.4s ease;
+                position: relative;
+                z-index: 1;
+                color: #8B0000;
+                width: 10%;
+                height: 10%;
+                font-size: 300%;
+                border: 2px solid #00ff00;
+                text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
+            }
+
+            .center {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 2;
+            }
+
+            button:hover {
+                background-color: black;
+                box-shadow: 0 10px 20px #000000, 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
+                color: #5a0000;
+            }
+
+            .background {
+                width: 100%;
+                height: 100vh;
+                object-fit: cover;
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <img class="background" src="https://files.oaiusercontent.com/file-zxJuYt8yksCBwIhXa3Lcm88r?se=2023-10-25T15%3A37%3A40Z&sp=r&sv=2021-08-06&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3D0590f846-505a-4551-9d59-dbbb590c503c.webp&sig=HWjYFPEMPGzilV4JL1nIwNNTr4nSyUQZBCNE0MLNGbM%3D">
+        <div class="center">
+            <button>Start</button>
+            <button>Story</button>
+        </div>
+    </body>
+</html>
