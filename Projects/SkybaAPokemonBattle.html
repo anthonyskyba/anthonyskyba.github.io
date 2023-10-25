@@ -42,7 +42,7 @@
 
             .healthBar {
                 background-color: red;
-                width: 15%;
+                width: 10px;
                 height: 25px;
                 display: none;
                 position: absolute;
@@ -64,13 +64,19 @@
                 <button id="attack1" style="display: none"></button>
                 <button id="attack2" style="display: none"></button>
                 <button id="attack3" style="display: none"></button>
-                <h1 id="event" style="position: absolute; top: 30%;"></h1>
             </div>
             <div class="healthBar"></div>
             <div class="healthBar"></div>
+            <h1 id="end"></h1>
         </center>  
         
         <script>
+            /* I don't know why I styled everything manually instead of using the
+            <style> tag, I'll try to make my code is more readable next time. It started
+            with only a few statements and then I kept adding onto it and it turned into
+            a mess. I also should have made variables and functions instead of repeating
+            the same code multiple times */
+
             function startGame(pokemon) {
                 let enemyImg
                 let pokemonImg
@@ -79,7 +85,8 @@
                 let enemyAttacks
                 let pokemonHealth = Array.from(document.getElementsByClassName("healthBar"))[0]
                 let enemyHealth = Array.from(document.getElementsByClassName("healthBar"))[1]
-                let eventText = document.getElementById("event")
+                let endText = document.getElementById("end")
+                let counter = 0
 
                 if (pokemon == "eevee") {
                     enemyImg = document.getElementById("bulbasaur")
@@ -106,13 +113,18 @@
                 enemyImg.style.top = "3%"
 
                 document.getElementById("heading").style.display = "none"
-                document.getElementById("instructions").innerText = "Choose your attack!"
+                let topText = document.getElementById("instructions")
+                topText.innerText = "Choose your attack!"
+
+                let desiredWidth = document.body.clientWidth * 0.15 + "px"
 
                 pokemonHealth.style.display = "inline-block"
                 pokemonHealth.style.left = "9%"
+                pokemonHealth.style.width = desiredWidth
                 
                 enemyHealth.style.display = "inline-block"
                 enemyHealth.style.left = "75%"
+                enemyHealth.style.width = desiredWidth
                 
                 
                 if (pokemon == "eevee") {
@@ -125,6 +137,7 @@
                 
                 box.style.display = "flex"
 
+                let ogHealth = pokemonHealth.style.width.slice(0, -2)
                 let buttons = Array.from(document.querySelectorAll("button"))
                 for (let i = 0; i < buttons.length; i++) {
                     let button = buttons[i]
@@ -133,29 +146,74 @@
                     button.innerText = attacks[i]
 
                     button.addEventListener("click", () => {
-                        buttons.map((button) => button.style.display = "none")
-                        let enemyHP = parseInt(getComputedStyle(enemyHealth).width);
-                        let pokemonHP = parseInt(getComputedStyle(pokemonHealth).width);
+                        let health = enemyHealth.style.width.slice(0, -2)
+                        let damageDealt = Math.floor(Math.random() * (ogHealth / 3 - ogHealth / 6 + 1) + ogHealth / 6);
+                        health -= damageDealt
+
+                        if (counter == 1) return
+
+                        if (health <= 0) {
+                            enemyHealth.style.width = 0 + "px"
+                            end("win") 
+                        }
                         
-                        console.log(parseInt(getComputedStyle(enemyHealth).height))
-                        let pokemonAttack = Math.floor(Math.random() * enemyHP)
-                        if (pokemonAttack > enemyHP * 0.8) pokemonAttack /= 2
-
-                        eventText.innerText = `${pokemon} used ${button.innerText} and dealt ${pokemonAttack} damage!`
-                        enemyHealth.style.width = (parseInt(enemyHealth.style.width) - pokemonAttack) + 'px';
-
+                        topText.innerText = `${pokemon} used ${button.innerText} and did ${damageDealt} damage!`
+                        enemyHealth.style.width = health + "px"
+                        
+                        for (button of buttons)
+                            button.style.display = "none"
+                        
                         setTimeout(() => {
-                            let enemyAttack = Math.floor(Math.random() * pokemonHP) / 1.1
-                            if (enemyAttack > pokemonHP * 0.8) enemyAttack /= 2
-                            eventText.innerText = `${enemyImg.id} used ${enemyAttacks[Math.floor(Math.random() * 3)]} and dealt ${enemyAttack} damage!`
-                            pokemonHealth.style.width = (parseInt(pokemonHealth.style.width) - enemyAttack) + 'px';
-                            buttons.map((button) => button.style.display = "block")
-                        }, 2000)
+                            health = pokemonHealth.style.width.slice(0, -2)
+                            damageDealt = Math.floor(Math.random() * (ogHealth / 3 - ogHealth / 7 + 1) + ogHealth / 6);
+                            health -= damageDealt
+
+                            if (counter == 1) return
+
+                            if (health <= 0 && counter == 0) {
+                                pokemonHealth.style.width = 0 + "px"
+                                end("lose")
+                            }
+                            
+                            topText.innerText = `${enemyImg.id} used ${enemyAttacks[Math.floor(Math.random() * 3)]} and did ${damageDealt} damage!`
+                            pokemonHealth.style.width = health + "px"
+
+                            for (button of buttons)
+                                button.style.display = "inline-block"
+                        }, 3500)
+
                     })
                 }
+                
+                let end = (cond) => {
+                    counter = 1
+                    setTimeout(function() {
+                        let img = document.createElement("img")
+                        img.style.width = 50 + "%"
+                        document.querySelector("center").append(img)
+                        endText.style.display = "block"
 
+                        if (cond == "win") {
+                            endText.innerText = "You Win!"
+                            pokemonHealth.style.display = "none"
+                            img.src = "https://user-images.githubusercontent.com/38748298/95656995-92d91200-0b2f-11eb-9898-e45bbf6876fb.png"
+                        } else {
+                            endText.innerText = "You Lost"
+                            enemyHealth.style.display = "none"
+                            img.src = "https://i.ytimg.com/vi/0E0wCGPokls/mqdefault.jpg"
+                        }
 
+                        enemyHealth.style.width = 0 + "px"
+                        endText.style.width = 50 + "%"
+                        endText.style.height = 50 + "%"
 
+                        pokemonImg.style.display = "none"
+                        enemyImg.style.display = "none"
+                        box.style.display = "none"
+                        topText.style.display = "none"
+
+                    }, 2500)
+                } 
             }
         </script>
     </body>
