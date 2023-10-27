@@ -8,6 +8,8 @@
                 padding: 0;
                 overflow-y: hidden;
                 height: 100%;
+                background-color: black;
+                overflow-x: hidden;
             }
 
             button {
@@ -16,19 +18,23 @@
                 transition: 0.4s ease;
                 position: relative;
                 z-index: 1;
-                color: #8B0000;
-                width: 10%;
+                color: #1d1d1d;
+                width: 50vh;
                 height: 10%;
                 font-size: 300%;
                 border: 2px solid #00ff00;
                 text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
 
             h1 {
                 font-family: 'Chiller', cursive;
                 z-index: 3;
                 position: relative;
-                color: #8B0000;
+                color: #323131;
                 text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
             }
 
@@ -48,13 +54,14 @@
             button:hover {
                 background-color: black;
                 box-shadow: 0 10px 20px #000000, 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
-                color: #6b0000;
+                color: #000000;
             }
 
             .background {
                 width: 100%;
                 height: 100vh;
                 object-fit: cover;
+                z-index: -5;
             }
 
             #notePaper {
@@ -64,26 +71,131 @@
                 height: auto;
             }
 
+            .noteText {
+                max-width: 50vh;
+                top: 10%;
+                text-align: center;
+            }
+
+            .fade-out {
+                animation: fadeOut 1s forwards;
+            }
+
+            .fade-in {
+                animation: fadeIn 1s forwards;
+            }
+
+            @keyframes fadeOut {
+                from {
+                    opacity: 1;
+                    visibility: visible;
+                }
+                to {
+                    opacity: 0;
+                    visibility: hidden;
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    visibility: hidden;
+                }
+                to {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            .arrow {
+                position: absolute;
+                height: auto;
+                width: 10%;
+            }
+
+            /* .arrow:hover {
+                
+            } */
+
+            #arrows {
+                position: absolute;
+                display: flex;
+                align-items: center;
+                visibility: hidden;
+                bottom: 0%;
+                left: 0%;
+                right: 0%;
+                top: 0%;
+            }
+
+            #hitbox {
+                display: none;
+                position: absolute;
+                width: 15%;
+                height: 15%;
+                top: 45%;
+                left: 52%;
+                transform: translate(-50%, -50%);
+                cursor: pointer;
+            }
+
+            #key {
+                position: absolute;
+                top: 50%;
+                left: 90%;
+                width: 10%;
+                height: auto;
+                display: none;
+                z-index: 10;
+            }
+
+            img {
+                -webkit-user-drag: none;
+                user-select: none;
+            }
+
         </style>
     </head>
     <body>
-        <img class="background" src="https://files.oaiusercontent.com/file-zxJuYt8yksCBwIhXa3Lcm88r?se=2023-10-25T21%3A57%3A15Z&sp=r&sv=2021-08-06&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3D0590f846-505a-4551-9d59-dbbb590c503c.webp&sig=Vybxb1VJILv%2Bz6Me7tpHf6H3qnumyY43k/69ygWpyqQ%3D">
+        <img id="splashScreen" class="background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/gptPrison.png?raw=true">
         <div class="center">
-            <img id="notePaper" src="C:\Users\antho\Downloads\notePaper.png">
+            <img id="notePaper" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/notePaper.png?raw=true">
             <h1 style="font-size: 600%;">idk a title yet</h1>
-            <h1 style="position: absolute; top: 15%;">An Escape Room game made by Anthony Skyba</h1>
+            <h1 style="position: absolute;">An Escape Room game made by Anthony Skyba</h1>
             <button onclick="activateButton('play')">Play</button>
             <button onclick="activateButton('story')">Story</button>
             <button onclick="activateButton('instructions')">Instructions</button>
-            <h1 style="display: none;">story goes here yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeehawwwwww</h1>
-            <h1 style="display: none;">instructions go here agagagagagagagagagagagag</h1>
+            <h1 class="noteText hidden"></h1>
+            <h1 class="noteText hidden"></h1>
             <button onclick="activateButton('back')" style="display: none;">Back</button>
+            <img id="lockedDoor" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/lockedDoor.png?raw=true">
+            <img id="brickWall" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/brickWall.png?raw=true">
+            <img id="keyWall" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keyWall.png?raw=true">
+            <div id="arrows">
+                <img class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
+                <img class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
+            </div>
+            <div id="hitbox"></div>
         </div>
+        <img id="key" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/coolKey.png?raw=true">
 
         <script>
+            
+            let arrowRight = Array.from(document.getElementsByClassName("arrow"))[0]
+            let arrowLeft = Array.from(document.getElementsByClassName("arrow"))[1]
+            arrowLeft.style.transform = "scaleX(-1)"
+            let arrowContainer = document.getElementById("arrows")
+            arrowRight.style.left = "90%"
+            arrowLeft.style.left = "0%"
+            
+            
             let hideSplash = true
             let notePaper = document.getElementById("notePaper")
-
+            
             let buttons = Array.from(document.querySelectorAll("button"))
             let playButton = buttons[0]
             let storyButton = buttons[1]
@@ -93,9 +205,16 @@
             let headings = Array.from(document.querySelectorAll("h1"))
             let heading1 = headings[0]
             let heading2 = headings[1]
-            let storyHeading = document.getElementById("story")
-            let instructionsHeading = document.getElementById("instructions")
+            let storyHeading = headings[2]
+            let instructionsHeading = headings[3]
             
+            storyHeading.innerText = ""
+            instructionsHeading.innerText = "Click around on the screen to find clues and solve puzzles.\n- Press \"x\" to get a hint\n - Refresh the page (ctrl+r) to return to the title screen\n - Play with audio for full experience"
+
+            document.body.addEventListener("dragstart", function(event) {
+                event.preventDefault()
+            })
+
             function activateButton(button) {
                 let x
                 let y
@@ -116,20 +235,129 @@
                 heading2.style.display = x
 
                 if (button == "play") {
-                    play()
+                    let splashScreen = document.getElementById("splashScreen") 
+                    splashScreen.className = "fade-out background"
+                    splashScreen.addEventListener("animationend", area1)
                     return
                 }
 
                 backButton.style.display = y
+                backButton.style.top = "10%"
                 notePaper.style.display = y
 
                 if (button == "back") {
-                    storyDiv.style.display = "none"
-                    instructionsDiv.style.display = "none"
+                    storyHeading.style.display = "none"
+                    instructionsHeading.style.display = "none"
                     return
                 }
-                if (button == "story") storyDiv.style.display = "flex"
-                if (button == "instructions") instructionsDiv.style.display = "flex"
+                if (button == "story") storyHeading.style.display = "flex"
+                if (button == "instructions") instructionsHeading.style.display = "flex"
+
+                function arrowEvent(room1, room2, room3, special) {
+                    arrowLeft.addEventListener("click", function() {
+                        arrowLeft.className = "arrow fade-out"
+                        arrowRight.className = "arrow fade-out"
+                        if (room2.style.display != "none") {
+                            room2.className = "fade-out background"
+                            room2.addEventListener("animationend", function() {
+                                room2.style.display = "none"
+                                room1.style.display = "block"
+                                room1.className = "fade-in background"
+                                arrowRight.className = "arrow fade-in"
+                            }, {once: true})
+                        } else {
+                            room3.className = "fade-out background"
+                            room3.addEventListener("animationend", function() {
+                                room3.style.display = "none"
+                                room2.style.display = "block"
+                                room2.className = "fade-in background"
+                                arrowLeft.className = "arrow fade-in"
+                                arrowRight.className = "arrow fade-in"
+                                if (special == "area1Key")
+                                    hitbox.style.display = "none"
+                            }, {once: true})
+                        }
+                    })
+
+                    arrowRight.addEventListener("click", function() {
+                        arrowLeft.className = "arrow fade-out"
+                        arrowRight.className = "arrow fade-out"
+                        if (room2.style.display != "none") {
+                            room2.className = "fade-out background"
+                            room2.addEventListener("animationend", function() {
+                                room2.style.display = "none"
+                                room3.style.display = "block"
+                                room3.className = "fade-in background"
+                                arrowLeft.className = "arrow fade-in"
+                                hitbox.style.display = "block"
+                            }, {once: true})
+                        } else {
+                            room1.className = "fade-out background"
+                            room1.addEventListener("animationend", function() {
+                                room1.style.display = "none"
+                                room2.style.display = "block"
+                                room2.className = "fade-in background"
+                                arrowLeft.className = "arrow fade-in"
+                                arrowRight.className = "arrow fade-in"
+                            }, {once: true})
+                        }
+                    })
+                }
+
+                function area1() {
+                    let lockedDoor = document.getElementById("lockedDoor")
+                    let keyWall = document.getElementById("keyWall")
+                    let brickWall = document.getElementById("brickWall")
+                    
+                    splashScreen.style.display = "none"
+                    lockedDoor.className = "fade-in background"
+
+                    arrowContainer.className = "fade-in"
+                    arrowEvent(brickWall, lockedDoor, keyWall, "area1Key")
+
+                    let removeEvent = false
+                    let key1 = document.getElementById("key")
+                    let hitbox = document.getElementById("hitbox")
+                    hitbox.addEventListener("mousedown", function key(event) {
+                        console.log(event)
+                        if (event.buttons != 1) return
+                        document.body.addEventListener("mouseup", function() {
+                            removeEvent = true
+                            key1.style.display = "none"
+                        }, {once: true})
+
+                        let room2 = false
+                        document.body.addEventListener("mousemove", function followMouse(mouseEvent) {
+                            let XPos = mouseEvent.clientX
+                            let YPos = mouseEvent.clientY
+
+                            key1.style.display = "block"
+                            key1.style.left = XPos - 40 + "px"
+                            key1.style.top = YPos - 80 + "px"
+                            console.log(removeEvent)
+
+                            if (YPos > screen.height / 3 && YPos < (screen.height / 3) * 2 && XPos < screen.width / 8 && !room2) {
+                                room2 = true
+                                arrowContainer.className = "fade-out"
+                                keyWall.className = "background fade-out"
+                                keyWall.addEventListener("animationend", function(){
+                                    lockedDoor.style.display = "block";
+                                    lockedDoor.className = "background fade-in"
+                                    arrowContainer.style.display = "flex";
+                                    arrowContainer.className = "fade-in"
+                                    arrowRight.className = "arrow fade-in"
+                                }, {once: true})
+
+                            }
+
+                            if (removeEvent) {
+                                document.body.removeEventListener("mousemove", followMouse)
+                                key1.style.display = "none"
+                                removeEvent = false
+                            }
+                        })
+                    })
+                }
             }
         </script>
     </body>
