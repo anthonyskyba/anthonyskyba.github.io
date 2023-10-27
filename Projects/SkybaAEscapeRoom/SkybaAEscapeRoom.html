@@ -140,7 +140,6 @@
                 top: 45%;
                 left: 52%;
                 transform: translate(-50%, -50%);
-                cursor: pointer;
             }
 
             #key {
@@ -181,7 +180,13 @@
             </div>
             <div id="hitbox"></div>
         </div>
-        <img id="key" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/coolKey.png?raw=true">
+        <img id="key" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/coolKey.png?raw=true">
+        <img id="tiles" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/floorTilesRoom.png?raw=true">
+        <img id="cards" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardsRoom.png?raw=true">
+        <img id="keypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/lockedKeypad.png?raw=true">
+        <img id="keypadUnlocked" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/unlockedKeypad.png?raw=true">
+
+
 
         <script>
             
@@ -209,7 +214,7 @@
             let instructionsHeading = headings[3]
             
             storyHeading.innerText = ""
-            instructionsHeading.innerText = "Click around on the screen to find clues and solve puzzles.\n- Press \"x\" to get a hint\n - Refresh the page (ctrl+r) to return to the title screen\n - Play with audio for full experience"
+            instructionsHeading.innerText = "Click around on the screen to find clues and solve puzzles.\n- Press \"x\" to get a hint\n - Refresh the page (ctrl+r) to return to the title screen\n - Play with audio"
 
             document.body.addEventListener("dragstart", function(event) {
                 event.preventDefault()
@@ -252,113 +257,149 @@
                 }
                 if (button == "story") storyHeading.style.display = "flex"
                 if (button == "instructions") instructionsHeading.style.display = "flex"
-
-                function arrowEvent(room1, room2, room3, special) {
-                    arrowLeft.addEventListener("click", function() {
-                        arrowLeft.className = "arrow fade-out"
-                        arrowRight.className = "arrow fade-out"
-                        if (room2.style.display != "none") {
-                            room2.className = "fade-out background"
-                            room2.addEventListener("animationend", function() {
-                                room2.style.display = "none"
-                                room1.style.display = "block"
-                                room1.className = "fade-in background"
-                                arrowRight.className = "arrow fade-in"
-                            }, {once: true})
-                        } else {
-                            room3.className = "fade-out background"
-                            room3.addEventListener("animationend", function() {
-                                room3.style.display = "none"
-                                room2.style.display = "block"
-                                room2.className = "fade-in background"
-                                arrowLeft.className = "arrow fade-in"
-                                arrowRight.className = "arrow fade-in"
-                                if (special == "area1Key")
-                                    hitbox.style.display = "none"
-                            }, {once: true})
-                        }
-                    })
-
-                    arrowRight.addEventListener("click", function() {
-                        arrowLeft.className = "arrow fade-out"
-                        arrowRight.className = "arrow fade-out"
-                        if (room2.style.display != "none") {
-                            room2.className = "fade-out background"
-                            room2.addEventListener("animationend", function() {
-                                room2.style.display = "none"
-                                room3.style.display = "block"
-                                room3.className = "fade-in background"
-                                arrowLeft.className = "arrow fade-in"
-                                hitbox.style.display = "block"
-                            }, {once: true})
-                        } else {
-                            room1.className = "fade-out background"
-                            room1.addEventListener("animationend", function() {
-                                room1.style.display = "none"
-                                room2.style.display = "block"
-                                room2.className = "fade-in background"
-                                arrowLeft.className = "arrow fade-in"
-                                arrowRight.className = "arrow fade-in"
-                            }, {once: true})
-                        }
-                    })
-                }
-
-                function area1() {
-                    let lockedDoor = document.getElementById("lockedDoor")
-                    let keyWall = document.getElementById("keyWall")
-                    let brickWall = document.getElementById("brickWall")
-                    
-                    splashScreen.style.display = "none"
-                    lockedDoor.className = "fade-in background"
-
-                    arrowContainer.className = "fade-in"
-                    arrowEvent(brickWall, lockedDoor, keyWall, "area1Key")
-
-                    let removeEvent = false
-                    let key1 = document.getElementById("key")
-                    let hitbox = document.getElementById("hitbox")
-                    hitbox.addEventListener("mousedown", function key(event) {
-                        console.log(event)
-                        if (event.buttons != 1) return
-                        document.body.addEventListener("mouseup", function() {
-                            removeEvent = true
-                            key1.style.display = "none"
-                        }, {once: true})
-
-                        let room2 = false
-                        document.body.addEventListener("mousemove", function followMouse(mouseEvent) {
-                            let XPos = mouseEvent.clientX
-                            let YPos = mouseEvent.clientY
-
-                            key1.style.display = "block"
-                            key1.style.left = XPos - 40 + "px"
-                            key1.style.top = YPos - 80 + "px"
-                            console.log(removeEvent)
-
-                            if (YPos > screen.height / 3 && YPos < (screen.height / 3) * 2 && XPos < screen.width / 8 && !room2) {
-                                room2 = true
-                                arrowContainer.className = "fade-out"
-                                keyWall.className = "background fade-out"
-                                keyWall.addEventListener("animationend", function(){
-                                    lockedDoor.style.display = "block";
-                                    lockedDoor.className = "background fade-in"
-                                    arrowContainer.style.display = "flex";
-                                    arrowContainer.className = "fade-in"
-                                    arrowRight.className = "arrow fade-in"
-                                }, {once: true})
-
-                            }
-
-                            if (removeEvent) {
-                                document.body.removeEventListener("mousemove", followMouse)
-                                key1.style.display = "none"
-                                removeEvent = false
-                            }
-                        })
-                    })
-                }
             }
+
+            let timesRun = 0
+            function arrowEvent(room1, room2, room3, area) {
+                timesRun++
+                if (timesRun > 1) {
+                    arrowLeft.removeEventListener("click", arrowL)
+                    arrowRight.removeEventListener("click", arrowR)
+                }
+
+                function arrowL() {
+                    arrowLeft.className = "arrow fade-out"
+                    arrowRight.className = "arrow fade-out"
+                    if (room2.style.display != "none") {
+                        room2.className = "fade-out background"
+                        room2.addEventListener("animationend", function() {
+                            room2.style.display = "none"
+                            room1.style.display = "block"
+                            room1.className = "fade-in background"
+                            arrowRight.className = "arrow fade-in"
+                        }, {once: true})
+                    } else {
+                        room3.className = "fade-out background"
+                        room3.addEventListener("animationend", function() {
+                            room3.style.display = "none"
+                            room2.style.display = "block"
+                            room2.className = "fade-in background"
+                            arrowLeft.className = "arrow fade-in"
+                            arrowRight.className = "arrow fade-in"
+                            hitbox.style.display = "none"
+                        }, {once: true})
+                    }
+                }
+                
+                arrowLeft.addEventListener("click", arrowL)
+
+                function arrowR() {
+                    arrowLeft.className = "arrow fade-out"
+                    arrowRight.className = "arrow fade-out"
+                    if (room2.style.display != "none") {
+                        if (area == 2 && !memoryCompleted) return
+                        room2.className = "fade-out background"
+                        room2.addEventListener("animationend", function() {
+                            room2.style.display = "none"
+                            room3.style.display = "block"
+                            room3.className = "fade-in background"
+                            arrowLeft.className = "arrow fade-in"
+                            hitbox.style.display = "block"
+                        }, {once: true})
+                    } else {
+                        room1.className = "fade-out background"
+                        room1.addEventListener("animationend", function() {
+                            room1.style.display = "none"
+                            room2.style.display = "block"
+                            room2.className = "fade-in background"
+                            arrowLeft.className = "arrow fade-in"
+                            if (memoryCompleted || area != 2)
+                                arrowRight.className = "arrow fade-in"
+                        }, {once: true})
+                    }
+                }
+
+                arrowRight.addEventListener("click", arrowR)
+            }
+
+            let memoryCompleted = false
+            function area1() {
+                let lockedDoor = document.getElementById("lockedDoor")
+                let keyWall = document.getElementById("keyWall")
+                let brickWall = document.getElementById("brickWall")
+                
+                splashScreen.style.display = "none"
+                lockedDoor.className = "fade-in background"
+
+                arrowContainer.className = "fade-in"
+                arrowEvent(brickWall, lockedDoor, keyWall)
+
+                let removeEvent = false
+                let key1 = document.getElementById("key")
+                let hitbox = document.getElementById("hitbox")
+                hitbox.addEventListener("mousedown", function key(event) {
+                    if (lockedDoor.style.display == "block") return
+                    if (event.buttons != 1) return
+                    document.body.addEventListener("mouseup", function(mouseEvent) {
+                        let XPos1 = mouseEvent.clientX
+                        let YPos1 = mouseEvent.clientY
+                        removeEvent = true
+                        key1.style.display = "none"
+                        if (lockedDoor.style.display == "block" && XPos1 > (screen.width / 5) * 2 && XPos1 < (screen.width / 5) * 3 && YPos1 > screen.height / 3 && YPos1 < (screen.height / 5) * 4) {
+                            lockedDoor.className = "background fade-out"
+                            arrowRight.className = "arrow fade-out"
+                            arrowContainer.className = "fade-out"
+                            lockedDoor.addEventListener("animationend", area2)
+                        }
+                    }, {once: true})
+
+                    let room2 = false
+                    document.body.addEventListener("mousemove", function followMouse(mouseEvent2) {
+                        let XPos2 = mouseEvent2.clientX
+                        let YPos2 = mouseEvent2.clientY
+
+                        key1.style.display = "block"
+                        key1.style.left = XPos2 - 40 + "px"
+                        key1.style.top = YPos2 - 80 + "px"
+
+                        if (YPos2 > screen.height / 3 && YPos2 < (screen.height / 3) * 2 && XPos2 < screen.width / 8 && !room2) {
+                            room2 = true
+                            arrowContainer.className = "fade-out"
+                            keyWall.className = "background fade-out"
+                            keyWall.addEventListener("animationend", function(){
+                                lockedDoor.style.display = "block";
+                                lockedDoor.className = "background fade-in"
+                                arrowContainer.style.display = "flex";
+                                arrowContainer.className = "fade-in"
+                                arrowRight.className = "arrow fade-in"
+                            }, {once: true})
+
+                        }
+
+                        if (removeEvent) {
+                            document.body.removeEventListener("mousemove", followMouse)
+                            key1.style.display = "none"
+                            removeEvent = false
+                        }
+                    })
+                })
+            }
+
+            function area2() {
+                let cardsRoom = document.getElementById("cards")
+                let tilesRoom = document.getElementById("tiles")
+                let lockedKeypad = document.getElementById("keypad")
+                let unlockedKeypad = document.getElementById("keypadUnlocked")
+
+                arrowContainer.className = "fade-in"
+
+                lockedKeypad.className = "background fade-in"
+                lockedKeypad.style.display = "block"
+
+                arrowEvent(cardsRoom, lockedKeypad, tilesRoom, 2)                
+
+            }
+
         </script>
     </body>
 </html>
