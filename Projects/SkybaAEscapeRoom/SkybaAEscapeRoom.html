@@ -140,6 +140,7 @@
                 top: 45%;
                 left: 52%;
                 transform: translate(-50%, -50%);
+                background-color: lightblue;
             }
 
             #key {
@@ -155,6 +156,20 @@
             img {
                 -webkit-user-drag: none;
                 user-select: none;
+            }
+
+            #keypad button {
+                align-items: center;
+            }
+
+            #keypad {
+                position: absolute;
+                top: 45%;
+                left: 52%;
+                transform: translate(-50%, -50%);
+                display: none;
+                background-color: rgb(38, 38, 38);
+                border: black 2px solid;
             }
 
         </style>
@@ -179,14 +194,24 @@
                 <img class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
             </div>
             <div id="hitbox"></div>
+            <div id="keypad">
+                <button>1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>4</button>
+                <button>5</button>
+                <button>6</button>
+                <button>7</button>
+                <button>8</button>
+                <button>9</button>
+                <button>Exit</button>
+            </div>
         </div>
         <img id="key" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/coolKey.png?raw=true">
-        <img id="tiles" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/floorTilesRoom.png?raw=true">
-        <img id="cards" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardsRoom.png?raw=true">
-        <img id="keypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/lockedKeypad.png?raw=true">
-        <img id="keypadUnlocked" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/unlockedKeypad.png?raw=true">
-
-
+        <img id="tilesRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/tilesRoom.png?raw=true">
+        <img id="cardsRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardsRoom.png?raw=true">
+        <img id="lockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadLocked1.png?raw=true">
+        <img id="unlockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadUnlocked.png?raw=true">
 
         <script>
             
@@ -214,7 +239,7 @@
             let instructionsHeading = headings[3]
             
             storyHeading.innerText = ""
-            instructionsHeading.innerText = "Click around on the screen to find clues and solve puzzles.\n- Press \"x\" to get a hint\n - Refresh the page (ctrl+r) to return to the title screen\n - Play with audio"
+            instructionsHeading.innerText = "Click around on the screen to find clues and solve puzzles.\n- Press \"x\" to get a hint\n - Refresh the page (ctrl+r) to return to the title screen\n - Play with audio for full experience"
 
             document.body.addEventListener("dragstart", function(event) {
                 event.preventDefault()
@@ -242,7 +267,10 @@
                 if (button == "play") {
                     let splashScreen = document.getElementById("splashScreen") 
                     splashScreen.className = "fade-out background"
-                    splashScreen.addEventListener("animationend", area1)
+                    splashScreen.addEventListener("animationend", function() {
+                        splashScreen.style.display = "none"
+                        area2()
+                    }, {once: true})
                     return
                 }
 
@@ -349,6 +377,7 @@
                             lockedDoor.className = "background fade-out"
                             arrowRight.className = "arrow fade-out"
                             arrowContainer.className = "fade-out"
+                            hitbox.style.display = "none"
                             lockedDoor.addEventListener("animationend", area2)
                         }
                     }, {once: true})
@@ -386,20 +415,28 @@
             }
 
             function area2() {
-                let cardsRoom = document.getElementById("cards")
-                let tilesRoom = document.getElementById("tiles")
-                let lockedKeypad = document.getElementById("keypad")
-                let unlockedKeypad = document.getElementById("keypadUnlocked")
+                let cardsRoom = document.getElementById("cardsRoom")
+                let tilesRoom = document.getElementById("tilesRoom")
+                let lockedKeypad = document.getElementById("lockedKeypad")
+                let unlockedKeypad = document.getElementById("unlockedKeypad")
+                let hitbox2 = document.getElementById("hitbox").cloneNode(true)
+                let keypadDiv = document.getElementById("keypad")
+                
+                document.body.appendChild(hitbox2);
+                hitbox2.style.width = "10%"
+                hitbox2.style.display = "block"
+                hitbox2.addEventListener("click", function keypad() {
+                    if (lockedKeypad.style.display == "none") return
+                    keypadDiv.style.display = "block"
+                })
 
                 arrowContainer.className = "fade-in"
 
                 lockedKeypad.className = "background fade-in"
                 lockedKeypad.style.display = "block"
 
-                arrowEvent(cardsRoom, lockedKeypad, tilesRoom, 2)                
-
+                arrowEvent(cardsRoom, lockedKeypad, tilesRoom, 2)
             }
-
         </script>
     </body>
 </html>
