@@ -140,7 +140,7 @@
                 top: 45%;
                 left: 52%;
                 transform: translate(-50%, -50%);
-                background-color: lightblue;
+                z-index: 15;
             }
 
             #key {
@@ -158,18 +158,82 @@
                 user-select: none;
             }
 
-            #keypad button {
-                align-items: center;
+            #keypad {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-gap: 10px;
+                padding: 10px;
             }
 
-            #keypad {
+            #keypadContainer {
                 position: absolute;
-                top: 45%;
-                left: 52%;
+                top: 50%;
+                left: 50%;
                 transform: translate(-50%, -50%);
-                display: none;
                 background-color: rgb(38, 38, 38);
                 border: black 2px solid;
+                display: none;
+                padding-bottom: 10px;
+            }
+
+            #keypad button {
+                height: 100px;
+                width: 100px;
+            }
+
+            #exitButton {
+                margin-left: 10px;
+                width: 320px;
+                height: 100px;
+            }
+
+            #cardsOverallContainer {
+                position: absolute;
+                z-index: 100;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                display: none;
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .cards {
+                width: auto;
+                height: 380px;
+                width: 380px;
+                transform-style: preserve-3d;
+                transition: all 1.5s ease;
+                margin-right: -100px;
+            }
+
+            .front {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                backface-visibility: hidden;
+            }
+
+            .back {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                backface-visibility: hidden;
+                transform: rotateY(180deg);
+            }
+
+            .flipped {
+                transform: rotateY(180deg);
+            }
+
+            #exitButton2 {
+                transform: translate(0%, -50%);
+                position: absolute;
+                top: 50%;
+                width: 10%;
+                margin-left: 5%;
+                display: block;
+                z-index: 100;
+                visibility: hidden;
             }
 
         </style>
@@ -178,7 +242,7 @@
         <img id="splashScreen" class="background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/gptPrison.png?raw=true">
         <div class="center">
             <img id="notePaper" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/notePaper.png?raw=true">
-            <h1 style="font-size: 600%;">idk a title yet</h1>
+            <h1 style="font-size: 600%;">IMPOSSIBLE ESCAPE</h1>
             <h1 style="position: absolute;">An Escape Room game made by Anthony Skyba</h1>
             <button onclick="activateButton('play')">Play</button>
             <button onclick="activateButton('story')">Story</button>
@@ -192,28 +256,33 @@
             <div id="arrows">
                 <img class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
                 <img class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
+                <div id="keypadContainer">
+                    <div id="keypad">
+                        <button onclick="keypadCode(1)">1</button>
+                        <button onclick="keypadCode(2)">2</button>
+                        <button onclick="keypadCode(3)">3</button>
+                        <button onclick="keypadCode(4)">4</button>
+                        <button onclick="keypadCode(5)">5</button>
+                        <button onclick="keypadCode(6)">6</button>
+                        <button onclick="keypadCode(7)">7</button>
+                        <button onclick="keypadCode(8)">8</button>
+                        <button onclick="keypadCode(9)">9</button>
+                    </div>
+                    <button id="exitButton">Exit</button>
+                </div>
             </div>
             <div id="hitbox"></div>
-            <div id="keypad">
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>5</button>
-                <button>6</button>
-                <button>7</button>
-                <button>8</button>
-                <button>9</button>
-                <button>Exit</button>
-            </div>
         </div>
         <img id="key" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/coolKey.png?raw=true">
         <img id="tilesRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/tilesRoom.png?raw=true">
         <img id="cardsRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardsRoom.png?raw=true">
         <img id="lockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadLocked1.png?raw=true">
         <img id="unlockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadUnlocked.png?raw=true">
+        <button id="exitButton2">Exit</button>
+        <div id="cardsOverallContainer"></div>
 
         <script>
+            let memoryCompleted = false
             
             let arrowRight = Array.from(document.getElementsByClassName("arrow"))[0]
             let arrowLeft = Array.from(document.getElementsByClassName("arrow"))[1]
@@ -269,7 +338,7 @@
                     splashScreen.className = "fade-out background"
                     splashScreen.addEventListener("animationend", function() {
                         splashScreen.style.display = "none"
-                        area2()
+                        area1()
                     }, {once: true})
                     return
                 }
@@ -305,6 +374,8 @@
                             room1.style.display = "block"
                             room1.className = "fade-in background"
                             arrowRight.className = "arrow fade-in"
+                            hitbox2.style.left = "68%"
+                            hitbox2.style.top = "91%"
                         }, {once: true})
                     } else {
                         room3.className = "fade-out background"
@@ -318,7 +389,6 @@
                         }, {once: true})
                     }
                 }
-                
                 arrowLeft.addEventListener("click", arrowL)
 
                 function arrowR() {
@@ -343,14 +413,14 @@
                             arrowLeft.className = "arrow fade-in"
                             if (memoryCompleted || area != 2)
                                 arrowRight.className = "arrow fade-in"
+                            hitbox2.style.left = "49.5%"
+                            hitbox2.style.top = "45%"
                         }, {once: true})
                     }
                 }
-
                 arrowRight.addEventListener("click", arrowR)
             }
 
-            let memoryCompleted = false
             function area1() {
                 let lockedDoor = document.getElementById("lockedDoor")
                 let keyWall = document.getElementById("keyWall")
@@ -366,24 +436,28 @@
                 let key1 = document.getElementById("key")
                 let hitbox = document.getElementById("hitbox")
                 hitbox.addEventListener("mousedown", function key(event) {
-                    if (lockedDoor.style.display == "block") return
-                    if (event.buttons != 1) return
+                    if (lockedDoor.style.display == "block" || event.buttons != 1) return
                     document.body.addEventListener("mouseup", function(mouseEvent) {
                         let XPos1 = mouseEvent.clientX
                         let YPos1 = mouseEvent.clientY
                         removeEvent = true
                         key1.style.display = "none"
                         if (lockedDoor.style.display == "block" && XPos1 > (screen.width / 5) * 2 && XPos1 < (screen.width / 5) * 3 && YPos1 > screen.height / 3 && YPos1 < (screen.height / 5) * 4) {
-                            lockedDoor.className = "background fade-out"
-                            arrowRight.className = "arrow fade-out"
-                            arrowContainer.className = "fade-out"
-                            hitbox.style.display = "none"
-                            lockedDoor.addEventListener("animationend", area2)
+                            area1to2()
                         }
                     }, {once: true})
 
                     let room2 = false
                     document.body.addEventListener("mousemove", function followMouse(mouseEvent2) {
+                        if (mouseEvent2.buttons != 1) {
+                            let XPos1 = mouseEvent2.clientX
+                            let YPos1 = mouseEvent2.clientY
+                            removeEvent = true
+                            key1.style.display = "none"
+                            if (lockedDoor.style.display == "block" && XPos1 > (screen.width / 5) * 2 && XPos1 < (screen.width / 5) * 3 && YPos1 > screen.height / 3 && YPos1 < (screen.height / 5) * 4) {
+                                area1to2()
+                            }
+                        }
                         let XPos2 = mouseEvent2.clientX
                         let YPos2 = mouseEvent2.clientY
 
@@ -414,20 +488,50 @@
                 })
             }
 
+            function area1to2() {
+                lockedDoor.className = "background fade-out"
+                arrowRight.className = "arrow fade-out"
+                arrowContainer.className = "fade-out"
+                hitbox.style.display = "none"
+                lockedDoor.addEventListener("animationend", area2)
+            }
+
+            let hitbox2 = document.getElementById("hitbox").cloneNode(true)
+
+            let userInput = []
+            function keypadCode(num) {
+                userInput.push(num)
+            }
+
             function area2() {
                 let cardsRoom = document.getElementById("cardsRoom")
                 let tilesRoom = document.getElementById("tilesRoom")
                 let lockedKeypad = document.getElementById("lockedKeypad")
                 let unlockedKeypad = document.getElementById("unlockedKeypad")
-                let hitbox2 = document.getElementById("hitbox").cloneNode(true)
-                let keypadDiv = document.getElementById("keypad")
+                let keypadContainer = document.getElementById("keypadContainer")
                 
-                document.body.appendChild(hitbox2);
+                document.body.appendChild(hitbox2)
                 hitbox2.style.width = "10%"
                 hitbox2.style.display = "block"
-                hitbox2.addEventListener("click", function keypad() {
-                    if (lockedKeypad.style.display == "none") return
-                    keypadDiv.style.display = "block"
+                hitbox2.style.left = "49.5%"
+                hitbox2.style.top = "45%"
+
+                hitbox2.addEventListener("click", function() {
+                    if (lockedKeypad.style.display != "none") {
+                        keypadContainer.style.display = "block"
+                        hitbox2.style.zIndex = 0
+                        let exitButton = document.getElementById("exitButton")
+                        exitButton.addEventListener("click", function() {
+                            keypadContainer.style.display = "none"
+                            hitbox2.style.zIndex = 50
+                            if (Number(userInput.join("")) == 9)
+                                console.log("gg")
+                            else
+                                userInput = []
+                        }, {once: true})
+                    } else if (cardsRoom.style.display != "none" && !memoryCompleted) {
+                        memoryGame()
+                    }
                 })
 
                 arrowContainer.className = "fade-in"
@@ -436,7 +540,104 @@
                 lockedKeypad.style.display = "block"
 
                 arrowEvent(cardsRoom, lockedKeypad, tilesRoom, 2)
+
+                function memoryGame() {
+                    let exitButton2 = document.getElementById("exitButton2")
+                    let cardsFlipped = 0
+                    let currentCardsFlipped = 0
+                    let cardsMatched = 0
+                    let firstCardFlipped
+                    let cardsContainer = document.getElementById("cardsOverallContainer")
+                    let cards = [
+                        "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/card1.png?raw=true",
+                        "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/card2Replacement.png?raw=true",
+                        "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/card3.png?raw=true",
+                        "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/card4.png?raw=true"
+                    ]
+                    
+                    arrowContainer.className = "fade-out"
+                    cards = cards.concat(cards)
+                    cardsContainer.style.display = "grid"
+                    hitbox2.style.display = "none"
+                    exitButton2.classList.add("fade-in")
+
+                    exitButton2.addEventListener("click", function() {
+                        cardsMatched = 0
+                        currentCardsFlipped = 0
+                        cardsFlipped = 0
+                        cardsContainer.className = "fade-out"
+                        exitButton2.className = "fade-out"
+                        arrowContainer.className = "fade-in"
+                        
+                        let cardsDivs = Array.from(document.getElementsByClassName("cards"))
+                        cardsDivs.forEach(cardDiv1 => {
+                            cardDiv1.removeEventListener("click", cardFlipper)
+                        })
+                        exitButton2.addEventListener("animationend", function() {
+                            Array.from(cardsContainer.children).forEach(child => child.remove())
+                            hitbox2.style.display = "block"
+                        }, {once: true})
+                    })
+
+                    for (let i = 0; i < 8; i++) {
+                        let randomElement = Math.floor(Math.random() * cards.length)
+                        let randomImg = document.createElement("img")
+
+                        randomImg.src = cards[randomElement]
+                        randomImg.className = "back"
+                        cards.splice(randomElement, 1)
+                        
+                        let back = document.createElement("img")
+                        back.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardBack.png?raw=true"
+                        back.className = "front"
+                        
+                        let cardDiv = document.createElement("div")
+                        cardDiv.className = "cards"
+                        cardsContainer.appendChild(cardDiv)
+                        cardDiv.appendChild(back)
+                        cardDiv.appendChild(randomImg)
+
+                        cardDiv.addEventListener("click", cardFlipper)
+                    }
+
+                    function cardFlipper() {
+                        let currentCard = this
+                        let card = Array.from(this.children)[1]
+                        if (this.classList.contains("flipped") || currentCardsFlipped >= 2) return
+                        currentCardsFlipped++
+                        this.classList.add("flipped")
+                        if (cardsFlipped == 1) {
+                            cardsFlipped = 0
+                            if (card.src == firstCardFlipped.children[1].src) {
+                                cardsMatched++
+                                currentCardsFlipped -= 2
+                                if (cardsMatched == 4) {
+                                    setTimeout(function() {
+                                        memoryCompleted = true
+                                        cardsContainer.classList.remove("fade-in")
+                                        exitButton2.classList.remove("fade-in")
+                                        cardsContainer.classList.add("fade-out")
+                                        arrowContainer.classList.add("fade-in")
+                                        exitButton2.classList.add("fade-out")
+                                        hitbox2.style.display = "block"
+                                    }, 1500)
+                                }
+                            } else {
+                                setTimeout(function() {
+                                    currentCard.classList.remove("flipped")
+                                    firstCardFlipped.classList.remove("flipped")
+                                        currentCardsFlipped -= 2
+                                }, 1500)
+                            }
+                        } else {
+                            firstCardFlipped = this
+                            cardsFlipped++
+                        }
+                    }
+                    cardsContainer.classList.add("fade-in")
+                }
             }
+
         </script>
     </body>
 </html>
