@@ -10,6 +10,7 @@
                 height: 100%;
                 background-color: black;
                 overflow-x: hidden;
+                user-select: none;
             }
 
             button {
@@ -225,7 +226,7 @@
                 transform: rotateY(180deg);
             }
 
-            #exitButton2 {
+            .exitButton {
                 transform: translate(0%, -50%);
                 position: absolute;
                 top: 50%;
@@ -236,6 +237,86 @@
                 visibility: hidden;
             }
 
+            #hitboxPower {
+                display: none;
+                position: absolute;
+                left: 44.5%;
+                top: 32.25%;
+                width: 8%;
+                height: 33.5%;
+                background-color: lightblue;
+                opacity: 50%;
+                z-index: 100;
+            }
+
+            #hitboxPaper {
+                display: none;
+                position: absolute;
+                left: 46%;
+                top: 83%;
+                width: 10%;
+                height: 10%;
+                background-color: lightblue;
+                opacity: 50%;
+                z-index: 100;
+            }
+
+            #hitboxMessageDoor {
+                display: none;
+                position: absolute;
+                left: 46%;
+                top: 38%;
+                width: 8%;
+                height: 20%;
+                background-color: lightblue;
+                opacity: 50%;
+                z-index: 100;
+            }
+
+            #hitboxFinalDoor {
+                display: none;
+                position: absolute;
+                left: 46.5%;
+                top: 40%;
+                width: 10.5%;
+                height: 30%;
+                background-color: lightblue;
+                opacity: 50%;
+                z-index: 100;
+            }
+
+            #powerBox {
+                width: 70%;
+                height: 70%;
+                margin-top: 5%;
+                border: 3px solid #00ff00;
+                top: 10%;
+                left: 22%;
+                position: absolute;
+                visibility: hidden;
+                background-color: #1d1d1d;
+                margin: 0 auto;
+                z-index: 900;
+            }
+
+            .mole {
+                position: absolute;
+                width: 110px;
+                height: 110px;
+            }
+
+            #powerBox p {
+                position: absolute;
+                font-family: 'Chiller', cursive;
+                left: 15px;
+                z-index: 999;
+                font-size: 50px;
+                pointer-events: none;
+                text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
+                color: white;
+                margin: 0;
+                margin-top: 5px;
+            }
         </style>
     </head>
     <body>
@@ -271,19 +352,35 @@
                     <button id="exitButton">Exit</button>
                 </div>
             </div>
-            <div id="hitbox"></div>
         </div>
+        <div id="hitboxPower">power</div>
+        <div id="hitboxPaper">paper</div>
+        <div id="hitboxMessageDoor">message</div>
+        <div id="hitboxFinalDoor">final</div>
+        <div id="hitbox"></div>
         <img id="key" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/coolKey.png?raw=true">
         <img id="tilesRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/tilesRoom.png?raw=true">
         <img id="cardsRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardsRoom.png?raw=true">
         <img id="lockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadLocked1.png?raw=true">
-        <button id="exitButton2">Exit</button>
+        <button id="exitButton2" class="exitButton">Exit</button>
+        <button id="exitButton3" class="exitButton">Exit</button>
         <div id="cardsOverallContainer"></div>
-        <img id="generatorRoom" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/generatorRoom.png?raw=true">
-        <img id="generatorRoomExploded" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/generatorRoomExploded.png?raw=true">
+        <img id="generatorRoom" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/generatorRoom.png?raw=true">
+        <img id="generatorRoomExploded" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/generatorRoomExploded.png?raw=true">
+        <img id="finalDoorLocked" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalDoorLocked.png?raw=true">
+        <img id="finalDoorUnlocked" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalDoorUnlocked.png?raw=true">
+        <img id="messageDoorClosed" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/messageDoorClosedReplacement.png?raw=true">
+        <img id="messageDoorOpen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/messageDoorOpen.png?raw=true">
+        <div id="powerBox">
+            <p id="time"></p>
+            <p id="score" style="top: 50px"></p>
+        </div>
 
         <script>
             let memoryCompleted = false
+            let hitbox = document.getElementById("hitbox")
+            let stopSpawning
+            let roomExploded = false
             
             let arrowRight = Array.from(document.getElementsByClassName("arrow"))[0]
             let arrowLeft = Array.from(document.getElementsByClassName("arrow"))[1]
@@ -338,7 +435,7 @@
                     splashScreen.className = "fade-out background"
                     splashScreen.addEventListener("animationend", function() {
                         splashScreen.style.display = "none"
-                        area1()
+                        area3()
                     }, {once: true})
                     return
                 }
@@ -353,7 +450,7 @@
                     return
                 }
                 if (button == "story") storyHeading.style.display = "flex"
-                if (button == "instructions") instructionsHeading.style.display = "flex"
+                else instructionsHeading.style.display = "flex"
             }
 
             let timesRun = 0
@@ -376,6 +473,14 @@
                             arrowRight.className = "arrow fade-in"
                             hitbox2.style.left = "68%"
                             hitbox2.style.top = "91%"
+                            if (area == 3) {
+                                hitboxPaper.style.display = "none"
+                                hitboxPower.style.display = "none"
+                                hitboxFinalDoor.style.display = "block"
+                                arrowRight.style.transform = "rotate(90deg)"
+                                arrowRight.style.top = "80%"
+                                arrowRight.style.left = "46.75%"
+                            }
                         }, {once: true})
                     } else {
                         room3.className = "fade-out background"
@@ -386,6 +491,14 @@
                             arrowLeft.className = "arrow fade-in"
                             arrowRight.className = "arrow fade-in"
                             hitbox.style.display = "none"
+                            if (area == 3) {
+                                hitboxPaper.style.display = "block"
+                                hitboxPower.style.display = "block"
+                                hitboxMessageDoor.style.display = "none"
+                                arrowLeft.style.transform = "rotate(-90deg) translate(0%, -50%)"
+                                arrowLeft.style.top = "1%"
+                                arrowLeft.style.left = "50%"
+                            }
                         }, {once: true})
                     }
                 }
@@ -403,6 +516,14 @@
                             room3.className = "fade-in background"
                             arrowLeft.className = "arrow fade-in"
                             hitbox.style.display = "block"
+                            if (area == 3) {
+                                hitboxPaper.style.display = "none"
+                                hitboxPower.style.display = "none"
+                                hitboxMessageDoor.style.display = "block"
+                                arrowLeft.style.top = ""
+                                arrowLeft.style.left = ""
+                                arrowLeft.style.transform = "scaleX(-1)"
+                            }
                         }, {once: true})
                     } else {
                         room1.className = "fade-out background"
@@ -415,6 +536,14 @@
                                 arrowRight.className = "arrow fade-in"
                             hitbox2.style.left = "49.5%"
                             hitbox2.style.top = "45%"
+                            if (area == 3) {
+                                hitboxPaper.style.display = "block"
+                                hitboxPower.style.display = "block"
+                                hitboxFinalDoor.style.display = "none"
+                                arrowRight.style.transform = ""
+                                arrowRight.style.top = ""
+                                arrowRight.style.left = "90%"
+                            }
                         }, {once: true})
                     }
                 }
@@ -427,7 +556,6 @@
                 let brickWall = document.getElementById("brickWall")
                 let removeEvent = false
                 let key1 = document.getElementById("key")
-                let hitbox = document.getElementById("hitbox")
                 
                 splashScreen.style.display = "none"
                 lockedDoor.className = "fade-in background"
@@ -581,21 +709,20 @@
                     for (let i = 0; i < 8; i++) {
                         let randomElement = Math.floor(Math.random() * cards.length)
                         let randomImg = document.createElement("img")
+                        let cardDiv = document.createElement("div")
+                        let back = document.createElement("img")
 
                         randomImg.src = cards[randomElement]
                         randomImg.className = "back"
                         cards.splice(randomElement, 1)
-                        
-                        let back = document.createElement("img")
+
                         back.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardBack.png?raw=true"
                         back.className = "front"
-                        
-                        let cardDiv = document.createElement("div")
+
                         cardDiv.className = "cards"
                         cardsContainer.appendChild(cardDiv)
                         cardDiv.appendChild(back)
                         cardDiv.appendChild(randomImg)
-
                         cardDiv.addEventListener("click", cardFlipper)
                     }
 
@@ -635,7 +762,6 @@
                     }
                     cardsContainer.classList.add("fade-in")
                 }
-
             }
             
             function area2to3() {
@@ -646,17 +772,148 @@
                 })
             }
 
-            let hitbox3 = hitbox2.cloneNode(true)
-            html.body.appendChild(hitbox3)
-            
+            let hitboxPower = document.getElementById("hitboxPower")
+            let hitboxPaper = document.getElementById("hitboxPaper")
+            let hitboxMessageDoor = document.getElementById("hitboxMessageDoor")
+            let hitboxFinalDoor = document.getElementById("hitboxFinalDoor")
+            let generatorRoomExploded = document.getElementById("generatorRoomExploded")
+            let messageDoorOpen = document.getElementById("messageDoorOpen")
             function area3() {
+                let finalDoorUnlocked = document.getElementById("finalDoorUnlocked")
+                let finalDoorLocked = document.getElementById("finalDoorLocked")
+                let messageDoorClosed = document.getElementById("messageDoorClosed")
                 let generatorRoom = document.getElementById("generatorRoom")
-                let generatorRoomExploded = document.getElementById("generatorRoomExploded")
+                let exitButton3 = document.getElementById("exitButton3")
+                exitButton3.addEventListener("click", function() {
+                    if (generatorRoom.style.display != "none" && hitboxPaper.style.display == "none") {
+                        stopSpawning = true
+                        exitButton3.className = "exitButton fade-out"
+                        document.getElementById("powerBox").className = "fade-out"
+                        arrowContainer.className = "fade-in"
+                        hitboxPaper.style.display = "block"
+
+                        for (let image of Array.from(document.getElementsByClassName("mole")))
+                            image.remove()
+                    }
+                })
+                
+                hitboxPower.addEventListener("click", function() {
+                    exitButton3.className = "exitButton fade-in"
+                    arrowContainer.className = "fade-out"
+                    hitboxPaper.style.display = "none"
+                    whackAMole()
+                })
 
                 generatorRoom.className = "background fade-in"
-                hitbox2.style.visibility = "hidden"
+                arrowContainer.className = "fade-in"
+                arrowLeft.style.transform = "rotate(-90deg) translate(0%, -50%)"
+                arrowLeft.style.top = "1%"
+                arrowLeft.style.left = "50%"
+
+                hitboxPower.style.display = "block"
+                hitboxPaper.style.display = "block"
+
+                arrowEvent(finalDoorLocked, generatorRoom, messageDoorClosed, 3)
+
+                
             }
 
+            function whackAMole() {
+                setTimeout(deleteImage, 2500)
+                let box = document.getElementById("powerBox")
+                let counter = 0
+                stopSpawning = false
+
+                document.getElementById("time").innerText = "Time: 20"
+                document.getElementById("score").innerText = "Batteries: 0"
+
+                box.className = "fade-in"
+                box.addEventListener("animationend", function() {
+                    startGame()
+                }, {once: true})
+                
+                function startGame() {
+                    box.style.display = "block"
+                    if (stopSpawning) {
+                        endGame()
+                        return
+                    }
+
+                    let timeArray = document.getElementById("time").innerText.split(" ")
+                    let image = document.createElement("img")
+                    image.className = "mole"
+                    let bomb = false
+
+                    if (counter % 3 == 0)
+                        document.getElementById("time").innerText = timeArray[0] + " " + (Number(timeArray[1]) - 1)
+                    
+                    if (Number(timeArray[1]) <= 0) {
+                        endGame()
+                        return
+                    }
+
+                    if (Math.floor((Math.random() * 4)) == 0) {
+                        image.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/dynamite.png?raw=true"
+                        bomb = true
+                    } else
+                        image.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/battery.png?raw=true"
+
+                    image.alt = "image not loaded"
+                    image.style.left = Math.floor(Math.random() * (box.clientWidth - 110)) + "px"
+                    image.style.top = Math.floor(Math.random() * (box.clientHeight - 110)) + "px" 
+
+                    box.appendChild(image)
+
+                    let moles = Array.from(document.getElementsByClassName("mole"))
+                    let createdImage = moles[moles.length - 1]
+                    createdImage.addEventListener("click", function() {
+                        if (bomb) {
+                            endGame(true)
+                            return
+                        }
+                        
+                        let scoreArray = document.getElementById("score").innerText.split(" ")
+                        createdImage.remove()
+                        document.getElementById("score").innerText = scoreArray[0] + " " + (Number(scoreArray[1]) + 1)
+                    })
+
+                    counter++   
+                    setTimeout(startGame, 333.333)
+                }
+
+                function endGame(bomb) {
+                    for (let image of Array.from(document.getElementsByClassName("mole")))
+                        image.remove()
+
+                    stopSpawning = true
+                    if (bomb) {
+                        roomExploded = true
+                        hitboxPower.style.visibility = "hidden"
+                        exitButton3.className = "exitButton fade-out"
+                        box.className = "fade-out"
+                        generatorRoom.className = "background fade-out"
+                        exitButton3.addEventListener("animationend", function() {
+                            generatorRoomExploded.style.top = "0px";
+                            generatorRoomExploded.style.left = "0px";
+                            generatorRoomExploded.className = "background fade-in"
+                            generatorRoomExploded.style.zIndex = 1
+                            arrowContainer.className = "fade-in"
+                        }, {once: true})
+                    } else {
+                        exitButton3.className = "exitButton fade-out"
+                        box.className = "fade-out"
+                        arrowContainer.className = "fade-in"
+                        hitboxPaper.style.display = "block"
+                    }
+                }
+
+                function deleteImage() {
+                    if (Array.from(document.getElementsByClassName("mole")).length <= 0) return
+                    Array.from(document.getElementsByClassName("mole"))[0].remove()
+                    setTimeout(deleteImage, 450)
+                }
+            }
+            
         </script>
     </body>
 </html>
