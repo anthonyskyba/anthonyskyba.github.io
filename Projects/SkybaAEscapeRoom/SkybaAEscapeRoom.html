@@ -277,9 +277,10 @@
         <img id="tilesRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/tilesRoom.png?raw=true">
         <img id="cardsRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardsRoom.png?raw=true">
         <img id="lockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadLocked1.png?raw=true">
-        <img id="unlockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadUnlocked.png?raw=true">
         <button id="exitButton2">Exit</button>
         <div id="cardsOverallContainer"></div>
+        <img id="generatorRoom" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/generatorRoom.png?raw=true">
+        <img id="generatorRoomExploded" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/generatorRoomExploded.png?raw=true">
 
         <script>
             let memoryCompleted = false
@@ -291,7 +292,6 @@
             arrowRight.style.left = "90%"
             arrowLeft.style.left = "0%"
             
-            
             let hideSplash = true
             let notePaper = document.getElementById("notePaper")
             
@@ -300,7 +300,7 @@
             let storyButton = buttons[1]
             let instructionsButton = buttons[2]
             let backButton = buttons[3]
-            
+
             let headings = Array.from(document.querySelectorAll("h1"))
             let heading1 = headings[0]
             let heading2 = headings[1]
@@ -425,6 +425,9 @@
                 let lockedDoor = document.getElementById("lockedDoor")
                 let keyWall = document.getElementById("keyWall")
                 let brickWall = document.getElementById("brickWall")
+                let removeEvent = false
+                let key1 = document.getElementById("key")
+                let hitbox = document.getElementById("hitbox")
                 
                 splashScreen.style.display = "none"
                 lockedDoor.className = "fade-in background"
@@ -432,9 +435,6 @@
                 arrowContainer.className = "fade-in"
                 arrowEvent(brickWall, lockedDoor, keyWall)
 
-                let removeEvent = false
-                let key1 = document.getElementById("key")
-                let hitbox = document.getElementById("hitbox")
                 hitbox.addEventListener("mousedown", function key(event) {
                     if (lockedDoor.style.display == "block" || event.buttons != 1) return
                     document.body.addEventListener("mouseup", function(mouseEvent) {
@@ -469,7 +469,7 @@
                             room2 = true
                             arrowContainer.className = "fade-out"
                             keyWall.className = "background fade-out"
-                            keyWall.addEventListener("animationend", function(){
+                            keyWall.addEventListener("animationend", function() {
                                 lockedDoor.style.display = "block";
                                 lockedDoor.className = "background fade-in"
                                 arrowContainer.style.display = "flex";
@@ -497,8 +497,9 @@
             }
 
             let hitbox2 = document.getElementById("hitbox").cloneNode(true)
-
             let userInput = []
+            let lockedKeypad = document.getElementById("lockedKeypad")
+            
             function keypadCode(num) {
                 userInput.push(num)
             }
@@ -506,8 +507,6 @@
             function area2() {
                 let cardsRoom = document.getElementById("cardsRoom")
                 let tilesRoom = document.getElementById("tilesRoom")
-                let lockedKeypad = document.getElementById("lockedKeypad")
-                let unlockedKeypad = document.getElementById("unlockedKeypad")
                 let keypadContainer = document.getElementById("keypadContainer")
                 
                 document.body.appendChild(hitbox2)
@@ -524,8 +523,8 @@
                         exitButton.addEventListener("click", function() {
                             keypadContainer.style.display = "none"
                             hitbox2.style.zIndex = 50
-                            if (Number(userInput.join("")) == 9)
-                                console.log("gg")
+                            if (Number(userInput.join("")) == 9 && memoryCompleted)
+                                area2to3()
                             else
                                 userInput = []
                         }, {once: true})
@@ -636,6 +635,26 @@
                     }
                     cardsContainer.classList.add("fade-in")
                 }
+
+            }
+            
+            function area2to3() {
+                lockedKeypad.className = "background fade-out"
+                arrowContainer.className = "fade-out"
+                arrowContainer.addEventListener("animationend", function() {
+                    area3()
+                })
+            }
+
+            let hitbox3 = hitbox2.cloneNode(true)
+            html.body.appendChild(hitbox3)
+            
+            function area3() {
+                let generatorRoom = document.getElementById("generatorRoom")
+                let generatorRoomExploded = document.getElementById("generatorRoomExploded")
+
+                generatorRoom.className = "background fade-in"
+                hitbox2.style.visibility = "hidden"
             }
 
         </script>
