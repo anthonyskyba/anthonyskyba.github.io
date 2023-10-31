@@ -12,7 +12,7 @@
                 overflow-x: hidden;
                 user-select: none;
             }
-
+            
             button {
                 font-family: 'Chiller', cursive;
                 background-color: #222;
@@ -60,7 +60,7 @@
 
             .background {
                 width: 100%;
-                height: 100vh;
+                height: 100%;
                 object-fit: cover;
                 z-index: -5;
             }
@@ -68,14 +68,17 @@
             #notePaper {
                 display: none;
                 position: absolute;
-                width: 50%;
+                bottom: -24%;
+                width: 74%;
                 height: auto;
+                transform: rotate(90deg);
             }
 
             .noteText {
-                max-width: 50vh;
+                max-width: 54%;
                 top: 10%;
                 text-align: center;
+                font-size: 170%;
             }
 
             .fade-out {
@@ -176,7 +179,7 @@
                 display: none;
                 padding-bottom: 10px;
             }
-
+            
             #keypad button {
                 height: 100px;
                 width: 100px;
@@ -186,6 +189,104 @@
                 margin-left: 10px;
                 width: 320px;
                 height: 100px;
+            }
+            
+            #slidingPuzzle {
+                position: relative;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+
+            #slidingPuzzleContainer button:not(#exitButton4) {
+                width: 100px;
+                height: 100px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-shadow: none;
+                background-color: gray;
+                color: black;
+                text-shadow: 2px 2px 3px rgba(70, 130, 180, 0.5);
+                border: 2px solid #1abc9c;
+                border-radius: 5px;
+                font-size: 1.8em;
+                transition: 0.4s;
+            }
+
+            #slidingPuzzleContainer button:not(#exitButton4):hover {
+                background-color: rgba(0, 255, 255, 0.1);
+                box-shadow: none;
+            }
+
+            #slidingPuzzleContainer {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 90%;
+                height: 90%;
+                transform: translate(-50%, -50%);
+                background-color: rgb(27, 36, 42);
+                border: 2px solid #1abc9c;
+                box-shadow: 0px 0px 20px 5px rgba(0, 255, 255, 0.5);
+                border-radius: 10px;
+                display: none;
+                z-index: 99;
+                justify-content: center;
+                align-items: center;
+                flex-shrink: 0;
+                flex-direction: column;
+            }
+
+            #exitButton4 {
+                margin-top: 30px;
+                padding: 10px 20px;
+                font-size: 1.8em;
+                border: 2px solid #1abc9c;
+                border-radius: 10px;
+                background-color: transparent;
+                color: #1abc9c;
+                transition: 0.3s;
+                text-shadow: none;
+            }
+
+            #exitButton4:hover {
+                background-color: #217b69;
+                color: #181a1d;
+                box-shadow: none;
+            }
+            
+            #manualOverride {
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 2.8em;
+                color: #1abc9c;
+                text-shadow: 2px 2px 4px rgba(0, 255, 255, 0.7);
+            }
+
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                    text-shadow: 0 0 5px rgba(173, 216, 230, 0.7);
+                }
+                50% {
+                    transform: scale(1.01);
+                    text-shadow: 0 0 15px rgba(173, 216, 230, 0.9);
+                }
+                100% {
+                    transform: scale(1);
+                    text-shadow: 0 0 5px rgba(173, 216, 230, 0.7);
+                }
+            }
+
+            #manualOverride {
+                animation: pulse ease-in-out 2.8s infinite;
+            }
+
+            #puzzleInstructions {
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.5em;
+                color: #1abc9c;
+                text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.7);
             }
 
             #cardsOverallContainer {
@@ -244,8 +345,6 @@
                 top: 32.25%;
                 width: 8%;
                 height: 33.5%;
-                background-color: lightblue;
-                opacity: 50%;
                 z-index: 100;
             }
 
@@ -256,8 +355,6 @@
                 top: 83%;
                 width: 10%;
                 height: 10%;
-                background-color: lightblue;
-                opacity: 50%;
                 z-index: 100;
             }
 
@@ -268,8 +365,6 @@
                 top: 38%;
                 width: 8%;
                 height: 20%;
-                background-color: lightblue;
-                opacity: 50%;
                 z-index: 100;
             }
 
@@ -280,8 +375,6 @@
                 top: 40%;
                 width: 10.5%;
                 height: 30%;
-                background-color: lightblue;
-                opacity: 50%;
                 z-index: 100;
             }
 
@@ -317,6 +410,26 @@
                 margin: 0;
                 margin-top: 5px;
             }
+
+            #area3images {
+                position: fixed;
+                top: 0%;
+                left: 0%;
+            }
+
+            #secretMessage {
+                margin-bottom: 3.2%;
+            }
+
+            h1 strong {
+                color: #545454;
+            }
+
+            #blankSpace {
+                height: 100px;
+                width: 100px;
+            }
+
         </style>
     </head>
     <body>
@@ -328,6 +441,7 @@
             <button onclick="activateButton('play')">Play</button>
             <button onclick="activateButton('story')">Story</button>
             <button onclick="activateButton('instructions')">Instructions</button>
+            <h1 id="secretMessage" class="noteText hidden"></h1>
             <h1 class="noteText hidden"></h1>
             <h1 class="noteText hidden"></h1>
             <button onclick="activateButton('back')" style="display: none;">Back</button>
@@ -337,22 +451,44 @@
             <div id="arrows">
                 <img class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
                 <img class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
-                <div id="keypadContainer">
-                    <div id="keypad">
-                        <button onclick="keypadCode(1)">1</button>
-                        <button onclick="keypadCode(2)">2</button>
-                        <button onclick="keypadCode(3)">3</button>
-                        <button onclick="keypadCode(4)">4</button>
-                        <button onclick="keypadCode(5)">5</button>
-                        <button onclick="keypadCode(6)">6</button>
-                        <button onclick="keypadCode(7)">7</button>
-                        <button onclick="keypadCode(8)">8</button>
-                        <button onclick="keypadCode(9)">9</button>
-                    </div>
-                    <button id="exitButton">Exit</button>
+            </div>
+            <div id="keypadContainer">
+                <div id="keypad">
+                    <button onclick="keypadCode(1)">1</button>
+                    <button onclick="keypadCode(2)">2</button>
+                    <button onclick="keypadCode(3)">3</button>
+                    <button onclick="keypadCode(4)">4</button>
+                    <button onclick="keypadCode(5)">5</button>
+                    <button onclick="keypadCode(6)">6</button>
+                    <button onclick="keypadCode(7)">7</button>
+                    <button onclick="keypadCode(8)">8</button>
+                    <button onclick="keypadCode(9)">9</button>
                 </div>
+                <button id="exitButton">Exit</button>
             </div>
         </div>
+        <div id="slidingPuzzleContainer">
+            <h1 id="manualOverride">MANUAL OVERRIDE</h1>
+            <h1 id="puzzleInstructions">Arrange the numbers in order to override the door's security system.</h1>
+            <div id="slidingPuzzle">
+                <button onclick="slideButton(1)">1</button>
+                <button onclick="slideButton(2)">2</button>
+                <button onclick="slideButton(3)">3</button>
+                <button onclick="slideButton(4)">4</button>
+                <button onclick="slideButton(5)">5</button>
+                <button onclick="slideButton(6)">6</button>
+                <button onclick="slideButton(7)">7</button>
+                <button onclick="slideButton(8)">8</button>
+                <div id="blankSpace"></div>
+            </div>
+            <button id="exitButton4">Exit</button>
+        </div>
+        <img id="generatorRoomExploded" class="background hidden area3images" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/generatorRoomExploded.png?raw=true">
+        <img id="generatorRoom" class="background hidden area3images" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/generatorRoom.png?raw=true">
+        <img id="finalDoorLocked" class="background hidden area3images" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalDoorLocked.png?raw=true">
+        <img id="finalDoorUnlocked" class="background hidden area3images" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalDoorUnlocked.png?raw=true">
+        <img id="messageDoorClosed" class="background hidden area3images" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/messageDoorClosedReplacement.png?raw=true">
+        <img id="messageDoorOpen" class="background hidden area3images" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/messageDoorOpen.png?raw=true">
         <div id="hitboxPower">power</div>
         <div id="hitboxPaper">paper</div>
         <div id="hitboxMessageDoor">message</div>
@@ -365,12 +501,6 @@
         <button id="exitButton2" class="exitButton">Exit</button>
         <button id="exitButton3" class="exitButton">Exit</button>
         <div id="cardsOverallContainer"></div>
-        <img id="generatorRoom" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/generatorRoom.png?raw=true">
-        <img id="generatorRoomExploded" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/generatorRoomExploded.png?raw=true">
-        <img id="finalDoorLocked" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalDoorLocked.png?raw=true">
-        <img id="finalDoorUnlocked" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalDoorUnlocked.png?raw=true">
-        <img id="messageDoorClosed" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/messageDoorClosedReplacement.png?raw=true">
-        <img id="messageDoorOpen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/messageDoorOpen.png?raw=true">
         <div id="powerBox">
             <p id="time"></p>
             <p id="score" style="top: 50px"></p>
@@ -381,6 +511,14 @@
             let hitbox = document.getElementById("hitbox")
             let stopSpawning
             let roomExploded = false
+            let hideSplash = true
+            let notePaper = document.getElementById("notePaper")
+            let hitbox2 = document.getElementById("hitbox").cloneNode(true)
+            let userInput = []
+            let lockedKeypad = document.getElementById("lockedKeypad")
+            let keypadContainer = document.getElementById("keypadContainer")
+            let timesRun = 0
+            let exitButton = document.getElementById("exitButton")
             
             let arrowRight = Array.from(document.getElementsByClassName("arrow"))[0]
             let arrowLeft = Array.from(document.getElementsByClassName("arrow"))[1]
@@ -388,9 +526,6 @@
             let arrowContainer = document.getElementById("arrows")
             arrowRight.style.left = "90%"
             arrowLeft.style.left = "0%"
-            
-            let hideSplash = true
-            let notePaper = document.getElementById("notePaper")
             
             let buttons = Array.from(document.querySelectorAll("button"))
             let playButton = buttons[0]
@@ -401,10 +536,19 @@
             let headings = Array.from(document.querySelectorAll("h1"))
             let heading1 = headings[0]
             let heading2 = headings[1]
-            let storyHeading = headings[2]
-            let instructionsHeading = headings[3]
-            
-            storyHeading.innerText = ""
+            let secretMessage = headings[2]
+            let storyHeading = headings[3]
+            let instructionsHeading = headings[4]
+
+            let hitboxPower = document.getElementById("hitboxPower")
+            let hitboxPaper = document.getElementById("hitboxPaper")
+            let hitboxMessageDoor = document.getElementById("hitboxMessageDoor")
+            let hitboxFinalDoor = document.getElementById("hitboxFinalDoor")
+            let generatorRoomExploded = document.getElementById("generatorRoomExploded")
+            let messageDoorOpen = document.getElementById("messageDoorOpen")
+
+            secretMessage.innerHTML = "Money was all I cared abou<strong>t</strong>, but now I just want to be home.<br><br>Until I f<strong>o</strong>und myself here, life really wasn’t that bad.<br><br>Loneliness has to be the worst part about this place.<br><br>To<strong>g</strong>ether, as a society, we can do anything.<br><br>I’ve started tallying my days sp<strong>e</strong>nt here.<br><br>Please lord! Allow me <strong>t</strong>o escape this hellhole!<br><br>Luck <strong>h</strong>as never been on my sid<strong>e</strong>.<br><br>You<strong>r</strong> mind degrades in this place. I only have so long left.<br><br>"
+            storyHeading.innerText = "Where am I? How did I get here? How do I get out of here? These are all questions poor Thomas was thinking to himself as he awoke trapped inside of a dark, eerie prison cell. Thomas could not identify any signs of life, and his screams were left unheard. There were strange markings all over the walls; Thomas had never seen such a place in his life, and it wasn’t somewhere where he wanted to be. Thomas felt frightened and confused as he thought back, recollecting his thoughts. The last thing he remembered was having gone to the bar with his friends. But how could he have ended up here? Was this some kind of practical joke? Thomas could barely think, he was hungry, tired, had no energy and was suffering from a severe headache. Only one thing was clear - he must escape!"
             instructionsHeading.innerText = "Click around on the screen to find clues and solve puzzles.\n- Press \"x\" to get a hint\n - Refresh the page (ctrl+r) to return to the title screen\n - Play with audio for full experience"
 
             document.body.addEventListener("dragstart", function(event) {
@@ -414,6 +558,16 @@
             function activateButton(button) {
                 let x
                 let y
+
+                if (button == "back" && secretMessage.style.display == "block") {
+                    notePaper.style.display = "none"
+                    arrowContainer.style.display = "flex"
+                    backButton.style.display = "none"
+                    secretMessage.style.display = "none"
+                    hitboxPaper.style.display = "block"
+                    if (!roomExploded) hitboxPower.style.display = "block"
+                    return
+                }
 
                 if (hideSplash) {
                     x = "none"
@@ -449,11 +603,13 @@
                     instructionsHeading.style.display = "none"
                     return
                 }
-                if (button == "story") storyHeading.style.display = "flex"
+                if (button == "story") {
+                    storyHeading.style.display = "flex"
+                    notePaper.style.transform = rotate("90deg")
+                }
                 else instructionsHeading.style.display = "flex"
             }
 
-            let timesRun = 0
             function arrowEvent(room1, room2, room3, area) {
                 timesRun++
                 if (timesRun > 1) {
@@ -462,6 +618,11 @@
                 }
 
                 function arrowL() {
+                    if (roomExploded) {
+                        hitboxPaper.style.left = "23%"
+                        hitboxPaper.style.top = "91%"
+                        room2 = generatorRoomExploded
+                    }
                     arrowLeft.className = "arrow fade-out"
                     arrowRight.className = "arrow fade-out"
                     if (room2.style.display != "none") {
@@ -505,6 +666,9 @@
                 arrowLeft.addEventListener("click", arrowL)
 
                 function arrowR() {
+                    if (roomExploded) {
+                        room2 = generatorRoomExploded
+                    }
                     arrowLeft.className = "arrow fade-out"
                     arrowRight.className = "arrow fade-out"
                     if (room2.style.display != "none") {
@@ -623,10 +787,6 @@
                 hitbox.style.display = "none"
                 lockedDoor.addEventListener("animationend", area2)
             }
-
-            let hitbox2 = document.getElementById("hitbox").cloneNode(true)
-            let userInput = []
-            let lockedKeypad = document.getElementById("lockedKeypad")
             
             function keypadCode(num) {
                 userInput.push(num)
@@ -635,7 +795,6 @@
             function area2() {
                 let cardsRoom = document.getElementById("cardsRoom")
                 let tilesRoom = document.getElementById("tilesRoom")
-                let keypadContainer = document.getElementById("keypadContainer")
                 
                 document.body.appendChild(hitbox2)
                 hitbox2.style.width = "10%"
@@ -643,31 +802,29 @@
                 hitbox2.style.left = "49.5%"
                 hitbox2.style.top = "45%"
 
-                hitbox2.addEventListener("click", function() {
-                    if (lockedKeypad.style.display != "none") {
-                        keypadContainer.style.display = "block"
-                        hitbox2.style.zIndex = 0
-                        let exitButton = document.getElementById("exitButton")
-                        exitButton.addEventListener("click", function() {
-                            keypadContainer.style.display = "none"
-                            hitbox2.style.zIndex = 50
-                            if (Number(userInput.join("")) == 9 && memoryCompleted)
-                                area2to3()
-                            else
-                                userInput = []
-                        }, {once: true})
-                    } else if (cardsRoom.style.display != "none" && !memoryCompleted) {
-                        memoryGame()
-                    }
-                })
-
                 arrowContainer.className = "fade-in"
-
                 lockedKeypad.className = "background fade-in"
                 lockedKeypad.style.display = "block"
 
                 arrowEvent(cardsRoom, lockedKeypad, tilesRoom, 2)
 
+                hitbox2.addEventListener("click", function() {
+                    if (lockedKeypad.style.display != "none") {
+                        keypadContainer.style.display = "block"
+                        hitbox2.style.zIndex = 0
+
+                        exitButton.addEventListener("click", function() {
+                            if (Number(userInput.join("")) == 9 && memoryCompleted)
+                                area2to3()
+                            keypadContainer.style.display = "none"
+                            hitbox2.style.zIndex = 50
+                            userInput = []
+                        }, {once: true})
+                    } else if (cardsRoom.style.display != "none" && !memoryCompleted) {
+                        memoryGame()
+                    }
+                })
+                
                 function memoryGame() {
                     let exitButton2 = document.getElementById("exitButton2")
                     let cardsFlipped = 0
@@ -688,24 +845,6 @@
                     hitbox2.style.display = "none"
                     exitButton2.classList.add("fade-in")
 
-                    exitButton2.addEventListener("click", function() {
-                        cardsMatched = 0
-                        currentCardsFlipped = 0
-                        cardsFlipped = 0
-                        cardsContainer.className = "fade-out"
-                        exitButton2.className = "fade-out"
-                        arrowContainer.className = "fade-in"
-                        
-                        let cardsDivs = Array.from(document.getElementsByClassName("cards"))
-                        cardsDivs.forEach(cardDiv1 => {
-                            cardDiv1.removeEventListener("click", cardFlipper)
-                        })
-                        exitButton2.addEventListener("animationend", function() {
-                            Array.from(cardsContainer.children).forEach(child => child.remove())
-                            hitbox2.style.display = "block"
-                        }, {once: true})
-                    })
-
                     for (let i = 0; i < 8; i++) {
                         let randomElement = Math.floor(Math.random() * cards.length)
                         let randomImg = document.createElement("img")
@@ -725,6 +864,26 @@
                         cardDiv.appendChild(randomImg)
                         cardDiv.addEventListener("click", cardFlipper)
                     }
+
+                    cardsContainer.classList.add("fade-in")
+
+                    exitButton2.addEventListener("click", function() {
+                        cardsMatched = 0
+                        currentCardsFlipped = 0
+                        cardsFlipped = 0
+                        cardsContainer.className = "fade-out"
+                        exitButton2.className = "fade-out"
+                        arrowContainer.className = "fade-in"
+                        
+                        let cardsDivs = Array.from(document.getElementsByClassName("cards"))
+                        cardsDivs.forEach(cardDiv1 => {
+                            cardDiv1.removeEventListener("click", cardFlipper)
+                        })
+                        exitButton2.addEventListener("animationend", function() {
+                            Array.from(cardsContainer.children).forEach(child => child.remove())
+                            hitbox2.style.display = "block"
+                        }, {once: true})
+                    })
 
                     function cardFlipper() {
                         let currentCard = this
@@ -760,7 +919,6 @@
                             cardsFlipped++
                         }
                     }
-                    cardsContainer.classList.add("fade-in")
                 }
             }
             
@@ -769,21 +927,27 @@
                 arrowContainer.className = "fade-out"
                 arrowContainer.addEventListener("animationend", function() {
                     area3()
-                })
+                }, {once:true})
             }
-
-            let hitboxPower = document.getElementById("hitboxPower")
-            let hitboxPaper = document.getElementById("hitboxPaper")
-            let hitboxMessageDoor = document.getElementById("hitboxMessageDoor")
-            let hitboxFinalDoor = document.getElementById("hitboxFinalDoor")
-            let generatorRoomExploded = document.getElementById("generatorRoomExploded")
-            let messageDoorOpen = document.getElementById("messageDoorOpen")
+            
             function area3() {
                 let finalDoorUnlocked = document.getElementById("finalDoorUnlocked")
                 let finalDoorLocked = document.getElementById("finalDoorLocked")
                 let messageDoorClosed = document.getElementById("messageDoorClosed")
                 let generatorRoom = document.getElementById("generatorRoom")
                 let exitButton3 = document.getElementById("exitButton3")
+                
+                generatorRoom.className = "background fade-in"
+                arrowContainer.className = "fade-in"
+                arrowLeft.style.transform = "rotate(-90deg) translate(0%, -50%)"
+                arrowLeft.style.top = "1%"
+                arrowLeft.style.left = "50%"
+
+                hitboxPower.style.display = "block"
+                hitboxPaper.style.display = "block"
+
+                arrowEvent(finalDoorLocked, generatorRoom, messageDoorClosed, 3)
+
                 exitButton3.addEventListener("click", function() {
                     if (generatorRoom.style.display != "none" && hitboxPaper.style.display == "none") {
                         stopSpawning = true
@@ -804,18 +968,51 @@
                     whackAMole()
                 })
 
-                generatorRoom.className = "background fade-in"
-                arrowContainer.className = "fade-in"
-                arrowLeft.style.transform = "rotate(-90deg) translate(0%, -50%)"
-                arrowLeft.style.top = "1%"
-                arrowLeft.style.left = "50%"
+                hitboxPaper.addEventListener("click", function() {
+                    notePaper.style.display = "block"
+                    arrowContainer.style.display = "none"
+                    backButton.style.display = "block"
+                    secretMessage.style.display = "block"
+                    hitboxPower.style.display = "none"
+                    hitboxPaper.style.display = "none"
+                })
 
-                hitboxPower.style.display = "block"
-                hitboxPaper.style.display = "block"
+                hitboxFinalDoor.addEventListener("click", function() {
+                    keypadContainer.style.display = "block"
+                    hitboxFinalDoor.style.display = "none"
+                    arrowContainer.style.display = "none"
 
-                arrowEvent(finalDoorLocked, generatorRoom, messageDoorClosed, 3)
+                    exitButton.addEventListener("click", function() {
+                        if (userInput == "")
+                        keypadContainer.style.display = "none"
+                        hitboxFinalDoor.style.display = "block"
+                        arrowContainer.style.display = "flex"
+                        userInput = []
+                    })
+                })
 
-                
+                hitboxMessageDoor.addEventListener("click", function() {
+                    let slidingPuzzleContainer = document.getElementById("slidingPuzzleContainer")
+                    let slidingPuzzle = document.getElementById("slidingPuzzle")
+                    let exitButton4 = document.getElementById("exitButton4")
+                    let positions = []
+                    
+                    arrowContainer.style.display = "none"
+                    arrowRight.style.display = "none"
+                    slidingPuzzleContainer.style.display = "flex"
+                    hitboxMessageDoor.style.display = "none"
+
+                    exitButton4.addEventListener("click", function() {
+                        slidingPuzzleContainer.style.display = "none"
+                        hitboxMessageDoor.style.display = "block"
+                        arrowContainer.style.display = "flex"
+                        arrowLeft.addEventListener("click", function() {
+                            arrowLeft.addEventListener("animationend", function() {
+                                arrowRight.style.display = "block"
+                            }, {once: true})
+                        }, {once: true})
+                    }, {once: true})
+                })
             }
 
             function whackAMole() {
@@ -833,12 +1030,9 @@
                 }, {once: true})
                 
                 function startGame() {
+                    if (stopSpawning)return
+                    
                     box.style.display = "block"
-                    if (stopSpawning) {
-                        endGame()
-                        return
-                    }
-
                     let timeArray = document.getElementById("time").innerText.split(" ")
                     let image = document.createElement("img")
                     image.className = "mole"
@@ -892,11 +1086,12 @@
                         exitButton3.className = "exitButton fade-out"
                         box.className = "fade-out"
                         generatorRoom.className = "background fade-out"
-                        exitButton3.addEventListener("animationend", function() {
-                            generatorRoomExploded.style.top = "0px";
-                            generatorRoomExploded.style.left = "0px";
+                        hitboxPaper.style.left = "23%"
+                        hitboxPaper.style.top = "91%"
+                        box.addEventListener("animationend", function() {
+                            generatorRoom.style.display = "none"
                             generatorRoomExploded.className = "background fade-in"
-                            generatorRoomExploded.style.zIndex = 1
+                            hitboxPaper.style.display = "block"
                             arrowContainer.className = "fade-in"
                         }, {once: true})
                     } else {
@@ -913,7 +1108,6 @@
                     setTimeout(deleteImage, 450)
                 }
             }
-            
         </script>
     </body>
 </html>
