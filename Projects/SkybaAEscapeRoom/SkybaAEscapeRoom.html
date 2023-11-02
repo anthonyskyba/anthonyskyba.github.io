@@ -536,10 +536,10 @@
         <img id="finalDoorUnlocked" class="background hidden area3images" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalDoorUnlocked.png?raw=true">
         <img id="messageDoorClosed" class="background hidden area3images" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/messageDoorClosedReplacement.png?raw=true">
         <img id="messageDoorOpen" class="background hidden area3images" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/messageDoorOpen.png?raw=true">
-        <div id="hitboxPower">power</div>
-        <div id="hitboxPaper">paper</div>
-        <div id="hitboxMessageDoor">message</div>
-        <div id="hitboxFinalDoor">final</div>
+        <div id="hitboxPower"></div>
+        <div id="hitboxPaper"></div>
+        <div id="hitboxMessageDoor"></div>
+        <div id="hitboxFinalDoor"></div>
         <div id="hitbox"></div>
         <img id="key" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/coolKey.png?raw=true">
         <img id="tilesRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/tilesRoom.png?raw=true">
@@ -566,7 +566,8 @@
             let keypadContainer = document.getElementById("keypadContainer")
             let timesRun = 0
             let exitButton = document.getElementById("exitButton")
-            let shuffleButtons = true
+            let shuffleButtons
+            let slidingPuzzleCompleted = false
             
             let arrowRight = Array.from(document.getElementsByClassName("arrow"))[0]
             let arrowLeft = Array.from(document.getElementsByClassName("arrow"))[1]
@@ -666,11 +667,8 @@
                 }
 
                 function arrowL() {
-                    if (roomExploded) {
-                        hitboxPaper.style.left = "23%"
-                        hitboxPaper.style.top = "91%"
-                        room2 = generatorRoomExploded
-                    }
+                    if (roomExploded) room2 = generatorRoomExploded
+                    if (slidingPuzzleCompleted) room3 = messageDoorOpen
                     arrowLeft.className = "arrow fade-out"
                     arrowRight.className = "arrow fade-out"
                     if (room2.style.display != "none") {
@@ -714,9 +712,8 @@
                 arrowLeft.addEventListener("click", arrowL)
 
                 function arrowR() {
-                    if (roomExploded) {
-                        room2 = generatorRoomExploded
-                    }
+                    if (roomExploded) room2 = generatorRoomExploded
+                    if (slidingPuzzleCompleted) room3 = messageDoorOpen
                     arrowLeft.className = "arrow fade-out"
                     arrowRight.className = "arrow fade-out"
                     if (room2.style.display != "none") {
@@ -731,7 +728,7 @@
                             if (area == 3) {
                                 hitboxPaper.style.display = "none"
                                 hitboxPower.style.display = "none"
-                                hitboxMessageDoor.style.display = "block"
+                                if (!slidingPuzzleCompleted) hitboxMessageDoor.style.display = "block"
                                 arrowLeft.style.top = ""
                                 arrowLeft.style.left = ""
                                 arrowLeft.style.transform = "scaleX(-1)"
@@ -990,6 +987,7 @@
                 arrowLeft.style.transform = "rotate(-90deg) translate(0%, -50%)"
                 arrowLeft.style.top = "1%"
                 arrowLeft.style.left = "50%"
+                hitbox.style.display = "none"
 
                 hitboxPower.style.display = "block"
                 hitboxPaper.style.display = "block"
@@ -1029,13 +1027,30 @@
                     keypadContainer.style.display = "block"
                     hitboxFinalDoor.style.display = "none"
                     arrowContainer.style.display = "none"
+                    arrowLeft.style.display = "none"
 
                     exitButton.addEventListener("click", function() {
-                        if (userInput == "")
+                        let userNum = Number(userInput.join(""))
+                        if ((userNum == 375 || userNum == 45) && roomExploded && slidingPuzzleCompleted) {
+                            hitboxFinalDoor.style.display = "none"
+                            finalDoorLocked.classList.remove("fade-in")
+                            finalDoorLocked.classList.add("fade-out")
+                            arrowContainer.className = "fade-out"
+                            finalDoorLocked.addEventListener("animationend", function() {
+                                finalDoorLocked.style.display = "none"
+                                finalDoorUnlocked.classList.remove("fade-out")
+                                finalDoorUnlocked.classList.add("fade-in")
+                            })
+                        }
                         keypadContainer.style.display = "none"
                         hitboxFinalDoor.style.display = "block"
                         arrowContainer.style.display = "flex"
                         userInput = []
+                        arrowRight.addEventListener("click", function() {
+                            arrowRight.addEventListener("animationend", function() {
+                                arrowLeft.style.display = "block"
+                            }, {once: true})
+                        }, {once: true})
                     })
                 })
 
@@ -1044,12 +1059,13 @@
                     let slidingPuzzle = document.getElementById("slidingPuzzle")
                     let exitButton4 = document.getElementById("exitButton4")
                     
+                    shuffleButtons = true
                     arrowContainer.style.display = "none"
                     arrowRight.style.display = "none"
                     slidingPuzzleContainer.style.display = "flex"
                     hitboxMessageDoor.style.display = "none"
 
-                    for (let i = 0; i < 1500; i++)
+                    for (let i = 0; i < 2000; i++)
                         slideButton()
                     shuffleButtons = false
 
@@ -1181,12 +1197,45 @@
                 let blankSpaceGridColumn = getGridValue(blankSpaceComputedStyle.getPropertyValue("grid-column"))
 
                 if (buttonClicked.nodeName != "BUTTON") return
+
                 if ((buttonGridRow == blankSpaceGridRow && (buttonGridColumn == blankSpaceGridColumn + 1 || buttonGridColumn == blankSpaceGridColumn - 1))
                     || buttonGridColumn == blankSpaceGridColumn && (buttonGridRow == blankSpaceGridRow + 1 || buttonGridRow == blankSpaceGridRow - 1)) {
                     buttonClicked.style.gridRow = blankSpaceGridRow
                     buttonClicked.style.gridColumn = blankSpaceGridColumn
                     blankSpace.style.gridRow = buttonGridRow
                     blankSpace.style.gridColumn = buttonGridColumn
+                }
+
+                if (!shuffleButtons) {
+                    let correctNumbers= 0
+                    for (let i = 1; i <= 8; i++) {
+                        let buttonComputedStyle2 = getComputedStyle(document.getElementById("button" + String(i)))
+                        if (buttonComputedStyle2.getPropertyValue("grid-row") == Math.ceil(i / 3) &&
+                         buttonComputedStyle2.getPropertyValue("grid-column") == ((i - 1) % 3) + 1)
+                            correctNumbers++
+                    }
+                    if (correctNumbers == 8) {
+                        setTimeout(function() {
+                            slidingPuzzleCompleted = true
+                            slidingPuzzleContainer.style.display = "none"
+                            messageDoorClosed.classList.remove("fade-in")
+                            messageDoorClosed.classList.add("fade-out")
+
+                            messageDoorClosed.addEventListener("animationend", function() {
+                                arrowContainer.style.display = "flex"
+                                messageDoorClosed.style.display = "none"
+                                messageDoorOpen.classList.remove("fade-out")
+                                messageDoorOpen.classList.add("fade-in")
+                                messageDoorOpen.style.display = "block"
+
+                                arrowLeft.addEventListener("click", function() {
+                                    arrowLeft.addEventListener("animationend", function() {
+                                        arrowRight.style.display = "block"
+                                    }, {once: true})
+                                }, {once: true})
+                            })
+                        }, 100)
+                    }
                 }
             }
         </script>
