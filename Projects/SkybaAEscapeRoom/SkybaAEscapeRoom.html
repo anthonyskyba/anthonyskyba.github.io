@@ -432,44 +432,49 @@
                 width: 100px;
             }
 
-            #slidingPuzzle #1 {
+            #slidingPuzzle #button1 {
                 grid-row: 1;
                 grid-column: 1;
             }
 
-            #slidingPuzzle #2 {
+            #slidingPuzzle #button2 {
                 grid-row: 1;
                 grid-column: 2;
             }
 
-            #slidingPuzzle #3 {
+            #slidingPuzzle #button3 {
                 grid-row: 1;
                 grid-column: 3;
             }
 
-            #slidingPuzzle #4 {
+            #slidingPuzzle #button4 {
                 grid-row: 2;
                 grid-column: 1;
             }
 
-            #slidingPuzzle #5 {
+            #slidingPuzzle #button5 {
                 grid-row: 2;
                 grid-column: 2;
             }
 
-            #slidingPuzzle #6 {
+            #slidingPuzzle #button6 {
                 grid-row: 2;
                 grid-column: 3;
             }
 
-            #slidingPuzzle #7 {
+            #slidingPuzzle #button7 {
                 grid-row: 3;
                 grid-column: 1;
             }
 
-            #slidingPuzzle #8 {
+            #slidingPuzzle #button8 {
                 grid-row: 3;
                 grid-column: 2;
+            }
+            
+            #slidingPuzzle #blankSpace {
+                grid-row: 3;
+                grid-column: 3;
             }
 
         </style>
@@ -513,14 +518,14 @@
             <h1 id="manualOverride">MANUAL OVERRIDE</h1>
             <h1 id="puzzleInstructions">Arrange the numbers in order to override the door's security system.</h1>
             <div id="slidingPuzzle">
-                <button id="1" onclick="slideButton(event)">1</button>
-                <button id="2" onclick="slideButton(event)">2</button>
-                <button id="3" onclick="slideButton(event)">3</button>
-                <button id="4" onclick="slideButton(event)">4</button>
-                <button id="5" onclick="slideButton(event)">5</button>
-                <button id="6" onclick="slideButton(event)">6</button>
-                <button id="7" onclick="slideButton(event)">7</button>
-                <button id="8" onclick="slideButton(event)">8</button>
+                <button id="button1" onclick="slideButton(event)">1</button>
+                <button id="button2" onclick="slideButton(event)">2</button>
+                <button id="button3" onclick="slideButton(event)">3</button>
+                <button id="button4" onclick="slideButton(event)">4</button>
+                <button id="button5" onclick="slideButton(event)">5</button>
+                <button id="button6" onclick="slideButton(event)">6</button>
+                <button id="button7" onclick="slideButton(event)">7</button>
+                <button id="button8" onclick="slideButton(event)">8</button>
                 <div id="blankSpace"></div>
             </div>
             <button id="exitButton4">Exit</button>
@@ -561,6 +566,7 @@
             let keypadContainer = document.getElementById("keypadContainer")
             let timesRun = 0
             let exitButton = document.getElementById("exitButton")
+            let shuffleButtons = true
             
             let arrowRight = Array.from(document.getElementsByClassName("arrow"))[0]
             let arrowLeft = Array.from(document.getElementsByClassName("arrow"))[1]
@@ -1043,6 +1049,10 @@
                     slidingPuzzleContainer.style.display = "flex"
                     hitboxMessageDoor.style.display = "none"
 
+                    for (let i = 0; i < 1500; i++)
+                        slideButton()
+                    shuffleButtons = false
+
                     exitButton4.addEventListener("click", function() {
                         slidingPuzzleContainer.style.display = "none"
                         hitboxMessageDoor.style.display = "block"
@@ -1150,22 +1160,25 @@
                 }
             }
 
+            function getGridValue(value) {
+                return Number(value.split('/')[0].trim())
+            }
+
             function slideButton(event) {
-                let buttonClicked = event.target
-                console.log(buttonClicked)
+                let buttonClicked
+                let randomButton = "button" + String(Math.floor(Math.random() * 8) + 1)
+                
+                if (shuffleButtons) buttonClicked = document.getElementById(randomButton)
+                else buttonClicked = event.target
+
                 let buttonComputedStyle = getComputedStyle(buttonClicked)
-                let buttonGridRow = Number(buttonComputedStyle.getPropertyValue("grid-row"))
-                let buttonGridColumn = Number(buttonComputedStyle.getPropertyValue("grid-column"))
+                let buttonGridRow = getGridValue(buttonComputedStyle.getPropertyValue("grid-row"))
+                let buttonGridColumn = getGridValue(buttonComputedStyle.getPropertyValue("grid-column"))
 
                 let blankSpace = document.getElementById("blankSpace")
-                console.log(blankSpace)
                 let blankSpaceComputedStyle = getComputedStyle(blankSpace)
-                let blankSpaceGridRow = Number(blankSpaceComputedStyle.getPropertyValue("grid-row"))
-                let blankSpaceGridColumn = Number(blankSpaceComputedStyle.getPropertyValue("grid-column"))
-
-                console.log(buttonGridRow, buttonGridColumn, blankSpaceGridRow, blankSpaceGridColumn);
-                console.log(buttonComputedStyle.getPropertyValue("grid-row"));
-                console.log(buttonComputedStyle.getPropertyValue("grid-column"));
+                let blankSpaceGridRow = getGridValue(blankSpaceComputedStyle.getPropertyValue("grid-row"))
+                let blankSpaceGridColumn = getGridValue(blankSpaceComputedStyle.getPropertyValue("grid-column"))
 
                 if (buttonClicked.nodeName != "BUTTON") return
                 if ((buttonGridRow == blankSpaceGridRow && (buttonGridColumn == blankSpaceGridColumn + 1 || buttonGridColumn == blankSpaceGridColumn - 1))
