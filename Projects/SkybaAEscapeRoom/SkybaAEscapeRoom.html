@@ -25,7 +25,6 @@
                 font-size: 300%;
                 border: 2px solid #00ff00;
                 text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
-
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -52,7 +51,7 @@
                 gap: 20px;
             }
 
-            button:hover {
+            button:not(#timer):hover {
                 background-color: black;
                 box-shadow: 0 10px 20px #000000, 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
                 color: #000000;
@@ -68,10 +67,11 @@
             #notePaper {
                 display: none;
                 position: absolute;
-                bottom: -24%;
-                width: 74%;
-                height: auto;
-                transform: rotate(90deg);
+                width: auto;
+                height: 145%;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(90deg);
             }
 
             .noteText {
@@ -79,6 +79,7 @@
                 top: 10%;
                 text-align: center;
                 font-size: 170%;
+                position: relative;
             }
 
             .fade-out {
@@ -266,17 +267,13 @@
             }
 
             @keyframes pulse {
-                0% {
+                0%, 100% {
                     transform: scale(1);
                     text-shadow: 0 0 5px rgba(173, 216, 230, 0.7);
                 }
                 50% {
                     transform: scale(1.01);
                     text-shadow: 0 0 15px rgba(173, 216, 230, 0.9);
-                }
-                100% {
-                    transform: scale(1);
-                    text-shadow: 0 0 5px rgba(173, 216, 230, 0.7);
                 }
             }
 
@@ -477,21 +474,211 @@
                 grid-column: 3;
             }
 
+            #backButton {
+                position: absolute;
+                top: 83%;
+            }
+
+            #notePaperContainer {
+                display: flex;
+                align-items: center;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            #instructionsHeading2 {
+                display: none;
+                z-index: 999;
+                position: fixed;
+                top: 92.5%;
+                left: 0%;
+                margin-left: 0.5%;
+                font-size: 170%;
+            }
+
+            #timer {
+                display: none;
+                position: fixed;
+                top: 0%;
+                left: 0%;
+                margin-top: 0.5%;
+                margin-left: 0.5%;
+                width: 11%;
+                background-color: #8B0000;
+                text-shadow: none;
+                color: #ffffff;
+                border: 3px solid #640000;
+                animation: timerPulse ease-in-out 2.8s infinite;
+            }
+
+            @keyframes timerPulse {
+                0%, 100% {
+                    transform: scale(1);
+                    box-shadow: 0 0 5px rgba(139, 0, 0, 0.7);
+                    text-shadow: 0 0 5px rgba(139, 0, 0, 0.7);
+                }
+                50% {
+                    transform: scale(1.01);
+                    box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+                    text-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+                }
+            }
+
+            #settingsDiv h1 {
+                margin-bottom: 5%;
+                margin-top: 0;
+                font-size: 150%;
+                display: block;
+            }
+
+            #slider {
+                margin-left: 1%;
+                color: #00ff00;
+            }
+
+            .dropdown {
+                min-width: 7.5em;
+                position: relative;
+                margin: 1em;
+            }
+
+            .dropdown * {
+                box-sizing: border-box;
+            }
+
+            .select {
+                background: #222;
+                color: #fff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-shadow: 0 0 0.8em #00ff00;
+                border: 2px #00ff00 solid;
+                padding-top: 5%;
+                padding-bottom: 5%;
+                border-radius: 0.25em;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+
+            .select-clicked {
+                border: 2px #00ff00 solid;
+                box-shadow: 0 0 0.8em #00ff00;
+            }
+
+            .select:hover {
+                background: #383838;
+            }
+
+            .caret {
+                width: 0;
+                height: 0;
+                color: white;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 5px solid;
+                transition: 0.3s;
+                margin-left: 5%;
+            }
+
+            .caret-rotate {
+                transform: rotate(180deg);
+            }
+
+            .menu {
+                list-style: none;
+                padding: 0.1em 0.25em;
+                background: #222;
+                border: 2px #00ff00 solid;
+                box-shadow: 0 0 0.8em #00ff00;
+                border-radius: 0.25em;
+                color: #fff;
+                position: absolute;
+                top: 1.6em;
+                left: 50%;
+                width: 100%;
+                transform: translateX(-50%);
+                opacity: 0;
+                display: none;
+                transition: 0.2s;
+                z-index: 1;
+            }
+
+            .menu li {
+                padding: 0.35em 0.25em;
+                margin: 0.15em 0;
+                border-radius: 0.25em;
+                cursor: pointer;
+            }
+
+            .menu li:hover {
+                background: #2a2d35;
+            }
+
+            .active {
+                background: #2e2e30;
+            }
+
+            .menu-open {
+                display: block;
+                opacity: 1;
+            }
+
+            #audioSymbol {
+                position: absolute;
+                top: 81.5%;
+                left: 1.5%;
+                width: 8%;
+                height: auto;
+                z-index: 99;
+            }
+
         </style>
     </head>
     <body>
         <img id="splashScreen" class="background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/gptPrison.png?raw=true">
         <div class="center">
-            <img id="notePaper" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/notePaper.png?raw=true">
-            <h1 style="font-size: 600%;">IMPOSSIBLE ESCAPE</h1>
-            <h1 style="position: absolute;">An Escape Room game made by Anthony Skyba</h1>
-            <button onclick="activateButton('play')">Play</button>
-            <button onclick="activateButton('story')">Story</button>
-            <button onclick="activateButton('instructions')">Instructions</button>
-            <h1 id="secretMessage" class="noteText hidden"></h1>
-            <h1 class="noteText hidden"></h1>
-            <h1 class="noteText hidden"></h1>
-            <button onclick="activateButton('back')" style="display: none;">Back</button>
+            <h1 id="title" style="font-size: 600%;">IMPOSSIBLE ESCAPE</h1>
+            <h1 id="author" style="position: absolute;">An Escape Room game made by Anthony Skyba</h1>
+            <button id="playButton" onclick="activateButton('play')">Play</button>
+            <button id="storyButton" onclick="activateButton('story')">Story</button>
+            <button id="instructionsButton" onclick="activateButton('instructions')">Instructions</button>
+            <button id="settingsButton" onclick="activateButton('settings')">Settings</button>
+            <div id="notePaperContainer">
+                <img id="notePaper" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/notePaper.png?raw=true">
+                <h1 id="secretMessage" class="noteText hidden"></h1>
+                <div id="settingsDiv" class="noteText hidden">
+                    <div>
+                        <h1>Brightness</h1>
+                        <div id="sliderNumber">50</div>
+                        <input id="slider" type="range" value="50">
+                        <h1>Timer Settings</h1>
+                        <form style="margin-top: 5%;" id="checkboxForm">
+                            <input id="checkbox" type="checkbox" value="infinite Time"> Infinite Time
+                        </form>
+                        <div class="dropdown">
+                            <div class="select">
+                                <span class="selected">10 Minutes</span>
+                                <div class="caret"></div>
+                            </div>
+                            <ul class="menu">
+                                <li>15 Minutes</li>
+                                <li class="active">10 Minutes</li>
+                                <li>5 Minutes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <h1 id="storyHeading" class="noteText hidden"></h1>
+                <h1 id="instructionsHeading" class="noteText hidden"></h1>
+                <h1 id="hints" class="noteText hidden"></h1>
+                <button id="backButton" onclick="activateButton('back')" style="display: none;">Back</button>
+            </div>
             <img id="lockedDoor" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/lockedDoor.png?raw=true">
             <img id="brickWall" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/brickWall.png?raw=true">
             <img id="keyWall" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keyWall.png?raw=true">
@@ -547,13 +734,30 @@
         <img id="lockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadLocked1.png?raw=true">
         <button id="exitButton2" class="exitButton">Exit</button>
         <button id="exitButton3" class="exitButton">Exit</button>
+        <button id="playAgainButton">Play Again</button>
         <div id="cardsOverallContainer"></div>
         <div id="powerBox">
             <p id="time"></p>
             <p id="score" style="top: 50px"></p>
         </div>
+        <h1 id="instructionsHeading2">Press 'z' to access instructions.</h1>
+        <button id="timer"></button>
+        <audio id="mainTrack">
+            <source src="/home/anthony/Downloads/Kristof Bathory - The Escape.mp3">
+        </audio>
+        <audio id="clickSound">
+            <source src="Click - Sound Effect (HD).mp3">
+        </audio>
+        <img id="audioSymbol" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/audioSymbolMuted.png?raw=true">
+        <img id="loseScreen" src="">
 
         <script>
+
+            // "The code works"
+
+            let currentArea = 0
+            let slidingPuzzleCompleted = false
+            let keyPressed = false
             let memoryCompleted = false
             let hitbox = document.getElementById("hitbox")
             let stopSpawning
@@ -567,7 +771,19 @@
             let timesRun = 0
             let exitButton = document.getElementById("exitButton")
             let shuffleButtons
-            let slidingPuzzleCompleted = false
+            let hints = document.getElementById("hints")
+            let timer = document.getElementById("timer")
+            let slider = document.getElementById("slider")
+            let sliderNumber = document.getElementById("sliderNumber")
+            let checkboxForm = document.getElementById("checkboxForm")
+            let infiniteTime = false
+            let mainTrack = document.getElementById("mainTrack")
+            let dropdowns = document.querySelectorAll(".dropdown")
+            let audioMuted = true
+            let audioSymbol = document.getElementById("audioSymbol")
+            let clickSound = document.getElementById("clickSound")
+            let timeSelected = "10 Minutes"
+            let secondsPassed = 0
             
             let arrowRight = Array.from(document.getElementsByClassName("arrow"))[0]
             let arrowLeft = Array.from(document.getElementsByClassName("arrow"))[1]
@@ -576,18 +792,18 @@
             arrowRight.style.left = "90%"
             arrowLeft.style.left = "0%"
             
-            let buttons = Array.from(document.querySelectorAll("button"))
-            let playButton = buttons[0]
-            let storyButton = buttons[1]
-            let instructionsButton = buttons[2]
-            let backButton = buttons[3]
+            let playButton = document.getElementById("playButton")
+            let storyButton = document.getElementById("storyButton")
+            let instructionsButton = document.getElementById("instructionsButton")
+            let backButton = document.getElementById("backButton")
+            let settingsButton = document.getElementById("settingsButton")
 
-            let headings = Array.from(document.querySelectorAll("h1"))
-            let heading1 = headings[0]
-            let heading2 = headings[1]
-            let secretMessage = headings[2]
-            let storyHeading = headings[3]
-            let instructionsHeading = headings[4]
+            let heading1 = document.getElementById("title")
+            let heading2 = document.getElementById("author")
+            let secretMessage = document.getElementById("secretMessage")
+            let storyHeading = document.getElementById("storyHeading")
+            let instructionsHeading = document.getElementById("instructionsHeading")
+            let settings = document.getElementById("settingsDiv")
 
             let hitboxPower = document.getElementById("hitboxPower")
             let hitboxPaper = document.getElementById("hitboxPaper")
@@ -595,10 +811,138 @@
             let hitboxFinalDoor = document.getElementById("hitboxFinalDoor")
             let generatorRoomExploded = document.getElementById("generatorRoomExploded")
             let messageDoorOpen = document.getElementById("messageDoorOpen")
-
+            
             secretMessage.innerHTML = "Money was all I cared abou<strong>t</strong>, but now I just want to be home.<br><br>Until I f<strong>o</strong>und myself here, life really wasn’t that bad.<br><br>Loneliness has to be the worst part about this place.<br><br>To<strong>g</strong>ether, as a society, we can do anything.<br><br>I’ve started tallying my days sp<strong>e</strong>nt here.<br><br>Please lord! Allow me <strong>t</strong>o escape this hellhole!<br><br>Luck <strong>h</strong>as never been on my sid<strong>e</strong>.<br><br>You<strong>r</strong> mind degrades in this place. I only have so long left.<br><br>"
             storyHeading.innerText = "Where am I? How did I get here? How do I get out of here? These are all questions poor Thomas was thinking to himself as he awoke trapped inside of a dark, eerie prison cell. Thomas could not identify any signs of life, and his screams were left unheard. There were strange markings all over the walls; Thomas had never seen such a place in his life, and it wasn’t somewhere where he wanted to be. Thomas felt frightened and confused as he thought back, recollecting his thoughts. The last thing he remembered was having gone to the bar with his friends. But how could he have ended up here? Was this some kind of practical joke? Thomas could barely think, he was hungry, tired, had no energy and was suffering from a severe headache. Only one thing was clear - he must escape!"
-            instructionsHeading.innerText = "Click around on the screen to find clues and solve puzzles.\n- Press \"x\" to get a hint\n - Refresh the page (ctrl+r) to return to the title screen\n - Play with audio for full experience"
+            instructionsHeading.innerText = "Escape the prison within the time limit by clicking around on the screen. Find clues, play games and solve puzzles.\n- Press \"z\" to open the instructions\n- Press \"x\" to get a hint\n- Press \"c\" to return to the title screen\n - Play with audio for full experience\n- Wait for the page to fully load before playing"
+            
+            slider.addEventListener("input", function() {
+                sliderNumber.innerText = slider.value
+                document.body.style.filter = "brightness(" + String(Number(slider.value) + 50) + "%)";
+            })
+
+            mainTrack.loop = true
+            mainTrack.volume = 0.4
+            audioSymbol.addEventListener("click", function() {
+                if (audioMuted) {
+                    audioSymbol.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/audioSymbol.png?raw=true"
+                    mainTrack.play()
+                    audioMuted = false
+                } else {
+                    audioSymbol.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/audioSymbolMuted.png?raw=true"
+                    mainTrack.pause()
+                    audioMuted = true
+                }
+            })  
+
+            dropdowns.forEach(dropdown => {
+                let select = dropdown.querySelector(".select")
+                let caret = dropdown.querySelector(".caret")
+                let menu = dropdown.querySelector(".menu")
+                let options = dropdown.querySelectorAll(".menu li")
+                let selected = dropdown.querySelector(".selected")
+
+                select.addEventListener("click", function() {
+                    select.classList.toggle("select-clicked")
+                    caret.classList.toggle("caret-rotate")
+                    menu.classList.toggle("menu-open")
+                })
+
+                options.forEach(option => {
+                    option.addEventListener("click", () => {
+                        selected.innerText = option.innerText
+                        select.classList.remove("select-clicked")
+                        caret.classList.remove("caret-rotate")
+                        menu.classList.remove("menu-open")
+                        timeSelected = option.innerText
+                        
+                        options.forEach(option => {
+                            option.classList.remove("active")
+                        })
+
+                        option.classList.add("active")
+                    })
+                })
+            })
+            
+            function gameOver(condition) {
+                if (condition == "time") {
+                    if (currentArea = 1) {
+                        let allElements = document.querySelectorAll("body *")
+                        allElements.forEach(element => {
+                            if (element.style.display != "none") element.remove()
+
+                        })
+                    }
+                } else {
+
+                }
+            }
+
+            function startTimer() {
+                timer.style.display = "block"
+                timeSelected = timeSelected.split(" ")[0]
+
+                if (timeSelected === "5") timeSelected = "05"
+
+                timer.innerText = timeSelected + ":00"
+
+                let timerInterval = setInterval(function() {
+                    let timerTextSplit = timer.innerText.split(":")
+                    let half1 = timerTextSplit[0]
+                    let half2 = timerTextSplit[1]
+
+                    if (timer.innerText == "00:00") {
+                        gameOver("time")
+                        clearInterval(timerInterval)
+                    }
+
+                    if (half2 == "00") {
+                        half1 = String(Number(half1) - 1)
+                        half2 = "59"
+                        if (half1.length == 1) half1 = "0" + half1
+                    } else {
+                        half2 = String(Number(half2) - 1)
+                        if (half2.length == 1) half2 = "0" + half2
+                    }
+
+                    timer.innerText = `${half1}:${half2}`
+                    secondsPassed++
+                }, 1000)
+            }
+
+            document.addEventListener("keydown", function(event) {
+                if (splashScreen.style.display != "none") return
+                let key = event.key
+                if (key == "z" || key == "x" || key == "c") {
+                    arrowContainer.style.display = "none"
+                    notePaper.style.display = "block"
+                    backButton.style.display = "block"
+                    hitboxPaper.style.display = "none"
+                    keyPressed = true
+                }
+                if (key == "z") {
+                    instructionsHeading.style.display = "block"
+                } else if (key == "x") {
+                    hints.style.display = "block"
+                    if (currentArea == 1) hints.innerText = "Maybe the locked door leads to a way out of here. If only there was a key that could open it..."
+                    else if (currentArea == 2) hints.innerText = "Squares are beautiful. Squares are life. Squares are your key to success."
+                    else if (currentArea == 3 && roomExploded) hints.innerText = "The FIRST thing you should do when assessing the condition of old photographs is to check for DISCOLOURATION."
+                    else if(currentArea == 3) hints.innerText = "Thomas hates this place so much that he would blow it up! If he could..."
+                } else if(key == "c") {
+                    location.reload()
+                }
+            })
+
+            checkboxForm.addEventListener("change", function(event) {
+                event.preventDefault()
+                if (document.getElementById("checkbox").checked) infiniteTime = true
+                else infiniteTime = false
+            })
+
+            document.body.addEventListener("click", function() {
+                if (!audioMuted) clickSound.play()
+            })
 
             document.body.addEventListener("dragstart", function(event) {
                 event.preventDefault()
@@ -608,14 +952,25 @@
                 let x
                 let y
 
-                if (button == "back" && secretMessage.style.display == "block") {
-                    notePaper.style.display = "none"
-                    arrowContainer.style.display = "flex"
-                    backButton.style.display = "none"
-                    secretMessage.style.display = "none"
-                    hitboxPaper.style.display = "block"
-                    if (!roomExploded) hitboxPower.style.display = "block"
-                    return
+                if (button == "back") {
+                    if (secretMessage.style.display == "block") {
+                        notePaper.style.display = "none"
+                        arrowContainer.style.display = "flex"
+                        backButton.style.display = "none"
+                        secretMessage.style.display = "none"
+                        hitboxPaper.style.display = "block"
+                        if (!roomExploded) hitboxPower.style.display = "block"
+                        return
+                    } else if (keyPressed) {
+                        keyPressed = false
+                        notePaper.style.display = "none"
+                        arrowContainer.style.display = "flex"
+                        backButton.style.display = "none"
+                        hitboxPaper.style.display = "block"
+                        instructionsHeading.style.display = "none"
+                        hints.style.display = "none"
+                        return
+                    }
                 }
 
                 if (hideSplash) {
@@ -630,33 +985,36 @@
                 playButton.style.display = x
                 storyButton.style.display = x
                 instructionsButton.style.display = x
+                settingsButton.style.display = x
                 heading1.style.display = x
                 heading2.style.display = x
 
                 if (button == "play") {
                     let splashScreen = document.getElementById("splashScreen") 
                     splashScreen.className = "fade-out background"
+                    audioSymbol.style.display = "none"
                     splashScreen.addEventListener("animationend", function() {
                         splashScreen.style.display = "none"
+                        if (!infiniteTime) startTimer()
                         area3()
                     }, {once: true})
                     return
                 }
 
                 backButton.style.display = y
-                backButton.style.top = "10%"
                 notePaper.style.display = y
 
                 if (button == "back") {
                     storyHeading.style.display = "none"
                     instructionsHeading.style.display = "none"
+                    settingsDiv.style.display = "none"
                     return
                 }
-                if (button == "story") {
-                    storyHeading.style.display = "flex"
-                    notePaper.style.transform = rotate("90deg")
+                if (button == "story") storyHeading.style.display = "flex"
+                else if (button == "instructions") instructionsHeading.style.display = "flex"
+                else {
+                    settingsDiv.style.display = "flex"
                 }
-                else instructionsHeading.style.display = "flex"
             }
 
             function arrowEvent(room1, room2, room3, area) {
@@ -760,11 +1118,15 @@
             }
 
             function area1() {
+                currentArea = 1
                 let lockedDoor = document.getElementById("lockedDoor")
                 let keyWall = document.getElementById("keyWall")
                 let brickWall = document.getElementById("brickWall")
                 let removeEvent = false
                 let key1 = document.getElementById("key")
+                let instructionsHeading2 = document.getElementById("instructionsHeading2")
+                instructionsHeading2.className = "fade-in"
+                instructionsHeading2.style.display = "block"
                 
                 splashScreen.style.display = "none"
                 lockedDoor.className = "fade-in background"
@@ -838,6 +1200,7 @@
             }
 
             function area2() {
+                currentArea = 2
                 let cardsRoom = document.getElementById("cardsRoom")
                 let tilesRoom = document.getElementById("tilesRoom")
                 
@@ -976,6 +1339,7 @@
             }
             
             function area3() {
+                currentArea = 3
                 let finalDoorUnlocked = document.getElementById("finalDoorUnlocked")
                 let finalDoorLocked = document.getElementById("finalDoorLocked")
                 let messageDoorClosed = document.getElementById("messageDoorClosed")
@@ -1031,7 +1395,8 @@
 
                     exitButton.addEventListener("click", function() {
                         let userNum = Number(userInput.join(""))
-                        if ((userNum == 375 || userNum == 45) && roomExploded && slidingPuzzleCompleted) {
+                        if ((userNum == 375 || userNum == 45)) {
+                            timer.style.display = "none"
                             hitboxFinalDoor.style.display = "none"
                             finalDoorLocked.classList.remove("fade-in")
                             finalDoorLocked.classList.add("fade-out")
@@ -1040,6 +1405,14 @@
                                 finalDoorLocked.style.display = "none"
                                 finalDoorUnlocked.classList.remove("fade-out")
                                 finalDoorUnlocked.classList.add("fade-in")
+                                finalDoorUnlocked.style.display = "block"
+                                finalDoorUnlocked.addEventListener("animationend", function() {
+                                    setTimeout(function() {
+                                        finalDoorUnlocked.classList.remove("fade-in")
+                                        finalDoorUnlocked.classList.add("fade-out")
+                                        gameOver()
+                                    }, 300)
+                                })
                             })
                         }
                         keypadContainer.style.display = "none"
