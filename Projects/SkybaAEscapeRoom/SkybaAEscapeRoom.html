@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Escape Room</title>
         <style>
@@ -30,7 +30,7 @@
                 align-items: center;
             }
 
-            h1 {
+            h1, p, label {
                 font-family: 'Chiller', cursive;
                 z-index: 3;
                 position: relative;
@@ -51,7 +51,7 @@
                 gap: 20px;
             }
 
-            button:not(#timer):hover {
+            button:not(#timer):not(#exitButton4):hover {
                 background-color: black;
                 box-shadow: 0 10px 20px #000000, 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
                 color: #000000;
@@ -121,10 +121,6 @@
                 height: auto;
                 width: 10%;
             }
-
-            /* .arrow:hover {
-                
-            } */
 
             #arrows {
                 position: absolute;
@@ -607,6 +603,7 @@
                 display: none;
                 transition: 0.2s;
                 z-index: 1;
+                z-index: 9;
             }
 
             .menu li {
@@ -638,6 +635,48 @@
                 z-index: 99;
             }
 
+            #playAgainButton, #continueButton {
+                position: absolute;
+                top: 83%;
+                left: 38%;
+                z-index: 99;
+            }
+
+            #endScreen, #radioButtonScreen{
+                width: 100%;
+                height: 100%;
+                align-items: center;
+                position: absolute;
+                top: 0%;
+                left: 0%;
+                z-index: 999;
+                flex-direction: column;
+                display: none;
+            }
+
+            #radioButtonScreen {
+                align-items: center;
+            }
+
+            .radio {
+                display: none;
+            }
+
+            label {
+                font-size: 350%;
+            }
+
+            label::before {
+                position: absolute;
+                content: "";
+                height: 30px;
+                width: 30px;
+                border: 3px solid black;
+                border-radius: 50%;
+                margin-right: 150%;
+                margin-top: 20%;
+            }
+
         </style>
     </head>
     <body>
@@ -650,6 +689,8 @@
             <button id="instructionsButton" onclick="activateButton('instructions')">Instructions</button>
             <button id="settingsButton" onclick="activateButton('settings')">Settings</button>
             <div id="notePaperContainer">
+                <h1 class="noteText hidden" id="loseText"></h1>
+                <h1 class="noteText hidden" id="winText"></h1>
                 <img id="notePaper" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/notePaper.png?raw=true">
                 <h1 id="secretMessage" class="noteText hidden"></h1>
                 <div id="settingsDiv" class="noteText hidden">
@@ -672,12 +713,14 @@
                                 <li>5 Minutes</li>
                             </ul>
                         </div>
+                        <p>Click <a href="javascript:void(0);" onclick="showPrompt()">here</a> to set a<br>custom name for<br>the story</p>
                     </div>
                 </div>
                 <h1 id="storyHeading" class="noteText hidden"></h1>
                 <h1 id="instructionsHeading" class="noteText hidden"></h1>
                 <h1 id="hints" class="noteText hidden"></h1>
                 <button id="backButton" onclick="activateButton('back')" style="display: none;">Back</button>
+                <button id="continueButton" class="hidden">Continue</button>
             </div>
             <img id="lockedDoor" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/lockedDoor.png?raw=true">
             <img id="brickWall" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/brickWall.png?raw=true">
@@ -734,7 +777,6 @@
         <img id="lockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadLocked1.png?raw=true">
         <button id="exitButton2" class="exitButton">Exit</button>
         <button id="exitButton3" class="exitButton">Exit</button>
-        <button id="playAgainButton">Play Again</button>
         <div id="cardsOverallContainer"></div>
         <div id="powerBox">
             <p id="time"></p>
@@ -749,11 +791,31 @@
             <source src="Click - Sound Effect (HD).mp3">
         </audio>
         <img id="audioSymbol" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/audioSymbolMuted.png?raw=true">
-        <img id="loseScreen" src="">
+        <img id="loseScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/loserScreen.png?raw=true">
+        <div id="endScreen">
+            <p style="position: absolute; left: 0%; font-size: 150%; margin-left: 1%;">by Anthony Skyba</p>
+            <h1 style="font-size: 400%;">IMPOSSIBLE ESCAPE</h1>
+            <h1>You ran out of time!</h1>
+            <h1>Thank you for playing</h1>
+            <h1>Continue your escape?</h1>
+            <button id="playAgainButton">Play Again</button>
+        </div>
+        <div id="radioButtonScreen">
+            <input type="radio" class="radio" name="options" value="option1">
+            <label for="option1">Run</label>
+            <br>
+            <br>
+            <input type="radio" class="radio" name="options" value="option2">
+            <label for="option2">Fight</label>
+        </div>
+        <img id="winScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/endScreen.png?raw=true">
+        <img id="storyScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalScreen.png?raw=true">
+
 
         <script>
 
             // "The code works"
+            // A couple variables incoming (these aren't even all of them)
 
             let currentArea = 0
             let slidingPuzzleCompleted = false
@@ -784,6 +846,21 @@
             let clickSound = document.getElementById("clickSound")
             let timeSelected = "10 Minutes"
             let secondsPassed = 0
+            let playAgainButton = document.getElementById("playAgainButton")
+            let continueButton = document.getElementById("continueButton")
+            let notePaperContainer = document.getElementById("notePaperContainer")
+            let endScreenDiv = document.getElementById("endScreen")
+            let endScreenText = document.getElementById("endScreenText")
+            let winScreen = document.getElementById("winScreen")
+            let storyScreen = document.getElementById("storyScreen")
+            let name = "Thomas"
+            let timeRanOut = false
+            let winText = document.getElementById("winText")
+            let timerInterval
+
+            let radioButtons = Array.from(document.getElementsByClassName("radio"))
+            let selectedRadioButton
+            let radioButtonScreen = document.getElementById("radioButtonScreen")
             
             let arrowRight = Array.from(document.getElementsByClassName("arrow"))[0]
             let arrowLeft = Array.from(document.getElementsByClassName("arrow"))[1]
@@ -804,6 +881,7 @@
             let storyHeading = document.getElementById("storyHeading")
             let instructionsHeading = document.getElementById("instructionsHeading")
             let settings = document.getElementById("settingsDiv")
+            let loseText = document.getElementById("loseText")
 
             let hitboxPower = document.getElementById("hitboxPower")
             let hitboxPaper = document.getElementById("hitboxPaper")
@@ -813,9 +891,14 @@
             let messageDoorOpen = document.getElementById("messageDoorOpen")
             
             secretMessage.innerHTML = "Money was all I cared abou<strong>t</strong>, but now I just want to be home.<br><br>Until I f<strong>o</strong>und myself here, life really wasn’t that bad.<br><br>Loneliness has to be the worst part about this place.<br><br>To<strong>g</strong>ether, as a society, we can do anything.<br><br>I’ve started tallying my days sp<strong>e</strong>nt here.<br><br>Please lord! Allow me <strong>t</strong>o escape this hellhole!<br><br>Luck <strong>h</strong>as never been on my sid<strong>e</strong>.<br><br>You<strong>r</strong> mind degrades in this place. I only have so long left.<br><br>"
-            storyHeading.innerText = "Where am I? How did I get here? How do I get out of here? These are all questions poor Thomas was thinking to himself as he awoke trapped inside of a dark, eerie prison cell. Thomas could not identify any signs of life, and his screams were left unheard. There were strange markings all over the walls; Thomas had never seen such a place in his life, and it wasn’t somewhere where he wanted to be. Thomas felt frightened and confused as he thought back, recollecting his thoughts. The last thing he remembered was having gone to the bar with his friends. But how could he have ended up here? Was this some kind of practical joke? Thomas could barely think, he was hungry, tired, had no energy and was suffering from a severe headache. Only one thing was clear - he must escape!"
             instructionsHeading.innerText = "Escape the prison within the time limit by clicking around on the screen. Find clues, play games and solve puzzles.\n- Press \"z\" to open the instructions\n- Press \"x\" to get a hint\n- Press \"c\" to return to the title screen\n - Play with audio for full experience\n- Wait for the page to fully load before playing"
-            
+
+            radioButtons.forEach(button => {
+                button.addEventListener("change", function() {
+                    selectedRadioButton = button
+                })
+            })
+
             slider.addEventListener("input", function() {
                 sliderNumber.innerText = slider.value
                 document.body.style.filter = "brightness(" + String(Number(slider.value) + 50) + "%)";
@@ -834,6 +917,10 @@
                     audioMuted = true
                 }
             })  
+
+            playAgainButton.addEventListener("click", function() {
+                location.reload()
+            })
 
             dropdowns.forEach(dropdown => {
                 let select = dropdown.querySelector(".select")
@@ -864,18 +951,88 @@
                     })
                 })
             })
-            
-            function gameOver(condition) {
-                if (condition == "time") {
-                    if (currentArea = 1) {
-                        let allElements = document.querySelectorAll("body *")
-                        allElements.forEach(element => {
-                            if (element.style.display != "none") element.remove()
 
-                        })
+            continueButton.addEventListener("click", function() {
+                notePaperContainer.className = "fade-out"
+                notePaperContainer.addEventListener("animationend", function() {
+                    if (timeRanOut) {
+                        endScreenDiv.classList.add("fade-in")
+                        endScreenDiv.style.display = "flex"
+                        endScreenText.innerText = "You ran out of time\n\n Thank you for playing!\n\n Want to try again?"
+                    } else {
+                        radioButtonScreen.style.display = "flex"
+                        radioButtonScreen.classList.add("fade-in")
                     }
-                } else {
+                })
+            })
 
+            function showPrompt() {
+                let usersName = prompt("Enter a male name (which will replace the default name of \"Thomas\")")
+                if (usersName.length < 10 || usersName.length <= 1) name = usersName
+                else if (usersName.length > 1) {
+                    alert("Your name is too long")
+                } else {
+                    alert("Your name is too short")
+                }
+                showPrompt()
+            }
+            
+            function gameOver() {
+                clearInterval(timerInterval)
+                timer.style.display = "none"
+
+                hitboxPaper.remove()
+                hitboxPower.remove()
+                hitbox.remove()
+                hitbox2.remove()
+                hitboxFinalDoor.remove()
+                hitboxMessageDoor.remove()
+                
+                if (timeRanOut) {
+                    let backgroundElements = Array.from(document.getElementsByClassName("background"))
+                    let currentBackground
+                    
+                    loseText.innerText = "It was the second day with no water, and the hallucinations wouldn’t stop. But in a moment of desperation," + name + "knew that he had gone too far to give up now. " + name + " took a deep breath, recollected his thoughts, and decided to give it another go."
+                    
+                    backgroundElements.forEach(element => {
+                        if (element.classList.contains("fade-in")) currentBackground = element
+                    })
+                    
+                    currentBackground.className = "background fade-out"
+                    arrowContainer.className = "fade-out"
+                    currentBackground.addEventListener("animationend", function() {
+                        currentBackground.style.display = "none"
+                        
+                        let loseScreen = document.getElementById("loseScreen")
+                        loseScreen.style.display = "block"
+                        loseScreen.classList.add("fade-in")
+                        
+                        notePaper.style.display = "block"
+                        notePaper.classList.add("fade-in")
+                        
+                        continueButton.style.display = "block"
+                        continueButton.classList.add("fade-in")
+                        
+                        loseText.style.display = "block"
+                        loseText.classList.add("fade-in")
+                    })
+                } else {
+                    storyScreen.style.display = "block"
+                    storyScreen.className = "background fade-in"
+
+                    winText.innerText = name + " thought the end was near, his quick thinking allowed him to slip through some of the prison’s defense mechanisms. With the outside world in sight, he began to exert his remaining strength to carry himself through the prison’s yard. But " + name + "'(s) inadequate reaction time allowed him little hope as he felt something grab his ankle, causing him to trip."
+                    
+                    setTimeout(function() {
+                        notePaper.style.display = "block"
+                        notePaper.classList.add("fade-in")
+
+                        winText.style.display = "block"
+                        winText.classList.add("fade-in")
+                        winText.zIndex = 999
+
+                        continueButton.style.display = "block"
+                        continueButton.classList.add("fade-in")
+                    }, 1500)
                 }
             }
 
@@ -887,14 +1044,15 @@
 
                 timer.innerText = timeSelected + ":00"
 
-                let timerInterval = setInterval(function() {
+                timerInterval = setInterval(function() {
                     let timerTextSplit = timer.innerText.split(":")
                     let half1 = timerTextSplit[0]
                     let half2 = timerTextSplit[1]
 
                     if (timer.innerText == "00:00") {
-                        gameOver("time")
                         clearInterval(timerInterval)
+                        timeRanOut = true
+                        gameOver("time")
                     }
 
                     if (half2 == "00") {
@@ -928,7 +1086,7 @@
                     if (currentArea == 1) hints.innerText = "Maybe the locked door leads to a way out of here. If only there was a key that could open it..."
                     else if (currentArea == 2) hints.innerText = "Squares are beautiful. Squares are life. Squares are your key to success."
                     else if (currentArea == 3 && roomExploded) hints.innerText = "The FIRST thing you should do when assessing the condition of old photographs is to check for DISCOLOURATION."
-                    else if(currentArea == 3) hints.innerText = "Thomas hates this place so much that he would blow it up! If he could..."
+                    else if(currentArea == 3) hints.innerText = name + "hates this place so much that he would blow it up! If he could..."
                 } else if(key == "c") {
                     location.reload()
                 }
@@ -1003,6 +1161,7 @@
 
                 backButton.style.display = y
                 notePaper.style.display = y
+                storyHeading.innerHTML = "Where am I? How did I get here? How do I get out of here? These are all questions poor " + name + " was thinking to himself as he awoke trapped inside of a dark, eerie prison cell. " + name + " could not identify any signs of life, and his screams were left unheard. There were strange markings all over the walls; " + name + " had never seen such a place in his life, and it wasn’t somewhere where he wanted to be. " + name + " felt frightened and confused as he thought back, recollecting his thoughts. The last thing he remembered was having gone to the bar with his friends. But how could he have ended up here? Was this some kind of practical joke? " + name + " could barely think, he was hungry, tired, had no energy and was suffering from a severe headache. Only one thing was clear - he must escape!"
 
                 if (button == "back") {
                     storyHeading.style.display = "none"
@@ -1010,6 +1169,7 @@
                     settingsDiv.style.display = "none"
                     return
                 }
+                
                 if (button == "story") storyHeading.style.display = "flex"
                 else if (button == "instructions") instructionsHeading.style.display = "flex"
                 else {
@@ -1396,11 +1556,11 @@
                     exitButton.addEventListener("click", function() {
                         let userNum = Number(userInput.join(""))
                         if ((userNum == 375 || userNum == 45)) {
-                            timer.style.display = "none"
                             hitboxFinalDoor.style.display = "none"
                             finalDoorLocked.classList.remove("fade-in")
                             finalDoorLocked.classList.add("fade-out")
                             arrowContainer.className = "fade-out"
+                            timer.style.display = "none"
                             finalDoorLocked.addEventListener("animationend", function() {
                                 finalDoorLocked.style.display = "none"
                                 finalDoorUnlocked.classList.remove("fade-out")
@@ -1410,8 +1570,11 @@
                                     setTimeout(function() {
                                         finalDoorUnlocked.classList.remove("fade-in")
                                         finalDoorUnlocked.classList.add("fade-out")
-                                        gameOver()
-                                    }, 300)
+                                        finalDoorUnlocked.addEventListener("animationend", function() {
+                                            finalDoorUnlocked.style.display = "none"
+                                            gameOver()
+                                        })
+                                    }, 800)
                                 })
                             })
                         }
@@ -1583,8 +1746,8 @@
                     let correctNumbers= 0
                     for (let i = 1; i <= 8; i++) {
                         let buttonComputedStyle2 = getComputedStyle(document.getElementById("button" + String(i)))
-                        if (buttonComputedStyle2.getPropertyValue("grid-row") == Math.ceil(i / 3) &&
-                         buttonComputedStyle2.getPropertyValue("grid-column") == ((i - 1) % 3) + 1)
+                        if (getGridValue(buttonComputedStyle2.getPropertyValue("grid-row")) == Math.ceil(i / 3) &&
+                         getGridValue(buttonComputedStyle2.getPropertyValue("grid-column")) == ((i - 1) % 3) + 1)
                             correctNumbers++
                     }
                     if (correctNumbers == 8) {
