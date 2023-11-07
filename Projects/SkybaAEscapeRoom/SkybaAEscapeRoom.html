@@ -807,8 +807,14 @@
         <audio id="mainTrack">
             <source src="/home/anthony/Downloads/Kristof Bathory - The Escape.mp3">
         </audio>
-        <audio id="clickSound">
-            <source src="Click - Sound Effect (HD).mp3">
+        <audio id="beepSound">
+            <source src="beepSound.mp3">
+        </audio>
+        <audio id="paperSound">
+            <source src="paperSound.mp3">
+        </audio>
+        <audio id="doorSound">
+            <source src="doorSoundTrimmed.mp3">
         </audio>
         <img id="audioSymbol" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/audioSymbolMuted.png?raw=true">
         <img id="loseScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/loserScreen.png?raw=true">
@@ -867,11 +873,8 @@
             let sliderNumber = document.getElementById("sliderNumber")
             let checkboxForm = document.getElementById("checkboxForm")
             let infiniteTime = false
-            let mainTrack = document.getElementById("mainTrack")
             let dropdowns = document.querySelectorAll(".dropdown")
-            let audioMuted = true
             let audioSymbol = document.getElementById("audioSymbol")
-            let clickSound = document.getElementById("clickSound")
             let timeSelected = "10 Minutes"
             let secondsPassed = 0
             let playAgainButton = document.getElementById("playAgainButton")
@@ -888,6 +891,12 @@
             let finalContinueButton = false
             let gameplayButton = document.getElementById("gameplayButton")
             let gameplayDiv = document.getElementById("gameplayDiv")
+            
+            let audioMuted = true
+            let mainTrack = document.getElementById("mainTrack")
+            let doorSound = document.getElementById("doorSound")
+            let beepSound = document.getElementById("beepSound")
+            let paperSound = document.getElementById("paperSound")
 
             let radioButtons = Array.from(document.getElementsByClassName("radio"))
             let selectedRadioButton
@@ -925,6 +934,12 @@
             secretMessage.innerHTML = "Money was all I cared abou<strong>t</strong>, but now I just want to be home.<br><br>Until I f<strong>o</strong>und myself here, life really wasn’t that bad.<br><br>Loneliness has to be the worst part about this place.<br><br>To<strong>g</strong>ether, as a society, we can do anything.<br><br>I’ve started tallying my days sp<strong>e</strong>nt here.<br><br>Please lord! Allow me <strong>t</strong>o escape this hellhole!<br><br>Luck <strong>h</strong>as never been on my sid<strong>e</strong>.<br><br>You<strong>r</strong> mind degrades in this place. I only have so long left.<br><br>"
             instructionsHeading.innerText = "Escape the prison within the time limit by clicking around on the screen. Find clues, play games and solve puzzles.\n\n- Press \"z\" to open the instructions\n- Press \"x\" to get a hint\n- Press \"c\" to return to the title screen\n - Play with audio for full experience\n- Toggle audio with the audio symbol in the bottom left (default is muted)\n- Wait for the page to fully load before playing"
 
+            paperSound.volume = 0.2
+            beepSound.volume = 0.2
+            doorSound.volume = 0.2
+            mainTrack.volume = 0.4            
+            mainTrack.loop = true
+
             radioButtons.forEach(button => {
                 button.addEventListener("change", function() {
                     selectedRadioButton = button
@@ -936,8 +951,6 @@
                 document.body.style.filter = "brightness(" + String(Number(slider.value) + 50) + "%)";
             })
 
-            mainTrack.loop = true
-            mainTrack.volume = 0.4
             audioSymbol.addEventListener("click", function() {
                 if (audioMuted) {
                     audioSymbol.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/audioSymbol.png?raw=true"
@@ -1010,6 +1023,7 @@
                         notePaperContainer.className = "fade-in"
                         storyScreen.style.display = "none"
                         notePaper.style.display = "block"
+                        if (!audioMuted) paperSound.play()
                         winScreen.className = "background fade-in"
                         winScreen.style.display = "block"
                         winText.style.display = "block"
@@ -1147,6 +1161,7 @@
                 let key = event.key
                 if (key == "z" || key == "x" || key == "c") {
                     arrowContainer.style.display = "none"
+                    if (!audioMuted && notePaper.style.display == "none") paperSound.play()
                     notePaper.style.display = "block"
                     backButton.style.display = "block"
                     hitboxPaper.style.display = "none"
@@ -1169,10 +1184,6 @@
                 event.preventDefault()
                 if (document.getElementById("checkbox").checked) infiniteTime = true
                 else infiniteTime = false
-            })
-
-            document.body.addEventListener("click", function() {
-                if (!audioMuted) clickSound.play()
             })
 
             document.body.addEventListener("dragstart", function(event) {
@@ -1235,6 +1246,8 @@
 
                 backButton.style.display = y
                 notePaper.style.display = y
+                if (y == "flex" && !audioMuted) paperSound.play()
+
                 storyHeading.innerHTML = "Where am I? How did I get here? How do I get out of here? These are all questions poor " + name + " was thinking to himself as he awoke trapped inside of a dark, eerie prison cell. " + name + " could not identify any signs of life, and his screams were left unheard. There were strange markings all over the walls; " + name + " had never seen such a place in his life, and it wasn’t somewhere where he wanted to be. " + name + " felt frightened and confused as he thought back, recollecting his thoughts. The last thing he remembered was having gone to the bar with his friends. But how could he have ended up here? Was this some kind of practical joke? " + name + " could barely think, he was hungry, tired, had no energy and was suffering from a severe headache. Only one thing was clear - he must escape!"
 
                 if (button == "back") {
@@ -1433,6 +1446,8 @@
             }
             
             function keypadCode(num) {
+                if (beepSound.currentTime > 0) beepSound.currentTime = 0
+                if (!audioMuted) beepSound.play()
                 userInput.push(num)
             }
 
@@ -1617,6 +1632,7 @@
 
                 hitboxPaper.addEventListener("click", function() {
                     notePaper.style.display = "block"
+                    if (!audioMuted) paperSound.play()
                     arrowContainer.style.display = "none"
                     backButton.style.display = "block"
                     secretMessage.style.display = "block"
@@ -1632,7 +1648,7 @@
 
                     exitButton.addEventListener("click", function() {
                         let userNum = Number(userInput.join(""))
-                        if ((userNum == 375 || userNum == 45)) {
+                        if ((userNum == 375 || userNum == 45) && roomExploded && slidingPuzzleCompleted) {
                             hitboxFinalDoor.remove()
                             arrowContainer.remove()
                             finalDoorLocked.classList.remove("fade-in")
@@ -1829,26 +1845,28 @@
                             correctNumbers++
                     }
                     if (correctNumbers == 8) {
+                        if (!audioMuted) doorSound.play()
                         setTimeout(function() {
                             slidingPuzzleCompleted = true
-                            slidingPuzzleContainer.style.display = "none"
+                            slidingPuzzleContainer.className = "fade-out"
                             messageDoorClosed.classList.remove("fade-in")
                             messageDoorClosed.classList.add("fade-out")
 
-                            messageDoorClosed.addEventListener("animationend", function() {
+                            setTimeout(function() {
                                 arrowContainer.style.display = "flex"
                                 messageDoorClosed.style.display = "none"
                                 messageDoorOpen.classList.remove("fade-out")
                                 messageDoorOpen.classList.add("fade-in")
                                 messageDoorOpen.style.display = "block"
+                                slidingPuzzleContainer.style.display = "none"
 
                                 arrowLeft.addEventListener("click", function() {
                                     arrowLeft.addEventListener("animationend", function() {
                                         arrowRight.style.display = "block"
                                     }, {once: true})
                                 }, {once: true})
-                            })
-                        }, 100)
+                            }, 5300)
+                        }, 1100)
                     }
                 }
             }
