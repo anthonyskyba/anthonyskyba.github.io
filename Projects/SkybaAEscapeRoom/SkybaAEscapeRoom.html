@@ -500,7 +500,7 @@
             #timer {
                 display: none;
                 position: fixed;
-                top: 0%;
+                top: 0.25%;
                 left: 0%;
                 margin-top: 0.5%;
                 margin-left: 0.5%;
@@ -510,6 +510,8 @@
                 color: #ffffff;
                 border: 3px solid #640000;
                 animation: timerPulse ease-in-out 2.8s infinite;
+                font-size: 8vh;
+                padding-top: 0.25%;
             }
 
             @keyframes timerPulse {
@@ -642,7 +644,7 @@
                 z-index: 99;
             }
 
-            #endScreen, #radioButtonScreen{
+            #endScreen {
                 width: 100%;
                 height: 100%;
                 align-items: center;
@@ -655,26 +657,40 @@
             }
 
             #radioButtonScreen {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
                 align-items: center;
-            }
-
-            .radio {
                 display: none;
+                z-index: 999;
             }
 
             label {
-                font-size: 350%;
+                font-size: 10vh;
+                vertical-align: middle;
             }
 
-            label::before {
-                position: absolute;
-                content: "";
-                height: 30px;
-                width: 30px;
-                border: 3px solid black;
-                border-radius: 50%;
-                margin-right: 150%;
-                margin-top: 20%;
+            #storyHeading {
+                font-size: 4.5vh;
+            }
+
+            #instructionsHeading {
+                font-size: 4.5vh;
+            }
+
+            #secretMessage {
+                font-size: 3.8vh;
+            }
+
+            #winText {
+                font-size: 4.5vh;
+            }
+
+            .radio {
+                margin-right: 30px;
+                vertical-align: middle;
+                transform: scale(2);
             }
 
         </style>
@@ -682,17 +698,21 @@
     <body>
         <img id="splashScreen" class="background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/gptPrison.png?raw=true">
         <div class="center">
-            <h1 id="title" style="font-size: 600%;">IMPOSSIBLE ESCAPE</h1>
+            <h1 id="title" style="font-size: 600%; margin-bottom: 30px;" mar>IMPOSSIBLE ESCAPE</h1>
             <h1 id="author" style="position: absolute;">An Escape Room game made by Anthony Skyba</h1>
             <button id="playButton" onclick="activateButton('play')">Play</button>
             <button id="storyButton" onclick="activateButton('story')">Story</button>
             <button id="instructionsButton" onclick="activateButton('instructions')">Instructions</button>
+            <button id="gameplayButton" onclick="activateButton('gameplay')">Gameplay</button>
             <button id="settingsButton" onclick="activateButton('settings')">Settings</button>
             <div id="notePaperContainer">
                 <h1 class="noteText hidden" id="loseText"></h1>
                 <h1 class="noteText hidden" id="winText"></h1>
                 <img id="notePaper" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/notePaper.png?raw=true">
                 <h1 id="secretMessage" class="noteText hidden"></h1>
+                <div id="gameplayDiv" class="noteText hidden">
+                    <h1>hehehehaw</h1>
+                </div>
                 <div id="settingsDiv" class="noteText hidden">
                     <div>
                         <h1>Brightness</h1>
@@ -782,7 +802,7 @@
             <p id="time"></p>
             <p id="score" style="top: 50px"></p>
         </div>
-        <h1 id="instructionsHeading2">Press 'z' to access instructions.</h1>
+        <h1 id="instructionsHeading2">Press "z" to access instructions.</h1>
         <button id="timer"></button>
         <audio id="mainTrack">
             <source src="/home/anthony/Downloads/Kristof Bathory - The Escape.mp3">
@@ -794,10 +814,11 @@
         <img id="loseScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/loserScreen.png?raw=true">
         <div id="endScreen">
             <p style="position: absolute; left: 0%; font-size: 150%; margin-left: 1%;">by Anthony Skyba</p>
-            <h1 style="font-size: 400%;">IMPOSSIBLE ESCAPE</h1>
-            <h1>You ran out of time!</h1>
-            <h1>Thank you for playing</h1>
-            <h1>Continue your escape?</h1>
+            <h1 style="font-size: 10vh;">IMPOSSIBLE ESCAPE</h1>
+            <h1 id="endScreen1" style="font-size: 5vh;">You ran out of time!</h1>
+            <h1 id="endScreen2" style="font-size: 5vh;"></h1>
+            <h1 style="font-size: 5vh;">Thank you for playing</h1>
+            <h1 id="endScreen3" style="font-size: 5vh;">Continue your escape?</h1>
             <button id="playAgainButton">Play Again</button>
         </div>
         <div id="radioButtonScreen">
@@ -805,8 +826,15 @@
             <label for="option1">Run</label>
             <br>
             <br>
+            <br>
+            <br>
+            <br>
+            <br>
             <input type="radio" class="radio" name="options" value="option2">
             <label for="option2">Fight</label>
+            <br>
+            <br>
+            <br>
         </div>
         <img id="winScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/endScreen.png?raw=true">
         <img id="storyScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalScreen.png?raw=true">
@@ -857,10 +885,14 @@
             let timeRanOut = false
             let winText = document.getElementById("winText")
             let timerInterval
+            let finalContinueButton = false
+            let gameplayButton = document.getElementById("gameplayButton")
+            let gameplayDiv = document.getElementById("gameplayDiv")
 
             let radioButtons = Array.from(document.getElementsByClassName("radio"))
             let selectedRadioButton
             let radioButtonScreen = document.getElementById("radioButtonScreen")
+            let radioOnScreen = false
             
             let arrowRight = Array.from(document.getElementsByClassName("arrow"))[0]
             let arrowLeft = Array.from(document.getElementsByClassName("arrow"))[1]
@@ -953,6 +985,40 @@
             })
 
             continueButton.addEventListener("click", function() {
+                if (finalContinueButton) {
+                    notePaperContainer.className = "fade-out"
+                    endScreenDiv.className = "fade-in"
+                    endScreenDiv.style.display = "flex"
+
+                    let endScreenH1 = document.getElementById("endScreen1")
+                    let endScreenH2 = document.getElementById("endScreen2")
+                    let endScreenH3 = document.getElementById("endScreen3")
+
+                    endScreenH1.innerText = "Congratulations!"
+                    endScreenH2.innerText = "You escaped in " + secondsPassed + " seconds!"
+                    endScreenH3.innerText = "Press the Play Again button to play again."
+                    
+                }
+
+                if (radioOnScreen) {
+                    if (!selectedRadioButton) return
+                    notePaperContainer.className = "fade-out"
+                    storyScreen.className = "background fade-out"
+                    radioButtonScreen.classList.remove("fade-in")
+                    radioButtonScreen.classList.add("fade-out")
+                    radioButtonScreen.addEventListener("animationend", function() {
+                        notePaperContainer.className = "fade-in"
+                        storyScreen.style.display = "none"
+                        notePaper.style.display = "block"
+                        winScreen.className = "background fade-in"
+                        winScreen.style.display = "block"
+                        winText.style.display = "block"
+                        winText.innerText = "Luckily, it was just a long weed that happened to hook around his foot. Feeling shaken up, Thomas sprinted the remaining distance to the well-paved road, and began his journey of rejoining civilization."
+                    }, {once: true})
+                    finalContinueButton = true
+                    return
+                }
+
                 notePaperContainer.className = "fade-out"
                 notePaperContainer.addEventListener("animationend", function() {
                     if (timeRanOut) {
@@ -960,10 +1026,17 @@
                         endScreenDiv.style.display = "flex"
                         endScreenText.innerText = "You ran out of time\n\n Thank you for playing!\n\n Want to try again?"
                     } else {
-                        radioButtonScreen.style.display = "flex"
+                        radioOnScreen = true
+                        radioButtonScreen.style.display = "block"
                         radioButtonScreen.classList.add("fade-in")
+
+                        notePaper.style.display = "none"
+                        winText.style.display = "none"
+                        
+                        notePaperContainer.style.display = "flex"
+                        notePaperContainer.className = "fade-in"
                     }
-                })
+                }, {once: true})
             })
 
             function showPrompt() {
@@ -985,7 +1058,9 @@
                 hitboxPower.remove()
                 hitbox.remove()
                 hitbox2.remove()
-                hitboxFinalDoor.remove()
+                if (hitboxFinalDoor) {
+                    hitboxFinalDoor.remove()
+                }
                 hitboxMessageDoor.remove()
                 
                 if (timeRanOut) {
@@ -1015,7 +1090,7 @@
                         
                         loseText.style.display = "block"
                         loseText.classList.add("fade-in")
-                    })
+                    }, {once: true})
                 } else {
                     storyScreen.style.display = "block"
                     storyScreen.className = "background fade-in"
@@ -1026,9 +1101,7 @@
                         notePaper.style.display = "block"
                         notePaper.classList.add("fade-in")
 
-                        winText.style.display = "block"
-                        winText.classList.add("fade-in")
-                        winText.zIndex = 999
+                        winText.classList.remove("hidden")
 
                         continueButton.style.display = "block"
                         continueButton.classList.add("fade-in")
@@ -1144,6 +1217,7 @@
                 storyButton.style.display = x
                 instructionsButton.style.display = x
                 settingsButton.style.display = x
+                gameplayButton.style.display = x
                 heading1.style.display = x
                 heading2.style.display = x
 
@@ -1167,13 +1241,16 @@
                     storyHeading.style.display = "none"
                     instructionsHeading.style.display = "none"
                     settingsDiv.style.display = "none"
+                    gameplayDiv.style.display = "none"
                     return
                 }
                 
                 if (button == "story") storyHeading.style.display = "flex"
                 else if (button == "instructions") instructionsHeading.style.display = "flex"
-                else {
+                else if (button == "settings") {
                     settingsDiv.style.display = "flex"
+                } else {
+                    gameplayDiv.style.display = "flex"
                 }
             }
 
@@ -1556,7 +1633,8 @@
                     exitButton.addEventListener("click", function() {
                         let userNum = Number(userInput.join(""))
                         if ((userNum == 375 || userNum == 45)) {
-                            hitboxFinalDoor.style.display = "none"
+                            hitboxFinalDoor.remove()
+                            arrowContainer.remove()
                             finalDoorLocked.classList.remove("fade-in")
                             finalDoorLocked.classList.add("fade-out")
                             arrowContainer.className = "fade-out"
@@ -1573,10 +1651,10 @@
                                         finalDoorUnlocked.addEventListener("animationend", function() {
                                             finalDoorUnlocked.style.display = "none"
                                             gameOver()
-                                        })
-                                    }, 800)
-                                })
-                            })
+                                        }, {once: true})
+                                    }, 1000)
+                                }, {once: true})
+                            }, {once: true})
                         }
                         keypadContainer.style.display = "none"
                         hitboxFinalDoor.style.display = "block"
