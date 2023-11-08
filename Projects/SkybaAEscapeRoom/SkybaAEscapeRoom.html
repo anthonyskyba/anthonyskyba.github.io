@@ -510,6 +510,7 @@
                 color: #ffffff;
                 border: 3px solid #640000;
                 animation: timerPulse ease-in-out 2.8s infinite;
+                z-index: 99999;
                 font-size: 8vh;
                 padding-top: 0.25%;
             }
@@ -672,7 +673,7 @@
             }
 
             #storyHeading {
-                font-size: 4.5vh;
+                font-size: 4vh;
             }
 
             #instructionsHeading {
@@ -693,17 +694,42 @@
                 transform: scale(2);
             }
 
+            #gameplayIcon {
+                position: absolute;
+                height: auto;
+                width: 20vh;
+                top: 100%;
+                left: 100%;
+                transform: translate(-100%, -100%);
+                z-index: 9999;
+            }
+
+            .gameplayImage {
+                width: 60vh;
+                height: auto;
+                border: 2px solid #00ff00;
+                box-shadow: 0 10px 20px #000000, 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
+                display: block;
+            }
+
+            #gameplayDiv {
+                gap: 6vh;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
         </style>
     </head>
     <body>
         <img id="splashScreen" class="background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/gptPrison.png?raw=true">
         <div class="center">
-            <h1 id="title" style="font-size: 600%; margin-bottom: 30px;" mar>IMPOSSIBLE ESCAPE</h1>
+            <h1 id="title" style="font-size: 600%; margin-bottom: 30px;">IMPOSSIBLE ESCAPE</h1>
             <h1 id="author" style="position: absolute;">An Escape Room game made by Anthony Skyba</h1>
             <button id="playButton" onclick="activateButton('play')">Play</button>
             <button id="storyButton" onclick="activateButton('story')">Story</button>
             <button id="instructionsButton" onclick="activateButton('instructions')">Instructions</button>
-            <button id="gameplayButton" onclick="activateButton('gameplay')">Gameplay</button>
+            <img id="gameplayIcon" onclick="activateButton('gameplay')" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/galleryIcon.png?raw=true"></img>
             <button id="settingsButton" onclick="activateButton('settings')">Settings</button>
             <div id="notePaperContainer">
                 <h1 class="noteText hidden" id="loseText"></h1>
@@ -711,7 +737,9 @@
                 <img id="notePaper" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/notePaper.png?raw=true">
                 <h1 id="secretMessage" class="noteText hidden"></h1>
                 <div id="gameplayDiv" class="noteText hidden">
-                    <h1>hehehehaw</h1>
+                    <p style="position: absolute;">Here are some images of the game</p>
+                    <img class="gameplayImage" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/gameplayImage1.png?raw=true">
+                    <img class="gameplayImage" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/gameplayImage2.png?raw=true">
                 </div>
                 <div id="settingsDiv" class="noteText hidden">
                     <div>
@@ -724,12 +752,12 @@
                         </form>
                         <div class="dropdown">
                             <div class="select">
-                                <span class="selected">10 Minutes</span>
+                                <span class="selected">15 Minutes</span>
                                 <div class="caret"></div>
                             </div>
                             <ul class="menu">
-                                <li>15 Minutes</li>
-                                <li class="active">10 Minutes</li>
+                                <li class="active">15 Minutes</li>
+                                <li>10 Minutes</li>
                                 <li>5 Minutes</li>
                             </ul>
                         </div>
@@ -819,6 +847,9 @@
         <audio id="doorSound">
             <source src="doorSoundTrimmed.mp3">
         </audio>
+        <audio id="explosionSoundEffect">
+            <source src="explosionSoundEffect.mp3">
+        </audio>
         <img id="audioSymbol" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/audioSymbolMuted.png?raw=true">
         <img id="loseScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/loserScreen.png?raw=true">
         <div id="endScreen">
@@ -847,6 +878,7 @@
         </div>
         <img id="winScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/endScreen.png?raw=true">
         <img id="storyScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalScreen.png?raw=true">
+
 
 
         <script>
@@ -878,7 +910,7 @@
             let infiniteTime = false
             let dropdowns = document.querySelectorAll(".dropdown")
             let audioSymbol = document.getElementById("audioSymbol")
-            let timeSelected = "10 Minutes"
+            let timeSelected = "15 Minutes"
             let secondsPassed = 0
             let playAgainButton = document.getElementById("playAgainButton")
             let continueButton = document.getElementById("continueButton")
@@ -892,7 +924,7 @@
             let winText = document.getElementById("winText")
             let timerInterval
             let finalContinueButton = false
-            let gameplayButton = document.getElementById("gameplayButton")
+            let gameplayIcon = document.getElementById("gameplayIcon")
             let gameplayDiv = document.getElementById("gameplayDiv")
             
             let audioMuted = true
@@ -901,6 +933,7 @@
             let beepSound = document.getElementById("beepSound")
             let paperSound = document.getElementById("paperSound")
             let titleTrack = document.getElementById("titleTrack")
+            let explosionSound = document.getElementById("explosionSoundEffect")
 
             let radioButtons = Array.from(document.getElementsByClassName("radio"))
             let selectedRadioButton
@@ -936,11 +969,12 @@
             let messageDoorOpen = document.getElementById("messageDoorOpen")
             
             secretMessage.innerHTML = "Money was all I cared abou<strong>t</strong>, but now I just want to be home.<br><br>Until I f<strong>o</strong>und myself here, life really wasn’t that bad.<br><br>Loneliness has to be the worst part about this place.<br><br>To<strong>g</strong>ether, as a society, we can do anything.<br><br>I’ve started tallying my days sp<strong>e</strong>nt here.<br><br>Please lord! Allow me <strong>t</strong>o escape this hellhole!<br><br>Luck <strong>h</strong>as never been on my sid<strong>e</strong>.<br><br>You<strong>r</strong> mind degrades in this place. I only have so long left.<br><br>"
-            instructionsHeading.innerText = "Escape the prison within the time limit by clicking around on the screen. Find clues, play games and solve puzzles.\n\n- Press \"z\" to open the instructions\n- Press \"x\" to get a hint\n- Press \"c\" to return to the title screen\n - Play with audio for full experience\n- Toggle audio with the audio symbol in the bottom left (default is muted)\n- Wait for the page to fully load before playing"
+            instructionsHeading.innerText = "Escape the prison within the time limit by clicking around on the screen. Find clues, play games and solve puzzles.\n\n- Press \"z\" to open the instructions\n- Press \"x\" to get a hint\n- Press \"c\" to return to the title screen\n - Play with audio for full experience\n- Toggle audio with the audio symbol in the bottom left (default is muted)\n- Wait for the page to fully load before playing, sometimes images can take some time to load in."
 
             paperSound.volume = 0.2
             beepSound.volume = 0.2
             doorSound.volume = 0.2
+            explosionSound.volume = 0.35
             titleTrack.volume = 0.4
             titleTrack.loop = true
             mainTrack.volume = 0.4            
@@ -1250,7 +1284,7 @@
                 storyButton.style.display = x
                 instructionsButton.style.display = x
                 settingsButton.style.display = x
-                gameplayButton.style.display = x
+                gameplayIcon.style.display = x
                 heading1.style.display = x
                 heading2.style.display = x
 
@@ -1265,7 +1299,7 @@
                     splashScreen.addEventListener("animationend", function() {
                         splashScreen.style.display = "none"
                         if (!infiniteTime) startTimer()
-                        area3()
+                        area1()
                     }, {once: true})
                     return
                 }
@@ -1503,6 +1537,8 @@
                             if (Number(userInput.join("")) == 9 && memoryCompleted)
                                 area2to3()
                             keypadContainer.style.display = "none"
+                            tilesRoom.style.opacity = 0
+                            tilesRoom.style.visibility = "hidden"
                             hitbox2.style.zIndex = 50
                             userInput = []
                         }, {once: true})
@@ -1811,11 +1847,25 @@
                         generatorRoom.className = "background fade-out"
                         hitboxPaper.style.left = "23%"
                         hitboxPaper.style.top = "91%"
+                        if (!audioMuted) {
+                            setTimeout(function() {
+                                explosionSound.play()
+                            }, 750)
+                        }
                         box.addEventListener("animationend", function() {
-                            generatorRoom.style.display = "none"
-                            generatorRoomExploded.className = "background fade-in"
-                            hitboxPaper.style.display = "block"
-                            arrowContainer.className = "fade-in"
+                            if (!audioMuted) {
+                                setTimeout(function() {
+                                    generatorRoom.style.display = "none"
+                                    generatorRoomExploded.className = "background fade-in"
+                                    hitboxPaper.style.display = "block"
+                                    arrowContainer.className = "fade-in"
+                                }, 1900)
+                            } else {
+                                generatorRoom.style.display = "none"
+                                generatorRoomExploded.className = "background fade-in"
+                                hitboxPaper.style.display = "block"
+                                arrowContainer.className = "fade-in"
+                            }
                         }, {once: true})
                     } else {
                         exitButton3.className = "exitButton fade-out"
@@ -1871,7 +1921,12 @@
                             correctNumbers++
                     }
                     if (correctNumbers == 8) {
-                        if (!audioMuted) doorSound.play()
+                        let delay = 1500
+                        if (!audioMuted) {
+                            doorSound.play()
+                            delay = 5300
+                        }
+
                         setTimeout(function() {
                             slidingPuzzleCompleted = true
                             slidingPuzzleContainer.className = "fade-out"
@@ -1891,7 +1946,7 @@
                                         arrowRight.style.display = "block"
                                     }, {once: true})
                                 }, {once: true})
-                            }, 5300)
+                            }, delay)
                         }, 1100)
                     }
                 }
