@@ -133,7 +133,7 @@
                 top: 0%;
             }
 
-            #hitbox {
+            #hitbox, #hitbox2 {
                 display: none;
                 position: absolute;
                 width: 15%;
@@ -148,7 +148,8 @@
                 position: absolute;
                 top: 50%;
                 left: 90%;
-                width: 10%;
+                width: 13%;
+                transform: rotate(90deg);
                 height: auto;
                 display: none;
                 z-index: 10;
@@ -713,7 +714,7 @@
             }
 
             #gameplayDiv {
-                gap: 6vh;
+                gap: 7vh;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
@@ -724,6 +725,7 @@
     <body>
         <img id="splashScreen" class="background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/gptPrison.png?raw=true">
         <div class="center">
+            <img id="storyScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalScreen.png?raw=true">
             <h1 id="title" style="font-size: 600%; margin-bottom: 30px;">IMPOSSIBLE ESCAPE</h1>
             <h1 id="author" style="position: absolute;">An Escape Room game made by Anthony Skyba</h1>
             <button id="playButton" onclick="activateButton('play')">Play</button>
@@ -819,11 +821,11 @@
         <div id="hitboxMessageDoor"></div>
         <div id="hitboxFinalDoor"></div>
         <div id="hitbox"></div>
-        <img id="key" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/coolKey.png?raw=true">
+        <img id="key" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/key.png?raw=true">
         <img id="tilesRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/tilesRoom.png?raw=true">
         <img id="cardsRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardsRoom.png?raw=true">
         <img id="lockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadLocked1.png?raw=true">
-        <button id="exitButton2" class="exitButton">Exit</button>
+        <button id="exitButton2" style="margin-left: 3%; z-index: 99999;" class="exitButton">Exit</button>
         <button id="exitButton3" class="exitButton">Exit</button>
         <div id="cardsOverallContainer"></div>
         <div id="powerBox">
@@ -877,7 +879,6 @@
             <br>
         </div>
         <img id="winScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/endScreen.png?raw=true">
-        <img id="storyScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalScreen.png?raw=true">
 
 
 
@@ -926,6 +927,8 @@
             let finalContinueButton = false
             let gameplayIcon = document.getElementById("gameplayIcon")
             let gameplayDiv = document.getElementById("gameplayDiv")
+            let gameCompleted = false
+            let area1to2ran = false
             
             let audioMuted = true
             let mainTrack = document.getElementById("mainTrack")
@@ -969,7 +972,7 @@
             let messageDoorOpen = document.getElementById("messageDoorOpen")
             
             secretMessage.innerHTML = "Money was all I cared abou<strong>t</strong>, but now I just want to be home.<br><br>Until I f<strong>o</strong>und myself here, life really wasn’t that bad.<br><br>Loneliness has to be the worst part about this place.<br><br>To<strong>g</strong>ether, as a society, we can do anything.<br><br>I’ve started tallying my days sp<strong>e</strong>nt here.<br><br>Please lord! Allow me <strong>t</strong>o escape this hellhole!<br><br>Luck <strong>h</strong>as never been on my sid<strong>e</strong>.<br><br>You<strong>r</strong> mind degrades in this place. I only have so long left.<br><br>"
-            instructionsHeading.innerText = "Escape the prison within the time limit by clicking around on the screen. Find clues, play games and solve puzzles.\n\n- Press \"z\" to open the instructions\n- Press \"x\" to get a hint\n- Press \"c\" to return to the title screen\n - Play with audio for full experience\n- Toggle audio with the audio symbol in the bottom left (default is muted)\n- Wait for the page to fully load before playing, sometimes images can take some time to load in."
+            instructionsHeading.innerText = "Escape the prison within the time limit by clicking on the screen. Find clues, play games and solve puzzles.\n\n- Press \"z\" to open the instructions\n- Press \"x\" to get a hint\n- Press \"c\" to return to the title screen\n - Play with audio for full experience\n- Toggle audio with the audio symbol in the bottom left (default is muted)\n- Wait for the page to fully load before playing. Sometimes images can take some time to load in."
 
             paperSound.volume = 0.2
             beepSound.volume = 0.2
@@ -1062,6 +1065,7 @@
                     radioButtonScreen.addEventListener("animationend", function() {
                         notePaperContainer.className = "fade-in"
                         storyScreen.style.display = "none"
+                        storyScreen.remove()
                         notePaper.style.display = "block"
                         if (!audioMuted) paperSound.play()
                         winScreen.className = "background fade-in"
@@ -1197,7 +1201,7 @@
             }
 
             document.addEventListener("keydown", function(event) {
-                if (splashScreen.style.display != "none") return
+                if (splashScreen.style.display != "none" || gameCompleted) return
                 let key = event.key
                 if (key == "z" || key == "x" || key == "c") {
                     arrowContainer.style.display = "none"
@@ -1453,6 +1457,7 @@
                         key1.style.display = "none"
                         if (lockedDoor.style.display == "block" && XPos1 > (screen.width / 5) * 2 && XPos1 < (screen.width / 5) * 3 && YPos1 > screen.height / 3 && YPos1 < (screen.height / 5) * 4) {
                             area1to2()
+                            area1to2ran = true
                         }
                     }, {once: true})
 
@@ -1465,6 +1470,7 @@
                             key1.style.display = "none"
                             if (lockedDoor.style.display == "block" && XPos1 > (screen.width / 5) * 2 && XPos1 < (screen.width / 5) * 3 && YPos1 > screen.height / 3 && YPos1 < (screen.height / 5) * 4) {
                                 area1to2()
+                                area1to2ran = true
                             }
                         }
                         let XPos2 = mouseEvent2.clientX
@@ -1498,6 +1504,7 @@
             }
 
             function area1to2() {
+                if (area1to2ran) return
                 lockedDoor.className = "background fade-out"
                 arrowRight.className = "arrow fade-out"
                 arrowContainer.className = "fade-out"
@@ -1517,6 +1524,7 @@
                 let tilesRoom = document.getElementById("tilesRoom")
                 
                 document.body.appendChild(hitbox2)
+                hitbox2.id = "hitbox2"
                 hitbox2.style.width = "10%"
                 hitbox2.style.display = "block"
                 hitbox2.style.left = "49.5%"
@@ -1534,11 +1542,9 @@
                         hitbox2.style.zIndex = 0
 
                         exitButton.addEventListener("click", function() {
-                            if (Number(userInput.join("")) == 9 && memoryCompleted)
+                            if (Number(userInput.join("")) == 9 /*&& memoryCompleted*/)
                                 area2to3()
                             keypadContainer.style.display = "none"
-                            tilesRoom.style.opacity = 0
-                            tilesRoom.style.visibility = "hidden"
                             hitbox2.style.zIndex = 50
                             userInput = []
                         }, {once: true})
@@ -1710,7 +1716,8 @@
 
                     exitButton.addEventListener("click", function() {
                         let userNum = Number(userInput.join(""))
-                        if ((userNum == 375 || userNum == 45) && roomExploded && slidingPuzzleCompleted) {
+                        if ((userNum == 375 || userNum == 45) /*&& roomExploded && slidingPuzzleCompleted*/) {
+                            gameCompleted = true
                             hitboxFinalDoor.remove()
                             arrowContainer.remove()
                             finalDoorLocked.classList.remove("fade-in")
@@ -1727,7 +1734,7 @@
                                         finalDoorUnlocked.classList.remove("fade-in")
                                         finalDoorUnlocked.classList.add("fade-out")
                                         finalDoorUnlocked.addEventListener("animationend", function() {
-                                            finalDoorUnlocked.style.display = "none"
+                                            finalDoorUnlocked.remove()
                                             gameOver()
                                         }, {once: true})
                                     }, 1000)
