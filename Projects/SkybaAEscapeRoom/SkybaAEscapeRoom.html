@@ -805,7 +805,10 @@
         <h1 id="instructionsHeading2">Press "z" to access instructions.</h1>
         <button id="timer"></button>
         <audio id="mainTrack">
-            <source src="/home/anthony/Downloads/Kristof Bathory - The Escape.mp3">
+            <source src="Explanation.mp3">
+        </audio>
+        <audio id="titleTrack">
+            <source src="SuspiciousEyes.mp3">
         </audio>
         <audio id="beepSound">
             <source src="beepSound.mp3">
@@ -897,6 +900,7 @@
             let doorSound = document.getElementById("doorSound")
             let beepSound = document.getElementById("beepSound")
             let paperSound = document.getElementById("paperSound")
+            let titleTrack = document.getElementById("titleTrack")
 
             let radioButtons = Array.from(document.getElementsByClassName("radio"))
             let selectedRadioButton
@@ -937,6 +941,8 @@
             paperSound.volume = 0.2
             beepSound.volume = 0.2
             doorSound.volume = 0.2
+            titleTrack.volume = 0.4
+            titleTrack.loop = true
             mainTrack.volume = 0.4            
             mainTrack.loop = true
 
@@ -954,11 +960,11 @@
             audioSymbol.addEventListener("click", function() {
                 if (audioMuted) {
                     audioSymbol.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/audioSymbol.png?raw=true"
-                    mainTrack.play()
+                    titleTrack.play()
                     audioMuted = false
                 } else {
                     audioSymbol.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/audioSymbolMuted.png?raw=true"
-                    mainTrack.pause()
+                    titleTrack.pause()
                     audioMuted = true
                 }
             })  
@@ -1207,6 +1213,22 @@
                         keyPressed = false
                         notePaper.style.display = "none"
                         arrowContainer.style.display = "flex"
+                        if (finalDoorLocked.style.display == "block" || cardsRoom.style.display == "block" || brickWall.style.display == "block") {
+                            console.log(finalDoorLocked.style.display, brickWall.style.display, cardsRoom.style.display)
+                            arrowLeft.style.display = "none"
+                            arrowRight.addEventListener("click", function() {
+                                arrowRight.addEventListener("animationend", function() {
+                                    arrowLeft.style.display = "block"
+                                }, {once: true})
+                            }, {once: true})
+                        } else if (tilesRoom.style.display == "block" || keyWall.style.display == "block" || messageDoorOpen.style.display == "block" || messageDoorClosed.style.display == "block" || (lockedKeypad.style.display == "block" && !memoryCompleted)) {
+                            arrowRight.style.display = "none"
+                            arrowLeft.addEventListener("click", function() {
+                                arrowLeft.addEventListener("animationend", function() {
+                                    arrowRight.style.display = "block"
+                                }, {once: true})
+                            }, {once: true})
+                        }
                         backButton.style.display = "none"
                         hitboxPaper.style.display = "block"
                         instructionsHeading.style.display = "none"
@@ -1234,6 +1256,10 @@
 
                 if (button == "play") {
                     let splashScreen = document.getElementById("splashScreen") 
+                    titleTrack.pause()
+                    setTimeout(function() {
+                        mainTrack.play()
+                    }, 1000)
                     splashScreen.className = "fade-out background"
                     audioSymbol.style.display = "none"
                     splashScreen.addEventListener("animationend", function() {
