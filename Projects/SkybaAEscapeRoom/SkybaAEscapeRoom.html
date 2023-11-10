@@ -729,7 +729,9 @@
     </head>
     <body>
         <img id="splashScreen" class="background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/gptPrison.png?raw=true">
-        <div class="center">
+        <div id="center" class="center">
+            <img id="loseScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/loserScreen.png?raw=true">
+            <img id="winScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/endScreen.png?raw=true">
             <img id="storyScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/finalScreen.png?raw=true">
             <h1 id="title" style="font-size: 600%; margin-bottom: 30px;">IMPOSSIBLE ESCAPE</h1>
             <h1 id="author" style="position: absolute;">An Escape Room game made by Anthony Skyba</h1>
@@ -781,8 +783,8 @@
             <img id="brickWall" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/brickWall.png?raw=true">
             <img id="keyWall" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keyWall.png?raw=true">
             <div id="arrows">
-                <img class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
-                <img class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
+                <img id="arrow1" class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
+                <img id="arrow2" class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
             </div>
             <div id="keypadContainer">
                 <div id="keypad">
@@ -830,7 +832,7 @@
         <img id="tilesRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/tilesRoom.png?raw=true">
         <img id="cardsRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardsRoom.png?raw=true">
         <img id="lockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadLocked1.png?raw=true">
-        <button id="exitButton2" style="margin-left: 13vh; z-index: 99999;" class="exitButton">Exit</button>
+        <button id="exitButton2" style="margin-left: 11vh; z-index: 99999;" class="exitButton">Exit</button>
         <button id="exitButton3" class="exitButton">Exit</button>
         <div id="cardsOverallContainer"></div>
         <div id="powerBox">
@@ -858,16 +860,15 @@
             <source src="explosionSoundEffect.mp3">
         </audio>
         <img id="audioSymbol" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/audioSymbolMuted.png?raw=true">
-        <img id="loseScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/loserScreen.png?raw=true">
-        <div id="endScreen">
-            <p style="position: absolute; left: 0%; font-size: 150%; margin-left: 1%;">by Anthony Skyba</p>
-            <h1 style="font-size: 10vh;">IMPOSSIBLE ESCAPE</h1>
-            <h1 id="endScreen1" style="font-size: 5vh;">You ran out of time!</h1>
-            <h1 id="endScreen2" style="font-size: 5vh;"></h1>
-            <h1 style="font-size: 5vh;">Thank you for playing</h1>
-            <h1 id="endScreen3" style="font-size: 5vh;">Continue your escape?</h1>
-            <button id="playAgainButton">Play Again</button>
-        </div>
+        <div id="endScreen" class="endScreen">
+            <p class="endScreen" style="position: absolute; left: 0%; font-size: 150%; margin-left: 1%;">by Anthony Skyba</p>
+            <h1 class="endScreen" style="font-size: 10vh;">IMPOSSIBLE ESCAPE</h1>
+            <h1 class="endScreen" id="endScreen1" style="font-size: 5vh;">You ran out of time!</h1>
+            <h1 class="endScreen" id="endScreen2" style="font-size: 5vh;"></h1>
+            <h1 class="endScreen" style="font-size: 5vh;">Thank you for playing</h1>
+            <h1 class="endScreen" id="endScreen3" style="font-size: 5vh;">Continue your escape?</h1>
+            <button class="endScreen" id="playAgainButton">Play Again</button>
+        </div>a
         <div id="radioButtonScreen">
             <input type="radio" class="radio" name="options" value="option1">
             <label for="option1">Run</label>
@@ -883,7 +884,6 @@
             <br>
             <br>
         </div>
-        <img id="winScreen" class="background hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/endScreen.png?raw=true">
 
 
 
@@ -916,7 +916,7 @@
             let infiniteTime = false
             let dropdowns = document.querySelectorAll(".dropdown")
             let audioSymbol = document.getElementById("audioSymbol")
-            let timeSelected = "15 Minutes"
+            let timeSelected = "1 Minutes"
             let secondsPassed = 0
             let playAgainButton = document.getElementById("playAgainButton")
             let continueButton = document.getElementById("continueButton")
@@ -935,6 +935,9 @@
             let gameCompleted = false
             let area1to2ran = false
             let stopArrows = false
+            let cardsContainer = document.getElementById("cardsOverallContainer")
+            let allBackgrounds = Array.from(document.getElementsByClassName("background"))
+            let backgroundChanging = false
             
             let audioMuted = true
             let mainTrack = document.getElementById("mainTrack")
@@ -990,6 +993,15 @@
             titleTrack.loop = true
             mainTrack.volume = 0.4            
             mainTrack.loop = true
+
+            allBackgrounds.forEach(background => {
+                background.addEventListener("animationstart", function() {
+                    backgroundChanging = true
+                    background.addEventListener("animationend", function() {
+                        backgroundChanging = false
+                    })
+                })
+            })
 
             arrowContainer.addEventListener("animationstart", function() {
                 stopArrows = true
@@ -1128,11 +1140,13 @@
 
             function showPrompt() {
                 let usersName = prompt("Enter a male name (which will replace the default name of \"Thomas\")")
-                if (usersName.length < 10 || usersName.length <= 1) name = usersName
-                else if (usersName.length > 1) {
-                    alert("Your name is too long")
-                } else {
+                if (usersName.length < 10 && usersName.length > 1) {
+                    name = usersName
+                    return
+                } else if (usersName.length <= 1) {
                     alert("Your name is too short")
+                } else {
+                    alert("Your name is too long")
                 }
                 showPrompt()
             }
@@ -1140,7 +1154,9 @@
             function gameOver() {
                 clearInterval(timerInterval)
                 timer.style.display = "none"
-
+                
+                notePaper.classList.remove("fade-in")
+                notePaper.classList.add("fade-out")
                 hitboxPaper.remove()
                 hitboxPower.remove()
                 hitbox.remove()
@@ -1159,9 +1175,21 @@
                     backgroundElements.forEach(element => {
                         if (element.classList.contains("fade-in")) currentBackground = element
                     })
-                    
+                    currentBackground.id = "currentBackground"
+
+                    let nonHiddenElements = ["continueButton", "notePaper", "loseText", "arrowContainer", "arrow1", "arrow2", "center", "loseScreen", "notePaperContainer", "currentBackground"]
+                    let allElements = Array.from(document.querySelectorAll("body *"))
+
+
+                    for (let element of allElements) {
+                        if (nonHiddenElements.includes(element.id) || element.classList.contains("endScreen"))
+                            continue
+                        element.style.display = "none"
+                    }
+
                     currentBackground.className = "background fade-out"
                     arrowContainer.className = "fade-out"
+                    
                     currentBackground.addEventListener("animationend", function() {
                         currentBackground.style.display = "none"
                         
@@ -1201,6 +1229,7 @@
                 timeSelected = timeSelected.split(" ")[0]
 
                 if (timeSelected === "5") timeSelected = "05"
+                if (timeSelected === "1") timeSelected = "01"
 
                 timer.innerText = timeSelected + ":00"
 
@@ -1212,6 +1241,7 @@
                     if (timer.innerText == "00:00") {
                         clearInterval(timerInterval)
                         timeRanOut = true
+                        gameCompleted = true
                         gameOver("time")
                     }
 
@@ -1225,14 +1255,15 @@
                     }
 
                     timer.innerText = `${half1}:${half2}`
+                    if (timer.innerText == "00:02") stopArrows = true
                     secondsPassed++
                 }, 1000)
             }
 
             document.addEventListener("keydown", function(event) {
-                if (splashScreen.style.display != "none" || gameCompleted) return
                 let key = event.key
-                if (key == "z" || key == "x" || key == "c") {
+                if ((splashScreen.style.display != "none" || gameCompleted || backgroundChanging || notePaper.style.display == "block") && key !== "c") return
+                if (key == "z" || key == "x") {
                     arrowContainer.style.display = "none"
                     if (!audioMuted && notePaper.style.display == "none") paperSound.play()
                     notePaper.style.display = "block"
@@ -1253,7 +1284,7 @@
                     hints.style.display = "block"
                     if (currentArea == 1) hints.innerText = "Maybe the locked door leads to a way out of here. If only there was a key that could open it..."
                     else if (currentArea == 2) hints.innerText = "Squares frame our vision through windows. Squares make up our modern-day buildings. Squares organize our information in grids. Embrace the square and you will find your success."
-                    else if (currentArea == 3 && roomExploded) hints.innerText = "The FIRST thing you should do when assessing the condition of old photographs is to check for DISCOLOURATION."
+                    else if (currentArea == 3 && roomExploded) hints.innerText = "The FIRST thing you should do when assessing the condition of old photographs, is to check for DISCOLOURATION."
                     else if(currentArea == 3) hints.innerText = name + " hates this place so much that he would blow it up! If he could..."
                 } else if(key == "c") {
                     location.reload()
@@ -1288,7 +1319,6 @@
                         notePaper.style.display = "none"
                         arrowContainer.style.display = "flex"
                         if (finalDoorLocked.style.display == "block" || cardsRoom.style.display == "block" || brickWall.style.display == "block") {
-                            console.log(finalDoorLocked.style.display, brickWall.style.display, cardsRoom.style.display)
                             arrowLeft.style.display = "none"
                             arrowRight.addEventListener("click", function() {
                                 arrowRight.addEventListener("animationend", function() {
@@ -1527,9 +1557,9 @@
                             arrowContainer.className = "fade-out"
                             keyWall.className = "background fade-out"
                             keyWall.addEventListener("animationend", function() {
-                                lockedDoor.style.display = "block";
+                                lockedDoor.style.display = "block"
                                 lockedDoor.className = "background fade-in"
-                                arrowContainer.style.display = "flex";
+                                arrowContainer.style.display = "flex"
                                 arrowContainer.className = "fade-in"
                                 arrowRight.className = "arrow fade-in"
                             }, {once: true})
@@ -1571,6 +1601,7 @@
                 hitbox2.style.display = "block"
                 hitbox2.style.left = "49.5%"
                 hitbox2.style.top = "45%"
+                keyWall.style.display = "none"
 
                 arrowContainer.className = "fade-in"
                 lockedKeypad.className = "background fade-in"
@@ -1584,7 +1615,7 @@
                         hitbox2.style.zIndex = 0
 
                         exitButton.addEventListener("click", function() {
-                            if (Number(userInput.join("")) == 9 && memoryCompleted)
+                            if (Number(userInput.join("")) == 9 && memoryCompleted && !(timer.innerText == "00:02" || timer.innerText == "00:01" || timer.innerText == "00:00" || gameCompleted))
                                 area2to3()
                             keypadContainer.style.display = "none"
                             hitbox2.style.zIndex = 50
@@ -1597,16 +1628,10 @@
                 
                 function memoryGame() {
                     let exitButton2 = document.getElementById("exitButton2")
-                    // exitButton2.style.display = "absolute"
-                    // exitButton2.style.top = "50%"
-                    // exitButton2.style.transform = "translate(0%, -50%)"
-                    // exitButton2.style.width = "10%"
-
                     let cardsFlipped = 0
                     let currentCardsFlipped = 0
                     let cardsMatched = 0
                     let firstCardFlipped
-                    let cardsContainer = document.getElementById("cardsOverallContainer")
                     let cards = [
                         "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/card1.png?raw=true",
                         "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/card2Replacement.png?raw=true",
@@ -1765,7 +1790,7 @@
 
                     exitButton.addEventListener("click", function() {
                         let userNum = Number(userInput.join(""))
-                        if ((userNum == 375 || userNum == 45) && roomExploded && slidingPuzzleCompleted) {
+                        if ((userNum == 375 || userNum == 45) && roomExploded && slidingPuzzleCompleted && !(timer.innerText == "00:02" || timer.innerText == "00:01" || timer.innerText == "00:00" || gameCompleted)) {
                             gameCompleted = true
                             hitboxFinalDoor.remove()
                             arrowContainer.remove()
@@ -1832,6 +1857,7 @@
 
             function whackAMole() {
                 setTimeout(deleteImage, 2500)
+
                 let box = document.getElementById("powerBox")
                 let counter = 0
                 stopSpawning = false
@@ -1845,6 +1871,10 @@
                 }, {once: true})
                 
                 function startGame() {
+                    if (timer.innerText == "00:02" || timer.innerText == "00:01" || timer.innerText == "00:00" || gameCompleted) {
+                        endGame()
+                    }
+
                     if (stopSpawning)return
                     
                     box.style.display = "block"
