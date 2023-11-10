@@ -1366,7 +1366,7 @@
                     let splashScreen = document.getElementById("splashScreen") 
                     titleTrack.pause()
                     setTimeout(function() {
-                        mainTrack.play()
+                        if (!audioMuted) mainTrack.play()
                     }, 1000)
                     splashScreen.className = "fade-out background"
                     audioSymbol.style.display = "none"
