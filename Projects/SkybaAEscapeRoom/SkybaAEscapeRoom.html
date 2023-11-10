@@ -297,8 +297,8 @@
 
             .cards {
                 width: auto;
-                height: 380px;
-                width: 380px;
+                height: 350px;
+                width: 350px;
                 transform-style: preserve-3d;
                 transition: all 1.5s ease;
                 margin-right: -100px;
@@ -916,7 +916,7 @@
             let infiniteTime = false
             let dropdowns = document.querySelectorAll(".dropdown")
             let audioSymbol = document.getElementById("audioSymbol")
-            let timeSelected = "1 Minutes"
+            let timeSelected = "15 Minutes"
             let secondsPassed = 0
             let playAgainButton = document.getElementById("playAgainButton")
             let continueButton = document.getElementById("continueButton")
@@ -1409,6 +1409,7 @@
                 }
 
                 function arrowL() {
+                    if (currentArea == 3 && finalDoorLocked.style.display == "block") hitboxFinalDoor.style.display = "block"
                     if (stopArrows) return
                     if (roomExploded) room2 = generatorRoomExploded
                     if (slidingPuzzleCompleted) room3 = messageDoorOpen
@@ -1455,6 +1456,7 @@
                 arrowLeft.addEventListener("click", arrowL)
 
                 function arrowR() {
+                    if (currentArea == 3) hitboxFinalDoor.style.display = "none"
                     if (stopArrows) return
                     if (roomExploded) room2 = generatorRoomExploded
                     if (slidingPuzzleCompleted) room3 = messageDoorOpen
