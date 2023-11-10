@@ -418,7 +418,7 @@
             }
 
             h1 strong {
-                color: #545454;
+                color: #525252;
             }
 
             #blankSpace {
@@ -513,8 +513,9 @@
                 border: 3px solid #640000;
                 animation: timerPulse ease-in-out 2.8s infinite;
                 z-index: 99999;
-                font-size: 8vh;
+                font-size: 7.8vh;
                 padding-top: 0.25%;
+                padding-right: 0.25%;
             }
 
             @keyframes timerPulse {
@@ -938,6 +939,7 @@
             let cardsContainer = document.getElementById("cardsOverallContainer")
             let allBackgrounds = Array.from(document.getElementsByClassName("background"))
             let backgroundChanging = false
+            let instructionsHeading2 = document.getElementById("instructionsHeading2")
             
             let audioMuted = true
             let mainTrack = document.getElementById("mainTrack")
@@ -1093,8 +1095,8 @@
 
                     endScreenH1.innerText = "Congratulations!"
                     endScreenH2.innerText = "You escaped in " + secondsPassed + " seconds!"
+                    if (infiniteTime) endScreenH2.innerText = "You escaped with infinite time!"
                     endScreenH3.innerText = "Press the Play Again button to play again."
-                    
                 }
 
                 if (radioOnScreen) {
@@ -1155,15 +1157,17 @@
                 clearInterval(timerInterval)
                 timer.style.display = "none"
                 
+                instructionsHeading2.style.display = "none"
+                tilesRoom.style.display = "none"
+                brickWall.style.display = "none"
+                keyWall.style.display = "none"
                 notePaper.classList.remove("fade-in")
                 notePaper.classList.add("fade-out")
                 hitboxPaper.remove()
                 hitboxPower.remove()
                 hitbox.remove()
                 hitbox2.remove()
-                if (hitboxFinalDoor) {
-                    hitboxFinalDoor.remove()
-                }
+                if (hitboxFinalDoor) hitboxFinalDoor.remove()
                 hitboxMessageDoor.remove()
                 
                 if (timeRanOut) {
@@ -1239,6 +1243,7 @@
                     let half2 = timerTextSplit[1]
 
                     if (timer.innerText == "00:00") {
+                        instructionsHeading2.style.display = "none"
                         clearInterval(timerInterval)
                         timeRanOut = true
                         gameCompleted = true
@@ -1283,7 +1288,7 @@
                 } else if (key == "x") {
                     hints.style.display = "block"
                     if (currentArea == 1) hints.innerText = "Maybe the locked door leads to a way out of here. If only there was a key that could open it..."
-                    else if (currentArea == 2) hints.innerText = "Squares frame our vision through windows. Squares make up our modern-day buildings. Squares organize our information in grids. Embrace the square and you will find your success."
+                    else if (currentArea == 2) hints.innerText = "Squares are the root to your success."
                     else if (currentArea == 3 && roomExploded) hints.innerText = "The FIRST thing you should do when assessing the condition of old photographs, is to check for DISCOLOURATION."
                     else if(currentArea == 3) hints.innerText = name + " hates this place so much that he would blow it up! If he could..."
                 } else if(key == "c") {
@@ -1456,8 +1461,8 @@
                 arrowLeft.addEventListener("click", arrowL)
 
                 function arrowR() {
-                    if (currentArea == 3) hitboxFinalDoor.style.display = "none"
                     if (stopArrows) return
+                    if (currentArea == 3) hitboxFinalDoor.style.display = "none"
                     if (roomExploded) room2 = generatorRoomExploded
                     if (slidingPuzzleCompleted) room3 = messageDoorOpen
                     arrowLeft.className = "arrow fade-out"
@@ -1512,7 +1517,6 @@
                 let brickWall = document.getElementById("brickWall")
                 let removeEvent = false
                 let key1 = document.getElementById("key")
-                let instructionsHeading2 = document.getElementById("instructionsHeading2")
                 instructionsHeading2.className = "fade-in"
                 instructionsHeading2.style.display = "block"
                 
@@ -1793,6 +1797,9 @@
                     exitButton.addEventListener("click", function() {
                         let userNum = Number(userInput.join(""))
                         if ((userNum == 375 || userNum == 45) && roomExploded && slidingPuzzleCompleted && !(timer.innerText == "00:02" || timer.innerText == "00:01" || timer.innerText == "00:00" || gameCompleted)) {
+                            tilesRoom.style.display = "none"
+                            instructionsHeading2.style.display = "none"
+                            cardsRoom.style.display = "none"
                             gameCompleted = true
                             hitboxFinalDoor.remove()
                             arrowContainer.remove()
@@ -1821,9 +1828,12 @@
                         hitboxFinalDoor.style.display = "block"
                         arrowContainer.style.display = "flex"
                         userInput = []
-                        arrowRight.addEventListener("click", function() {
-                            arrowRight.addEventListener("animationend", function() {
-                                arrowLeft.style.display = "block"
+                        arrowRight.addEventListener("animationend", function() {
+                            arrowRight.addEventListener("click", function() {
+                                if (arrowRight)
+                                arrowRight.addEventListener("animationend", function() {
+                                    arrowLeft.style.display = "block"
+                                }, {once: true})
                             }, {once: true})
                         }, {once: true})
                     })
@@ -2029,9 +2039,11 @@
                                 messageDoorOpen.style.display = "block"
                                 slidingPuzzleContainer.style.display = "none"
 
-                                arrowLeft.addEventListener("click", function() {
-                                    arrowLeft.addEventListener("animationend", function() {
-                                        arrowRight.style.display = "block"
+                                arrowLeft.addEventListener("animationend", function() {
+                                    arrowLeft.addEventListener("click", function() {
+                                        arrowLeft.addEventListener("animationend", function() {
+                                            arrowRight.style.display = "block"
+                                        }, {once: true})
                                     }, {once: true})
                                 }, {once: true})
                             }, delay)
