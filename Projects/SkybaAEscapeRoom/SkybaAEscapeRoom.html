@@ -415,6 +415,7 @@
 
             #secretMessage {
                 margin-bottom: 3.2%;
+                font-size: 3.8vh;
             }
 
             h1 strong {
@@ -683,10 +684,6 @@
                 font-size: 4.2vh;
             }
 
-            #secretMessage {
-                font-size: 3.8vh;
-            }
-
             #winText {
                 font-size: 4.5vh;
             }
@@ -780,9 +777,9 @@
                 <button id="backButton" onclick="activateButton('back')" style="display: none;">Back</button>
                 <button id="continueButton" class="hidden">Continue</button>
             </div>
-            <img id="lockedDoor" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/lockedDoor.png?raw=true">
-            <img id="brickWall" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/brickWall.png?raw=true">
-            <img id="keyWall" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keyWall.png?raw=true">
+            <img id="lockedDoor" class="hidden background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/lockedDoor.png?raw=true">
+            <img id="brickWall" class="hidden background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/brickWall.png?raw=true">
+            <img id="keyWall" class="hidden background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keyWall.png?raw=true">
             <div id="arrows">
                 <img id="arrow1" class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
                 <img id="arrow2" class="arrow" style="left: 100%;" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/arrow.png?raw=true">
@@ -830,9 +827,9 @@
         <div id="hitboxFinalDoor"></div>
         <div id="hitbox"></div>
         <img id="key" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/key.png?raw=true">
-        <img id="tilesRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/tilesRoom.png?raw=true">
-        <img id="cardsRoom" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardsRoom.png?raw=true">
-        <img id="lockedKeypad" class="hidden" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadLocked1.png?raw=true">
+        <img id="tilesRoom" class="hidden background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/tilesRoom.png?raw=true">
+        <img id="cardsRoom" class="hidden background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/cardsRoom.png?raw=true">
+        <img id="lockedKeypad" class="hidden background" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAEscapeRoom/keypadLocked1.png?raw=true">
         <button id="exitButton2" style="margin-left: 11vh; z-index: 99999;" class="exitButton">Exit</button>
         <button id="exitButton3" class="exitButton">Exit</button>
         <div id="cardsOverallContainer"></div>
@@ -940,6 +937,9 @@
             let allBackgrounds = Array.from(document.getElementsByClassName("background"))
             let backgroundChanging = false
             let instructionsHeading2 = document.getElementById("instructionsHeading2")
+            let memoryGamePlaying = false
+            let whackAMolePlaying = false
+            let slidingPuzzlePlaying = false
             
             let audioMuted = true
             let mainTrack = document.getElementById("mainTrack")
@@ -985,7 +985,7 @@
             let shownHitboxes = []
             
             secretMessage.innerHTML = "Money was all I cared abou<strong>t</strong>, but now I just want to be home.<br><br>Until I f<strong>o</strong>und myself here, life really wasn’t that bad.<br><br>Loneliness has to be the worst part about this place.<br><br>To<strong>g</strong>ether, as a society, we can do anything.<br><br>I’ve started tallying my days sp<strong>e</strong>nt here.<br><br>Please lord! Allow me <strong>t</strong>o escape this hellhole!<br><br>Luck <strong>h</strong>as never been on my sid<strong>e</strong>.<br><br>You<strong>r</strong> mind degrades in this place. I only have so long left.<br><br>"
-            instructionsHeading.innerText = "Escape the prison within the time limit by clicking on the screen. Find clues, play games and solve puzzles.\n\n- Press \"z\" to open the instructions\n- Press \"x\" to get a hint\n- Press \"c\" to return to the title screen\n - Play with audio for full experience\n- Toggle audio with the audio symbol in the bottom left (default is muted)\n- Wait for the page to fully load before playing. Sometimes images can take some time to load in.\n- Arrows must be fully faded in before being able to be clicked"
+            instructionsHeading.innerText = "Escape the prison within the time limit by clicking on the screen. Find clues, play games, and solve puzzles.\n\n- Press \"z\" to open the instructions\n- Press \"x\" to get a hint\n- Press \"c\" to return to the title screen\n - Play with audio for full experience\n- Toggle audio with the audio symbol in the bottom left (default is muted)\n- Wait for the page to fully load before playing. Sometimes images can take some time to load in.\n- Elements/images must be fully faded in before being able to be clicked"
 
             paperSound.volume = 0.35
             beepSound.volume = 0.35
@@ -999,9 +999,9 @@
             allBackgrounds.forEach(background => {
                 background.addEventListener("animationstart", function() {
                     backgroundChanging = true
-                    background.addEventListener("animationend", function() {
-                        backgroundChanging = false
-                    })
+                })
+                background.addEventListener("animationend", function() {
+                    backgroundChanging = false
                 })
             })
 
@@ -1142,11 +1142,13 @@
 
             function showPrompt() {
                 let usersName = prompt("Enter a male name (which will replace the default name of \"Thomas\")")
-                if (usersName.length < 10 && usersName.length > 1) {
+                if (usersName.length < 10 && usersName.length > 1 && !usersName.includes("<") && !usersName.includes(">")) {
                     name = usersName
                     return
                 } else if (usersName.length <= 1) {
                     alert("Your name is too short")
+                } else if (usersName.includes("<") || usersName.includes(">")) {
+                    alert("An invalid character was used")
                 } else {
                     alert("Your name is too long")
                 }
@@ -1267,8 +1269,11 @@
 
             document.addEventListener("keydown", function(event) {
                 let key = event.key
-                if ((splashScreen.style.display != "none" || gameCompleted || backgroundChanging || notePaper.style.display == "block") && key !== "c") return
+
                 if (key == "z" || key == "x") {
+                    if (splashScreen.style.display != "none" || gameCompleted || whackAMolePlaying || slidingPuzzlePlaying || memoryGamePlaying
+                    || backgroundChanging || keypadContainer.style.display == "block" || notePaper.style.display == "block") return
+
                     arrowContainer.style.display = "none"
                     if (!audioMuted && notePaper.style.display == "none") paperSound.play()
                     notePaper.style.display = "block"
@@ -1325,18 +1330,24 @@
                         arrowContainer.style.display = "flex"
                         if (finalDoorLocked.style.display == "block" || cardsRoom.style.display == "block" || brickWall.style.display == "block") {
                             arrowLeft.style.display = "none"
-                            arrowRight.addEventListener("click", function() {
+                            arrowRight.addEventListener("click", function arrowRightBug() {
+                                if (stopArrows) return
+                                arrowRight.removeEventListener("click", arrowRightBug)
                                 arrowRight.addEventListener("animationend", function() {
                                     arrowLeft.style.display = "block"
                                 }, {once: true})
-                            }, {once: true})
-                        } else if (tilesRoom.style.display == "block" || keyWall.style.display == "block" || messageDoorOpen.style.display == "block" || messageDoorClosed.style.display == "block" || (lockedKeypad.style.display == "block" && !memoryCompleted)) {
+                            })
+                        } else if ((tilesRoom.style.display == "block" || keyWall.style.display == "block" || messageDoorOpen.style.display == "block"
+                        || messageDoorClosed.style.display == "block" || (lockedKeypad.style.display == "block" && !memoryCompleted))
+                        && generatorRoom.style.display != "block" && generatorRoomExploded.style.display != "block") {
                             arrowRight.style.display = "none"
-                            arrowLeft.addEventListener("click", function() {
+                            arrowLeft.addEventListener("click", function arrowLeftBug() {
+                                if (stopArrows) return
+                                arrowLeft.removeEventListener("click", arrowLeftBug)
                                 arrowLeft.addEventListener("animationend", function() {
                                     arrowRight.style.display = "block"
                                 }, {once: true})
-                            }, {once: true})
+                            })
                         }
                         backButton.style.display = "none"
                         hitboxPaper.style.display = "block"
@@ -1387,7 +1398,7 @@
                 notePaper.style.display = y
                 if (y == "flex" && !audioMuted) paperSound.play()
 
-                storyHeading.innerHTML = "Where am I? How did I get here? How do I get out of here? These are all questions poor " + name + " was thinking to himself as he awoke trapped inside of a dark, eerie prison cell. " + name + " could not identify any signs of life, and his screams were left unheard. There were strange markings all over the walls; " + name + " had never seen such a place in his life, and it wasn’t somewhere where he wanted to be. " + name + " felt frightened and confused as he thought back, recollecting his thoughts. The last thing he remembered was having gone to the bar with his friends. But how could he have ended up here? Was this some kind of practical joke? " + name + " could barely think, he was hungry, tired, had no energy and was suffering from a severe headache. Only one thing was clear - he must escape!"
+                storyHeading.innerHTML = "Where am I? How did I get here? How do I get out of here? These are all questions poor " + name + " was thinking to himself as he awoke trapped inside of a dark, eerie prison cell. " + name + " could not identify any signs of life, and his screams were left unheard. There were strange markings all over the walls, " + name + " had never seen such a place in his life, and it wasn’t somewhere he wanted to be. " + name + " felt frightened and confused as he thought back, recollecting his thoughts. The last thing he remembered was having gone to the bar with his friends. But how could he have ended up here? Was this some kind of practical joke? " + name + " could barely think, he was hungry, tired, had no energy and was suffering from a severe headache. Only one thing was clear: he must escape!"
 
                 if (button == "back") {
                     storyHeading.style.display = "none"
@@ -1527,7 +1538,7 @@
                 arrowEvent(brickWall, lockedDoor, keyWall)
 
                 hitbox.addEventListener("mousedown", function key(event) {
-                    if (lockedDoor.style.display == "block" || event.buttons != 1) return
+                    if (currentArea != 1 || keyWall.style.display !== "block" || event.buttons != 1 || backgroundChanging || stopArrows) return
                     document.body.addEventListener("mouseup", function(mouseEvent) {
                         let XPos1 = mouseEvent.clientX
                         let YPos1 = mouseEvent.clientY
@@ -1616,9 +1627,11 @@
                 arrowEvent(cardsRoom, lockedKeypad, tilesRoom, 2)
 
                 hitbox2.addEventListener("click", function() {
+                    if (backgroundChanging || stopArrows) return
                     if (lockedKeypad.style.display != "none") {
                         keypadContainer.style.display = "block"
                         hitbox2.style.zIndex = 0
+                        stopArrows = true
 
                         exitButton.addEventListener("click", function() {
                             if (Number(userInput.join("")) == 9 && memoryCompleted && !(timer.innerText == "00:02" || timer.innerText == "00:01" || timer.innerText == "00:00" || gameCompleted))
@@ -1626,6 +1639,7 @@
                             keypadContainer.style.display = "none"
                             hitbox2.style.zIndex = 50
                             userInput = []
+                            stopArrows = false
                         }, {once: true})
                     } else if (cardsRoom.style.display != "none" && !memoryCompleted) {
                         memoryGame()
@@ -1633,6 +1647,8 @@
                 })
                 
                 function memoryGame() {
+                    memoryGamePlaying = true
+
                     let exitButton2 = document.getElementById("exitButton2")
                     let cardsFlipped = 0
                     let currentCardsFlipped = 0
@@ -1646,6 +1662,9 @@
                     ]
                     
                     arrowContainer.className = "fade-out"
+                    arrowContainer.addEventListener("animationend", function() {
+                        arrowRight.style.display = "none"
+                    }, {once: true})
                     cards = cards.concat(cards)
                     cardsContainer.style.display = "grid"
                     hitbox2.style.display = "none"
@@ -1675,10 +1694,12 @@
                     cardsContainer.classList.add("fade-in")
 
                     exitButton2.addEventListener("click", function() {
+                        memoryGamePlaying = false
                         cardsMatched = 0
                         currentCardsFlipped = 0
                         cardsFlipped = 0
                         cardsContainer.className = "fade-out"
+                        arrowRight.style.display = "block"
                         exitButton2.classList.remove("fade-in")
                         exitButton2.classList.add("fade-out")
                         arrowContainer.className = "fade-in"
@@ -1707,10 +1728,12 @@
                                 if (cardsMatched == 4) {
                                     setTimeout(function() {
                                         memoryCompleted = true
+                                        memoryGamePlaying = false
                                         cardsContainer.classList.remove("fade-in")
                                         exitButton2.classList.remove("fade-in")
                                         cardsContainer.classList.add("fade-out")
                                         arrowContainer.classList.add("fade-in")
+                                        arrowRight.style.display = "block"
                                         exitButton2.classList.add("fade-out")
                                         hitbox2.style.display = "block"
                                     }, 1500)
@@ -1752,6 +1775,7 @@
                 arrowLeft.style.top = "1%"
                 arrowLeft.style.left = "50%"
                 hitbox.style.display = "none"
+                hitbox2.style.display = "none"
 
                 hitboxPower.style.display = "block"
                 hitboxPaper.style.display = "block"
@@ -1760,6 +1784,7 @@
 
                 exitButton3.addEventListener("click", function() {
                     if (generatorRoom.style.display != "none" && hitboxPaper.style.display == "none") {
+                        whackAMolePlaying = false
                         stopSpawning = true
                         exitButton3.className = "exitButton fade-out"
                         document.getElementById("powerBox").className = "fade-out"
@@ -1772,6 +1797,7 @@
                 })
                 
                 hitboxPower.addEventListener("click", function() {
+                    if (backgroundChanging || stopArrows) return
                     exitButton3.className = "exitButton fade-in"
                     arrowContainer.className = "fade-out"
                     hitboxPaper.style.display = "none"
@@ -1779,8 +1805,9 @@
                 })
 
                 hitboxPaper.addEventListener("click", function() {
-                    notePaper.style.display = "block"
+                    if (backgroundChanging || stopArrows) return
                     if (!audioMuted) paperSound.play()
+                    notePaper.style.display = "block"
                     arrowContainer.style.display = "none"
                     backButton.style.display = "block"
                     secretMessage.style.display = "block"
@@ -1789,6 +1816,7 @@
                 })
 
                 hitboxFinalDoor.addEventListener("click", function() {
+                    if (backgroundChanging || stopArrows) return
                     keypadContainer.style.display = "block"
                     hitboxFinalDoor.style.display = "none"
                     arrowContainer.style.display = "none"
@@ -1796,7 +1824,7 @@
 
                     exitButton.addEventListener("click", function() {
                         let userNum = Number(userInput.join(""))
-                        if ((userNum == 375 || userNum == 45) && roomExploded && slidingPuzzleCompleted && !(timer.innerText == "00:02" || timer.innerText == "00:01" || timer.innerText == "00:00" || gameCompleted)) {
+                        if ((userNum == 375 || userNum == 45 || userNum == 54 || userNum == 648) && roomExploded && slidingPuzzleCompleted && !(timer.innerText == "00:02" || timer.innerText == "00:01" || timer.innerText == "00:00" || gameCompleted)) {
                             tilesRoom.style.display = "none"
                             instructionsHeading2.style.display = "none"
                             cardsRoom.style.display = "none"
@@ -1840,10 +1868,13 @@
                 })
 
                 hitboxMessageDoor.addEventListener("click", function() {
+                    if (backgroundChanging || stopArrows) return
+
                     let slidingPuzzleContainer = document.getElementById("slidingPuzzleContainer")
                     let slidingPuzzle = document.getElementById("slidingPuzzle")
                     let exitButton4 = document.getElementById("exitButton4")
                     
+                    slidingPuzzlePlaying = true
                     shuffleButtons = true
                     arrowContainer.style.display = "none"
                     arrowRight.style.display = "none"
@@ -1855,12 +1886,16 @@
                     shuffleButtons = false
 
                     exitButton4.addEventListener("click", function() {
+                        if (slidingPuzzleCompleted) return
                         slidingPuzzleContainer.style.display = "none"
                         hitboxMessageDoor.style.display = "block"
                         arrowContainer.style.display = "flex"
-                        arrowLeft.addEventListener("click", function() {
-                            arrowLeft.addEventListener("animationend", function() {
-                                arrowRight.style.display = "block"
+                        slidingPuzzlePlaying = false
+                        arrowLeft.addEventListener("animationend", function() {
+                            arrowLeft.addEventListener("click", function() {
+                                arrowLeft.addEventListener("animationend", function() {
+                                    arrowRight.style.display = "block"
+                                }, {once: true})
                             }, {once: true})
                         }, {once: true})
                     }, {once: true})
@@ -1869,6 +1904,8 @@
 
             function whackAMole() {
                 setTimeout(deleteImage, 2500)
+
+                whackAMolePlaying = true
 
                 let box = document.getElementById("powerBox")
                 let counter = 0
@@ -1933,6 +1970,8 @@
                 }
 
                 function endGame(bomb) {
+                    whackAMolePlaying = false
+
                     for (let image of Array.from(document.getElementsByClassName("mole")))
                         image.remove()
 
@@ -2019,6 +2058,7 @@
                             correctNumbers++
                     }
                     if (correctNumbers == 8) {
+                        slidingPuzzleCompleted = true
                         let delay = 1500
                         if (!audioMuted) {
                             doorSound.play()
@@ -2026,7 +2066,6 @@
                         }
 
                         setTimeout(function() {
-                            slidingPuzzleCompleted = true
                             slidingPuzzleContainer.className = "fade-out"
                             messageDoorClosed.classList.remove("fade-in")
                             messageDoorClosed.classList.add("fade-out")
@@ -2037,6 +2076,7 @@
                                 messageDoorOpen.classList.remove("fade-out")
                                 messageDoorOpen.classList.add("fade-in")
                                 messageDoorOpen.style.display = "block"
+                                slidingPuzzlePlaying = false
                                 slidingPuzzleContainer.style.display = "none"
 
                                 arrowLeft.addEventListener("animationend", function() {
