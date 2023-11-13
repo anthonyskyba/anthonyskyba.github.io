@@ -1115,7 +1115,7 @@
                         winScreen.className = "background fade-in"
                         winScreen.style.display = "block"
                         winText.style.display = "block"
-                        winText.innerText = "Luckily, it was just a long weed that happened to hook around his foot. Feeling shaken up, Thomas sprinted the remaining distance to the well-paved road, and began his journey of rejoining civilization."
+                        winText.innerText = "Luckily, it was just a long weed that happened to hook around his foot. Feeling shaken up, " + name + " sprinted the remaining distance to the well-paved road, and began his journey of rejoining civilization."
                     }, {once: true})
                     finalContinueButton = true
                     return
@@ -1390,7 +1390,7 @@
                     splashScreen.addEventListener("animationend", function() {
                         splashScreen.style.display = "none"
                         if (!infiniteTime) startTimer()
-                        area1()
+                        area3()
                     }, {once: true})
                     return
                 }
