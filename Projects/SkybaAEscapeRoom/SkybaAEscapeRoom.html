@@ -940,6 +940,7 @@
             let memoryGamePlaying = false
             let whackAMolePlaying = false
             let slidingPuzzlePlaying = false
+            let bombClicked = false
             
             let audioMuted = true
             let mainTrack = document.getElementById("mainTrack")
@@ -1783,7 +1784,7 @@
                 arrowEvent(finalDoorLocked, generatorRoom, messageDoorClosed, 3)
 
                 exitButton3.addEventListener("click", function() {
-                    if (generatorRoom.style.display != "none" && hitboxPaper.style.display == "none") {
+                    if (generatorRoom.style.display != "none" && hitboxPaper.style.display == "none" && !bombClicked) {
                         whackAMolePlaying = false
                         stopSpawning = true
                         exitButton3.className = "exitButton fade-out"
@@ -1956,6 +1957,7 @@
                     let createdImage = moles[moles.length - 1]
                     createdImage.addEventListener("click", function() {
                         if (bomb) {
+                            bombClicked = true
                             endGame(true)
                             return
                         }
