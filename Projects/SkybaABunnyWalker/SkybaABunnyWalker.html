@@ -4,17 +4,26 @@
         <title>amogus</title>
         <style>
             body {
-                background-color: green;
+                background-color: lightblue;
                 overflow: hidden;
                 margin: 0;
                 padding: 0;
             }
 
             button {
+                position: relative;
+                text-align: center;
+                border-radius: 4px;
+                border: none;
+                font-size: large;
+                width: 100px;
                 height: 50px;
-                width: 200px;
-                background-color: gray;
-                color: white;
+                transition-duration: 0.4s;
+            }
+
+            button:hover {
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+                transform: translateY(-2px);
             }
 
             .background {
@@ -23,114 +32,236 @@
                 left: 0;
                 top: 0;
                 width: 1920px;
-                height: auto;
+                height: 1080px;
             }
 
             #amongus {
                 z-index: 100;
                 position: absolute;
-                height: 300px;
+                height: 285px;
                 width: auto;
                 display: none;
+            }
+
+            .coin {
+                height: 100px;
+                width: auto;
+                position: absolute;
+                z-index: 102;
+                display: block;
+            }
+
+            #score {
+                display: none;
+                position: fixed;
+                margin-top: 0;
+                padding: 0.5%;
+                margin: 1%;
+                background-color: black;
+                color: white;
+                font-size: 3em;
             }
         </style>
     </head>
     <body>
-        <img class="background" id="background1" src="C:\Users\antho\Downloads\background.png">
-        <img class="background" id="background2" src="C:\Users\antho\Downloads\background.png">
-        <img id="amongus" src="C:\Users\antho\Downloads\amongus.png">
-        <!-- "C:\Users\antho\Downloads\amogus.gif" -->
-        <center>
-            <div id="splashScreen">
-                <h1>Bunny Walker</h1>
-                <h1>Press start to play!</h1>
-                <button id="startButton">Start</button>
-            </div>
-        </center>
+        <div id="gameElements">
+            <img class="background" id="background1" src="/home/anthony/Downloads/background.png">
+            <img class="background" id="background2" src="/home/anthony/Downloads/background.png">
+            <img id="amongus" src="/home/anthony/Downloads/amongus.png">
+            <center>
+                <h3 id="score">Score: 0</h3>
+            </center>
+                <div id="splashScreen">
+                    <p style="display: fixed; position: absolute; margin-left: 1%;">Made by Anthony Skyba</p>
+                    <center>
+                        <h1>Bunny Walker</h1>
+                        <h1>Gain 30 score to win</h1>
+                        <h1>Press Start to play!</h1>
+                        <h3>Gain score by collecting coins. Not collecting coins will lose you score.</h3>
+                        <p>Make sure to play in full screen to avoid dimension issues</p>
+                        <button id="startButton">Start</button>
+                    </center>
+                </div>
+        </div>
+        <div id="endScreen" style="display: none;">
+            <center>
+                <h1>You Won!</h1>
+                <h2>Press Space to play again!</h2>
+            </center>
+        </div>
     </body>
     <script>
         document.getElementById("startButton").addEventListener("click", function() { start() }, {once: true});
-        let continueMoving = false;
         let amongus = document.getElementById("amongus");
-        let previousKeyPressed;
+        let keysDown = {};
+        let animationFrameId = null;
+        let gravity = 2;
+        let velocity = 15;
+        let coinSpeed = 5;
+        let score = document.getElementById("score");
+        let gameOver = false
+        let spawnCoinsInterval
         
         function parse(str) {
-            if (/^-/.test(str)) return Number("-" + str.replace(/\D+/g, ""));
-            return Number(str.replace(/\D+/g, ""));
+            return Number(str.replace(/[^\d.-]/g, ""));
         }
 
-        function move(key) {
-            if (previousKeyPressed != key) return;
-            
-            let bg1Parsed = parse(background1.style.left) - 1;
-            let bg2Parsed = parse(background2.style.left) - 1;
+        function endGame() {
+            gameOver = true
+            clearInterval(spawnCoinsInterval)
+            document.getElementById("gameElements").style.display = "none";
+            document.getElementById("endScreen").style.display = "block";
+
+            document.body.addEventListener("keydown", function(event) {
+                if (event.key == " ") location.reload();
+            })
+        }
+    
+        function horizontalMovement() {
+            if (gameOver) return;
+
+            let speed = 15;
+            let bg1Parsed = parse(background1.style.left) - speed;
+            let bg2Parsed = parse(background2.style.left) - speed;
             let amongusLeft = parse(amongus.style.left);
-
-            amongus.style.src = "C:\\Users\\antho\\Downloads\\amogus.gif";
-
-            
-            if (bg1Parsed <= -1920)
-                bg1Parsed = 1920;
-            
-            if (bg2Parsed <= -1920)
-                bg2Parsed = 1920;
-
-            
-            if (key == "d") {
-                if (amongusLeft >= 960) {
-                    background1.style.left = bg1Parsed + "px";
-                    background2.style.left = bg2Parsed + "px";
         
-                    background1.style.top = "0px";
-                    background2.style.top = "0px";
-                } else {
-                    amongus.style.left = (amongusLeft + 1) + "px";
-                }
-            } else if (amongusLeft > 5) {
-                amongus.style.left = (amongusLeft - 1) + "px";
+            if (bg1Parsed <= -1920) bg1Parsed = 1920;
+            if (bg2Parsed <= -1920) bg2Parsed = 1920;
+    
+            if ((keysDown["d"] || keysDown["a"]) && amongus.src == "file:///home/anthony/Downloads/amongus.png") {
+                amongus.style.height = "300px";
+                amongus.src = "/home/anthony/Downloads/amongus.gif";
+            } else if (keysDown["w"] && !(keysDown["d"] || keysDown["a"])) {
+                amongus.style.height = "285px";
+                amongus.src = "/home/anthony/Downloads/amongus.png";
             }
 
-            // console.log(Number(amongus.clientWidth), amongusLeft)
+            if (keysDown["d"]) {
+                amongus.style.transform = "scaleX(1)";
+                if (amongusLeft >= screen.width / 2.5) {
+                    coinSpeed = 15;
+                    background1.style.left = bg1Parsed + "px";
+                    background2.style.left = bg2Parsed + "px";
+                } else {
+                    coinSpeed = 5;
+                    amongus.style.left = (amongusLeft + speed) + "px";
+                }
+            }
 
-            if (continueMoving) requestAnimationFrame(() => move(key));
+            if (keysDown["a"] && amongusLeft > 5) {
+                amongus.style.transform = "scaleX(-1)";
+                amongus.style.left = (amongusLeft - speed) + "px";
+            }
+            
+            if (keysDown["w"] && parse(amongus.style.top) >= 434) {
+                velocity = -44;
+            }
+
+            animationFrameId = requestAnimationFrame(horizontalMovement);
+        }
+
+        function verticalMovement() {
+            if (gameOver) return;
+
+            let amongusTop = parse(amongus.style.top);
+
+            if (amongusTop + velocity > 434) {
+                requestAnimationFrame(verticalMovement);
+                return;
+            }
+
+            amongusTop = amongusTop + velocity;
+            velocity = velocity + gravity;
+
+            amongus.style.top = amongusTop + "px";
+            
+            requestAnimationFrame(verticalMovement);
+        }
+
+        function spawnCoins() {
+            if (gameOver) return;
+
+            let coin = document.createElement("img");
+            coin.className = "coin";
+            coin.style.left = screen.width + "px";
+            coin.style.top = Math.floor(Math.random() * screen.height - coin.height - 50) + "px";
+            document.getElementById("gameElements").appendChild(coin);
+            coin.src = "/home/anthony/Downloads/coin.gif";
+
+            requestAnimationFrame(() => moveCoin(coin));
+        }
+    
+        function updateScore(num) {
+            let score2 = Number(score.innerText.split(" ")[1]) + num;
+            score.innerText = "Score: " + score2;
+            if (score2 >= 30) endGame();
+        }
+
+        function moveCoin(coin) {
+            let coinLeft = parse(coin.style.left);
+            let coinTop = parse(coin.style.top);
+
+            let amongusTop = parse(amongus.style.top);
+            let amongusLeft = parse(amongus.style.left);
+
+            if (amongusLeft < coinLeft + coin.width && amongusLeft + amongus.width > coinLeft &&
+                amongusTop < coinTop + coin.height && amongusTop + amongus.height > coinTop) {
+                    updateScore(1);
+                    coin.style.display = "none";
+                    return;
+            }
+
+            if (coinLeft < coin.width * -1) {
+                updateScore(-1);
+                coin.style.display = "none";
+                return;
+            }
+
+            coin.style.left = (coinLeft - coinSpeed) + "px";
+            requestAnimationFrame(() => moveCoin(coin));
         }
 
         function start() {
             let background1 = document.getElementById("background1");
             let background2 = document.getElementById("background2");
-            let keyPressed;
-
+    
             background1.style.display = "block";
             background2.style.display = "block";
 
             background1.style.left = "0px";
             background2.style.left = "1920px";
 
-            amongus.style.top = screen.height - amongus.height + "px";
             amongus.style.display = "block";
+            score.style.display = "block";
+
+            amongus.style.top = (Math.round(screen.height - screen.height / 2.3)) + "px"
 
             document.getElementById("splashScreen").style.display = "none";
-
-            document.body.addEventListener("keydown", function(event1) {
-                console.log(event1.key, 1)
-                if (previousKeyPressed == "d" && event1.key == "a") keyup("d", true);
-                else if (previousKeyPressed == "a" && event1.key == "d") keyup("a", true);
-                else if ((event1.key != "a" && event1.key != "d") || continueMoving) return;
-
-                console.log(event1.key, 2)
-                previousKeyPressed = event1.key;
-                continueMoving = true;
-                requestAnimationFrame(() => move(event1.key));
-
-                function keyup(event2, force) {
-                    if (event2.key == event1.key || force) {
-                        continueMoving = false;
-                        amongus.style.src = "C:\\Users\\antho\\Downloads\\amongus.png";
-                        document.body.removeEventListener("keyup", keyup);
+    
+            document.body.addEventListener("keydown", function(event) {
+                if (event.key == "a" || event.key == "d" || event.key == "w") {
+                    keysDown[event.key] = true;
+                    if (animationFrameId === null) {
+                        animationFrameId = requestAnimationFrame(horizontalMovement);
                     }
                 }
-                document.body.addEventListener("keyup", keyup);
             });
+    
+            document.body.addEventListener("keyup", function(event) {
+                if (event.key == "a" || event.key == "d" || event.key == "w") {
+                    if (event.key == "d") coinSpeed = 5;
+                    keysDown[event.key] = false;
+                    if (!keysDown["a"] && !keysDown["d"] && !keysDown["w"]) {
+                        cancelAnimationFrame(animationFrameId);
+                        animationFrameId = null;
+                        amongus.style.height = "285px";
+                        amongus.src = "/home/anthony/Downloads/amongus.png";
+                    }
+                }
+            });
+
+            requestAnimationFrame(verticalMovement);
+            spawnCoinsInterval = setInterval(spawnCoins, 1000);
         }
-    </script>
+    </script>        
 </html>
