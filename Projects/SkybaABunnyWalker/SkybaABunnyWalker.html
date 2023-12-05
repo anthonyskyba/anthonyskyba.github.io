@@ -65,9 +65,9 @@
     </head>
     <body>
         <div id="gameElements">
-            <img class="background" id="background1" src="/home/anthony/Downloads/background.png">
-            <img class="background" id="background2" src="/home/anthony/Downloads/background.png">
-            <img id="amongus" src="/home/anthony/Downloads/amongus.png">
+            <img class="background" id="background1" src="background.png">
+            <img class="background" id="background2" src="background.png">
+            <img id="amongus" src="amongus.png">
             <center>
                 <h3 id="score">Score: 0</h3>
             </center>
@@ -128,12 +128,12 @@
             if (bg1Parsed <= -1920) bg1Parsed = 1920;
             if (bg2Parsed <= -1920) bg2Parsed = 1920;
     
-            if ((keysDown["d"] || keysDown["a"]) && amongus.src == "file:///home/anthony/Downloads/amongus.png") {
+            if ((keysDown["d"] || keysDown["a"]) && amongus.src == "file:///amongus.png") {
                 amongus.style.height = "300px";
-                amongus.src = "/home/anthony/Downloads/amongus.gif";
+                amongus.src = "amongus.gif";
             } else if (keysDown["w"] && !(keysDown["d"] || keysDown["a"])) {
                 amongus.style.height = "285px";
-                amongus.src = "/home/anthony/Downloads/amongus.png";
+                amongus.src = "amongus.png";
             }
 
             if (keysDown["d"]) {
@@ -186,7 +186,7 @@
             coin.style.left = screen.width + "px";
             coin.style.top = Math.floor(Math.random() * screen.height - coin.height - 50) + "px";
             document.getElementById("gameElements").appendChild(coin);
-            coin.src = "/home/anthony/Downloads/coin.gif";
+            coin.src = "coin.gif";
 
             requestAnimationFrame(() => moveCoin(coin));
         }
@@ -255,7 +255,7 @@
                         cancelAnimationFrame(animationFrameId);
                         animationFrameId = null;
                         amongus.style.height = "285px";
-                        amongus.src = "/home/anthony/Downloads/amongus.png";
+                        amongus.src = "amongus.png";
                     }
                 }
             });
