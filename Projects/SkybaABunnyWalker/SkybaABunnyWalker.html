@@ -65,9 +65,9 @@
     </head>
     <body>
         <div id="gameElements">
-            <img class="background" id="background1" src="background.png">
-            <img class="background" id="background2" src="background.png">
-            <img id="amongus" src="amongusPNG.png">
+            <img class="background" id="background1" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/background.png?raw=true">
+            <img class="background" id="background2" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/background.png?raw=true">
+            <img id="amongus" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true">
             <center>
                 <h3 id="score">Score: 0</h3>
             </center>
@@ -128,12 +128,12 @@
             if (bg1Parsed <= -1920) bg1Parsed = 1920;
             if (bg2Parsed <= -1920) bg2Parsed = 1920;
     
-            if ((keysDown["d"] || keysDown["a"]) && amongus.src == "file:///amongusPNG.png") {
+            if ((keysDown["d"] || keysDown["a"]) && amongus.src == "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true") {
                 amongus.style.height = "300px";
-                amongus.src = "amongus.gif";
+                amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongus.gif?raw=true";
             } else if (keysDown["w"] && !(keysDown["d"] || keysDown["a"])) {
                 amongus.style.height = "285px";
-                amongus.src = "amongusPNG.png";
+                amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true";
             }
 
             if (keysDown["d"]) {
@@ -186,7 +186,7 @@
             coin.style.left = screen.width + "px";
             coin.style.top = Math.floor(Math.random() * screen.height - coin.height - 50) + "px";
             document.getElementById("gameElements").appendChild(coin);
-            coin.src = "coin.gif";
+            coin.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/coin.gif?raw=true";
 
             requestAnimationFrame(() => moveCoin(coin));
         }
@@ -255,7 +255,7 @@
                         cancelAnimationFrame(animationFrameId);
                         animationFrameId = null;
                         amongus.style.height = "285px";
-                        amongus.src = "amongusPNG.png";
+                        amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true";
                     }
                 }
             });
