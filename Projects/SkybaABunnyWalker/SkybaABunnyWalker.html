@@ -67,7 +67,7 @@
         <div id="gameElements">
             <img class="background" id="background1" src="background.png">
             <img class="background" id="background2" src="background.png">
-            <img id="amongus" src="amongus.png">
+            <img id="amongus" src="amongusPNG.png">
             <center>
                 <h3 id="score">Score: 0</h3>
             </center>
@@ -128,12 +128,12 @@
             if (bg1Parsed <= -1920) bg1Parsed = 1920;
             if (bg2Parsed <= -1920) bg2Parsed = 1920;
     
-            if ((keysDown["d"] || keysDown["a"]) && amongus.src == "file:///amongus.png") {
+            if ((keysDown["d"] || keysDown["a"]) && amongus.src == "file:///amongusPNG.png") {
                 amongus.style.height = "300px";
                 amongus.src = "amongus.gif";
             } else if (keysDown["w"] && !(keysDown["d"] || keysDown["a"])) {
                 amongus.style.height = "285px";
-                amongus.src = "amongus.png";
+                amongus.src = "amongusPNG.png";
             }
 
             if (keysDown["d"]) {
@@ -255,7 +255,7 @@
                         cancelAnimationFrame(animationFrameId);
                         animationFrameId = null;
                         amongus.style.height = "285px";
-                        amongus.src = "amongus.png";
+                        amongus.src = "amongusPNG.png";
                     }
                 }
             });
