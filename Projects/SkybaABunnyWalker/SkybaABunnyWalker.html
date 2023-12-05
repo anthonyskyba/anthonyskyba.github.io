@@ -1,1 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>amogus</title>
+        <style>
+            body {
+                background-color: green;
+                overflow: hidden;
+                margin: 0;
+                padding: 0;
+            }
 
+            button {
+                height: 50px;
+                width: 200px;
+                background-color: gray;
+                color: white;
+            }
+
+            .background {
+                display: none;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 1920px;
+                height: auto;
+            }
+
+            #gif {
+                z-index: 100;
+                position: absolute;
+                height: 300px;
+                width: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <img class="background" id="background1" src="C:\Users\antho\Downloads\background.png">
+        <img class="background" id="background2" src="C:\Users\antho\Downloads\background.png">
+        <img id="gif" src="C:\Users\antho\Downloads\amogus.gif">
+        <center>
+            <div id="splashScreen">
+                <h1>Bunny Walker</h1>
+                <h1>Press start to play!</h1>
+                <button id="startButton">Start</button>
+            </div>
+        </center>
+    </body>
+    <script>
+        document.getElementById("startButton").addEventListener("click", function() { start() }, {once: true});
+        let continueMoving = false
+        let gif = document.getElementById("gif")
+        // gif.style.top = 
+
+        function parse(str) {
+            if (/^-/.test(str)) return Number("-" + str.replace(/\D+/g, ""));
+            return Number(str.replace(/\D+/g, ""));
+        }
+
+        function move(key) {
+            let bg1Parsed = parse(background1.style.left) - 1;
+            let bg2Parsed = parse(background2.style.left) - 1;
+            
+            if (bg1Parsed <= -1920)
+                bg1Parsed = 1920;
+            
+            if (bg2Parsed <= -1920)
+                bg2Parsed = 1920;
+            
+            background1.style.left = bg1Parsed + "px";
+            background2.style.left = bg2Parsed + "px";
+
+            background1.style.top = "0px";
+            background2.style.top = "0px";
+            
+            if (continueMoving) requestAnimationFrame(move);
+        }
+
+        function start() {
+            let background1 = document.getElementById("background1");
+            let background2 = document.getElementById("background2");
+
+            background1.style.display = "block";
+            background2.style.display = "block";
+
+            background1.style.left = "0px";
+            background2.style.left = "1920px";
+
+            document.getElementById("splashScreen").style.display = "none";
+
+            document.body.addEventListener("keydown", function(event1) {
+                if (continueMoving) return
+                if (event1.key == "d" || event1.key == "a") {
+                    continueMoving = true;
+                    requestAnimationFrame(() => move(event1.key));
+                    document.body.addEventListener("keyup", function(event2) {
+                        if (event2.key == event1.key) continueMoving = false;
+                    }, {once: true});
+                }
+            });
+        }
+    </script>
+</html>
