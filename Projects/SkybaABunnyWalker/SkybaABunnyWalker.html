@@ -26,18 +26,20 @@
                 height: auto;
             }
 
-            #gif {
+            #amongus {
                 z-index: 100;
                 position: absolute;
                 height: 300px;
                 width: auto;
+                display: none;
             }
         </style>
     </head>
     <body>
         <img class="background" id="background1" src="C:\Users\antho\Downloads\background.png">
         <img class="background" id="background2" src="C:\Users\antho\Downloads\background.png">
-        <img id="gif" src="C:\Users\antho\Downloads\amogus.gif">
+        <img id="amongus" src="C:\Users\antho\Downloads\amongus.png">
+        <!-- "C:\Users\antho\Downloads\amogus.gif" -->
         <center>
             <div id="splashScreen">
                 <h1>Bunny Walker</h1>
@@ -48,37 +50,55 @@
     </body>
     <script>
         document.getElementById("startButton").addEventListener("click", function() { start() }, {once: true});
-        let continueMoving = false
-        let gif = document.getElementById("gif")
-        // gif.style.top = 
-
+        let continueMoving = false;
+        let amongus = document.getElementById("amongus");
+        let previousKeyPressed;
+        
         function parse(str) {
             if (/^-/.test(str)) return Number("-" + str.replace(/\D+/g, ""));
             return Number(str.replace(/\D+/g, ""));
         }
 
         function move(key) {
+            if (previousKeyPressed != key) return;
+            
             let bg1Parsed = parse(background1.style.left) - 1;
             let bg2Parsed = parse(background2.style.left) - 1;
+            let amongusLeft = parse(amongus.style.left);
+
+            amongus.style.src = "C:\\Users\\antho\\Downloads\\amogus.gif";
+
             
             if (bg1Parsed <= -1920)
                 bg1Parsed = 1920;
             
             if (bg2Parsed <= -1920)
                 bg2Parsed = 1920;
-            
-            background1.style.left = bg1Parsed + "px";
-            background2.style.left = bg2Parsed + "px";
 
-            background1.style.top = "0px";
-            background2.style.top = "0px";
             
-            if (continueMoving) requestAnimationFrame(move);
+            if (key == "d") {
+                if (amongusLeft >= 960) {
+                    background1.style.left = bg1Parsed + "px";
+                    background2.style.left = bg2Parsed + "px";
+        
+                    background1.style.top = "0px";
+                    background2.style.top = "0px";
+                } else {
+                    amongus.style.left = (amongusLeft + 1) + "px";
+                }
+            } else if (amongusLeft > 5) {
+                amongus.style.left = (amongusLeft - 1) + "px";
+            }
+
+            // console.log(Number(amongus.clientWidth), amongusLeft)
+
+            if (continueMoving) requestAnimationFrame(() => move(key));
         }
 
         function start() {
             let background1 = document.getElementById("background1");
             let background2 = document.getElementById("background2");
+            let keyPressed;
 
             background1.style.display = "block";
             background2.style.display = "block";
@@ -86,17 +106,30 @@
             background1.style.left = "0px";
             background2.style.left = "1920px";
 
+            amongus.style.top = screen.height - amongus.height + "px";
+            amongus.style.display = "block";
+
             document.getElementById("splashScreen").style.display = "none";
 
             document.body.addEventListener("keydown", function(event1) {
-                if (continueMoving) return
-                if (event1.key == "d" || event1.key == "a") {
-                    continueMoving = true;
-                    requestAnimationFrame(() => move(event1.key));
-                    document.body.addEventListener("keyup", function(event2) {
-                        if (event2.key == event1.key) continueMoving = false;
-                    }, {once: true});
+                console.log(event1.key, 1)
+                if (previousKeyPressed == "d" && event1.key == "a") keyup("d", true);
+                else if (previousKeyPressed == "a" && event1.key == "d") keyup("a", true);
+                else if ((event1.key != "a" && event1.key != "d") || continueMoving) return;
+
+                console.log(event1.key, 2)
+                previousKeyPressed = event1.key;
+                continueMoving = true;
+                requestAnimationFrame(() => move(event1.key));
+
+                function keyup(event2, force) {
+                    if (event2.key == event1.key || force) {
+                        continueMoving = false;
+                        amongus.style.src = "C:\\Users\\antho\\Downloads\\amongus.png";
+                        document.body.removeEventListener("keyup", keyup);
+                    }
                 }
+                document.body.addEventListener("keyup", keyup);
             });
         }
     </script>
