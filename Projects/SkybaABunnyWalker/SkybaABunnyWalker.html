@@ -78,7 +78,8 @@
                         <h1>Gain 30 score to win</h1>
                         <h1>Press Start to play!</h1>
                         <h3>Gain score by collecting coins. Not collecting coins will lose you score.</h3>
-                        <p>Make sure to play in full screen to avoid dimension issues</p>
+                        <p>If the dimensions are bugged, try playing in full screen</p>
+                        <p>The gifs may also sometimes not load in right away</p>
                         <button id="startButton">Start</button>
                     </center>
                 </div>
@@ -101,6 +102,8 @@
         let score = document.getElementById("score");
         let gameOver = false
         let spawnCoinsInterval
+        let firstJump = true
+        let firstRun = true
         
         function parse(str) {
             return Number(str.replace(/[^\d.-]/g, ""));
@@ -129,11 +132,15 @@
             if (bg2Parsed <= -1920) bg2Parsed = 1920;
     
             if ((keysDown["d"] || keysDown["a"]) && amongus.src == "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true" && parse(amongus.style.top) >= 434) {
-                amongus.style.height = "300px";
+                if (firstRun) {
+                    setTimeout(function() {
+                        amongus.style.height = "300px";
+                    }, 100)
+                    firstRun = false;
+                } else {
+                    amongus.style.height = "300px";
+                }
                 amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongus.gif?raw=true";
-            } else if (keysDown["w"]) {
-                amongus.style.height = "285px";
-                amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true";
             }
 
             if (keysDown["d"]) {
@@ -155,6 +162,15 @@
             
             if (keysDown["w"] && parse(amongus.style.top) >= 434) {
                 velocity = -44;
+                if (firstJump) {
+                    setTimeout(function() {
+                        amongus.style.height = "420px";
+                        firstJump = false
+                    }, 200)
+                } else {
+                    amongus.style.height = "420px";
+                }
+                amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusJump.gif?raw=true";
             }
 
             animationFrameId = requestAnimationFrame(horizontalMovement);
@@ -166,6 +182,10 @@
             let amongusTop = parse(amongus.style.top);
 
             if (amongusTop + velocity > 434) {
+                if (amongus.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true" && amongus.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongus.gif?raw=true") {
+                    amongus.style.height = "285px";
+                    amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true";
+                }
                 requestAnimationFrame(verticalMovement);
                 return;
             }
@@ -251,7 +271,7 @@
                 if (event.key == "a" || event.key == "d" || event.key == "w") {
                     if (event.key == "d") coinSpeed = 5;
                     keysDown[event.key] = false;
-                    if (!keysDown["a"] && !keysDown["d"] && !keysDown["w"]) {
+                    if (!keysDown["a"] && !keysDown["d"] && !keysDown["w"] && parse(amongus.style.top) >= 434) {
                         cancelAnimationFrame(animationFrameId);
                         animationFrameId = null;
                         amongus.style.height = "285px";
