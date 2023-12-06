@@ -128,10 +128,10 @@
             if (bg1Parsed <= -1920) bg1Parsed = 1920;
             if (bg2Parsed <= -1920) bg2Parsed = 1920;
     
-            if ((keysDown["d"] || keysDown["a"]) && amongus.src == "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true") {
+            if ((keysDown["d"] || keysDown["a"]) && amongus.src == "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true" && parse(amongus.style.top) >= 434) {
                 amongus.style.height = "300px";
                 amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongus.gif?raw=true";
-            } else if (keysDown["w"] && !(keysDown["d"] || keysDown["a"])) {
+            } else if (keysDown["w"]) {
                 amongus.style.height = "285px";
                 amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true";
             }
