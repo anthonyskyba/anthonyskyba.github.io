@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SkybaALevelUpSwimmer</title>
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                user-select: none;
+            }
+
+            #sky {
+                height: 100%;
+                width: 100%;
+                position: absolute;
+                z-index: -1;
+            }
+
+            #bird {
+                position: absolute;
+                z-index: 10;
+                height: 20%;
+                width: auto;
+            }
+            
+            .rain {
+                position: absolute;
+                z-index: 10;
+                width: 5%;
+                height: auto;
+            }
+
+        </style>
+    </head>
+    <body>
+        <img id="sky" src="C:\Users\antho\Downloads\sky.png">
+        <img id="bird" src="C:\Users\antho\Downloads\bird.gif">
+
+        <script>
+            document.addEventListener("dragstart", function(event) { event.preventDefault() });
+
+            let bird = document.getElementById("bird");
+            let keysDown = {};
+            let animationFrameId = null;
+            let velocity = 0.2;
+            let gravity = 0.01;
+            let droppingSpeed = 500
+
+            bird.style.display = "block";
+            bird.style.left = "500px";
+            bird.style.top = "500px";
+
+            requestAnimationFrame(verticalMovement);
+
+            setInterval(spawnRain, droppingSpeed);
+
+            document.body.addEventListener("keydown", function(event) {
+                if (event.key == "a" || event.key == "d" || event.key == "w") {
+                    keysDown[event.key] = true;
+                    if (animationFrameId === null) {
+                        animationFrameId = requestAnimationFrame(horizontalMovement);
+                    }
+                }
+            });
+
+            document.body.addEventListener("keyup", function(event) {
+                if (event.key == "a" || event.key == "d" || event.key == "w") {
+                    keysDown[event.key] = false;
+                    if (!keysDown["a"] && !keysDown["d"] && !keysDown["w"]) {
+                        cancelAnimationFrame(animationFrameId);
+                        animationFrameId = null;
+                    }
+                }
+            });
+
+            function spawnRain() {
+                let rain = document.createElement("img");
+                rain.className = "rain";
+                rain.style.top = rain.height * -1 + "px";
+                rain.style.left = Math.floor(Math.random() * screen.width) + "px";
+                document.body.appendChild(rain);
+                rain.src = "C:\\Users\\antho\\Downloads\\rain.png";
+
+                moveRain(rain);
+            }
+
+            function moveRain(rain) {
+                let rainSpeed = 2;
+                let rainTop = parse(rain.style.top);
+
+                if (rainTop > screen.height) {
+                    rain.remove();
+                    console.log("+1")
+                    return;
+                }
+                
+                rain.style.top = rainTop + rainSpeed + "px";
+                requestAnimationFrame(() => moveRain(rain));
+            }
+
+            function parse(str) {
+                return Number(str.replace(/[^\d.-]/g, ""));
+            }
+        
+            function horizontalMovement() {
+                let speed = 3;
+                let birdLeft = parse(bird.style.left);
+                let birdTop = parse(bird.style.top);
+            
+                if (keysDown["d"] && birdLeft < (screen.width - bird.width - 5)) {
+                    bird.style.transform = "scaleX(-1)";
+                    bird.style.left = (birdLeft + speed) + "px";
+                }
+
+                if (keysDown["a"] && birdLeft > 5) {
+                    bird.style.transform = "scaleX(1)";
+                    bird.style.left = (birdLeft - speed) + "px";
+                }
+                
+                if (keysDown["w"]) {
+                    velocity = -2;
+                }
+
+                animationFrameId = requestAnimationFrame(horizontalMovement);
+            }
+
+            function verticalMovement() {
+                let birdTop = parse(bird.style.top);
+
+                if (birdTop + velocity >= screen.height || birdTop + velocity <= bird.height * -1) {
+                    document.getElementById("sky").remove();
+                }
+
+                birdTop = birdTop + velocity;
+                velocity = velocity + gravity;
+
+                bird.style.top = birdTop + "px";
+                
+                requestAnimationFrame(verticalMovement);
+            }
+        </script>
+    </body>
+</html>
