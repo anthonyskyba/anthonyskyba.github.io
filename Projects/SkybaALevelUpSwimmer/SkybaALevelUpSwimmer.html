@@ -31,11 +31,27 @@
                 height: auto;
             }
 
+            #score, #blinker {
+                display: block;
+                position: fixed;
+                margin-top: 0;
+                padding: 0.5%;
+                margin: 1%;
+                background-color: black;
+                color: white;
+                font-size: 3em;
+                z-index: 99;
+            }
+
         </style>
     </head>
     <body>
         <img id="sky" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaALevelUpSwimmer/sky.png?raw=true">
         <img id="bird" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaALevelUpSwimmer/bird.gif?raw=true">
+        <center>
+            <h3 id="score">Score: 0</h3>
+        </center>
+        <h2 id="blinker"></h2>
 
         <script>
             document.addEventListener("dragstart", function(event) { event.preventDefault() });
@@ -44,16 +60,27 @@
             let keysDown = {};
             let animationFrameId = null;
             let velocity = 0.2;
-            let gravity = 0.01;
-            let droppingSpeed = 500
+            let gravity = 0.05;
+            let droppingSpeed = 1200;
+            let score = 0;
+            let totalScore = 0;
+            let level = 1;
+            let blinker = document.getElementById("blinker");
+            let rainSpeed = 2;
 
             bird.style.display = "block";
             bird.style.left = "500px";
             bird.style.top = "500px";
 
+            blinker.style.left = "50%";
+            blinker.style.top = "45%";
+            blinker.style.transform = "translate(-50%, -50%)";
+            blinker.style.fontSize = "5em";
+            blinker.style.display = "none";
+
             requestAnimationFrame(verticalMovement);
 
-            setInterval(spawnRain, droppingSpeed);
+            let rainSpawn = setInterval(spawnRain, droppingSpeed);
 
             document.body.addEventListener("keydown", function(event) {
                 if (event.key == "a" || event.key == "d" || event.key == "w") {
@@ -86,17 +113,60 @@
             }
 
             function moveRain(rain) {
-                let rainSpeed = 2;
                 let rainTop = parse(rain.style.top);
+                let rainLeft = parseInt(rain.style.left);
 
-                if (rainTop > screen.height) {
+                if (rainTop > 800) {
                     rain.remove();
-                    console.log("+1")
+                    score++;
+                    totalScore++;
+                    updateScore();
                     return;
                 }
-                
+
+                let birdHitboxWidth = bird.width * 0.3;
+                let birdHitboxHeight = bird.height * 0.2;
+
+                let birdHitboxTop = parseInt(bird.style.top) + (bird.height - birdHitboxHeight) / 2;
+                let birdHitboxLeft = parseInt(bird.style.left) + (bird.width - birdHitboxWidth) / 2;
+
+                if (birdHitboxLeft < rainLeft + rain.width && birdHitboxLeft + birdHitboxWidth > rainLeft &&
+                    birdHitboxTop < rainTop + rain.height && birdHitboxTop + birdHitboxHeight > rainTop) {
+                    location.reload();
+                }
+
                 rain.style.top = rainTop + rainSpeed + "px";
                 requestAnimationFrame(() => moveRain(rain));
+            }
+
+            function updateScore() {
+                let scoreElement = document.getElementById("score");
+                scoreElement.innerText = "Score: " + String(totalScore);
+                if (score == 25 + Math.floor(((level - 1) * 25)* 0.5)) {
+                    droppingSpeed *= 0.85;
+                    clearInterval(rainSpawn);
+                    setInterval(spawnRain, droppingSpeed);
+                    rainSpeed += 0.6;
+                    level++;
+                    score = 0;
+                    blink();
+                }
+            }
+
+            function blink() {
+                blinker.innerText = "Level " + String(level);
+
+                function displayNone() { blinker.style.display = "none"; }
+                function displayBlock() { blinker.style.display = "block"; }
+                displayBlock();
+
+                setTimeout(displayNone, 500);
+                setTimeout(displayBlock, 1000);
+                setTimeout(displayNone, 1500);
+                setTimeout(displayBlock, 2000);
+                setTimeout(displayNone, 2500);
+                setTimeout(displayBlock, 3000);
+                setTimeout(displayNone, 3500);
             }
 
             function parse(str) {
@@ -104,11 +174,11 @@
             }
         
             function horizontalMovement() {
-                let speed = 3;
+                let speed = 5;
                 let birdLeft = parse(bird.style.left);
                 let birdTop = parse(bird.style.top);
             
-                if (keysDown["d"] && birdLeft < (screen.width - bird.width - 5)) {
+                if (keysDown["d"] && birdLeft < (1550 - bird.width)) {
                     bird.style.transform = "scaleX(-1)";
                     bird.style.left = (birdLeft + speed) + "px";
                 }
@@ -119,7 +189,7 @@
                 }
                 
                 if (keysDown["w"]) {
-                    velocity = -2;
+                    velocity = -3;
                 }
 
                 animationFrameId = requestAnimationFrame(horizontalMovement);
@@ -129,7 +199,7 @@
                 let birdTop = parse(bird.style.top);
 
                 if (birdTop + velocity >= screen.height || birdTop + velocity <= bird.height * -1) {
-                    document.getElementById("sky").remove();
+                    location.reload();
                 }
 
                 birdTop = birdTop + velocity;
