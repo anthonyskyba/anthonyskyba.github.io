@@ -159,7 +159,7 @@
                 player.style.left = (playerLeft + speed) + "px";
             }
             
-            if (keysDown["w"] && (playerTop >= 434 || playerTop <= 0 || (playerTop == 144 && notMoving))) {
+            if (keysDown["w"] && (playerTop >= 434 || (playerTop <= 0 && !platformJump) || (playerTop == 144 && notMoving))) {
                 if ((playerTop == 144 && notMoving)) platformJump = true;
                 else platformJump = false;
 
@@ -168,8 +168,9 @@
                 player.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusJump.gif?raw=true";
             }
 
-            if (keysDown["s"] && !flippedCounter && (playerTop >= 434 || playerTop <= -10 || (playerTop == 144 && notMoving))) {
+            if (keysDown["s"] && !flippedCounter && (playerTop >= 434 || (playerTop <= -10 && !platformJump) || (playerTop == 144 && notMoving))) {
                 flippedCounter = true;
+                platformJump = false;
                 
                 if (playerTop <= 0) {
                     player.style.transform = "scaleY(1)";
@@ -191,6 +192,7 @@
         function verticalMovement() {
             if (gameOver) return;
 
+            console.log(velocity)
             notMoving = false;
             let playerTop = parse(player.style.top);
             let playerLeft = parse(player.style.left);
@@ -198,7 +200,7 @@
 
             if (nextPosition > 434 || (nextPosition < -20 && !platformJump) || (nextPosition > playerTop && playerTop <= 200 && playerTop >= 130 && player.style.transform != "scaleY(-1)" && playerLeft < parse(platform.style.left) + platform.width - 200 && playerLeft + player.width > parse(platform.style.left) - 100)) {
                 notMoving = true;
-  
+                
                 if (nextPosition < -20) {
                     player.style.top = "-10px";
                     velocity = -38;
@@ -207,7 +209,7 @@
                     if (nextPosition > 434)
                         player.style.top = "434px";
                     else
-                        player.style.top = "144px"
+                        player.style.top = "144px";
                 }
 
                 if (player.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true" && player.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/player.gif?raw=true") {
@@ -220,7 +222,7 @@
 
             playerTop = playerTop + velocity;
             velocity = velocity + gravity;
-        
+            
             player.style.top = playerTop + "px";
             
             requestAnimationFrame(verticalMovement);
