@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>amogus</title>
+        <style>
+            body {
+                background-color: lightblue;
+                overflow: hidden;
+                margin: 0;
+                padding: 0;
+            }
+
+            button {
+                position: relative;
+                text-align: center;
+                border-radius: 4px;
+                border: none;
+                font-size: large;
+                width: 100px;
+                height: 50px;
+                transition-duration: 0.4s;
+            }
+
+            button:hover {
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+                transform: translateY(-2px);
+            }
+
+            .background {
+                display: none;
+                position: absolute;
+                left: 0;
+                top: 20;
+                width: 1920px;
+                height: 1080px;
+            }
+
+            #player {
+                z-index: 100;
+                position: absolute;
+                height: 285px;
+                width: auto;
+                display: none;
+            }
+
+            .star {
+                height: 100px;
+                width: auto;
+                position: absolute;
+                z-index: 102;
+                display: block;
+            }
+
+            #score {
+                display: none;
+                position: fixed;
+                margin-top: 0;
+                padding: 0.5%;
+                margin: 1%;
+                background-color: black;
+                color: white;
+                font-size: 3em;
+            }
+
+            #platform {
+                display: none;
+                position: absolute;
+                z-index: 50;
+                height: 80px;
+                width: auto;
+                top: 65%;
+                left: 400px;
+                transform: translate(-50%, -50%);
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="gameElements">
+            <img class="background" id="background1" src="/home/anthony/Downloads/background.png">
+            <img class="background" id="background2" src="/home/anthony/Downloads/background.png">
+            <img id="player" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true">
+            <img id="platform" src="/home/anthony/Downloads/platform.png">
+            <center>
+                <h3 id="score">Score: 0</h3>
+            </center>
+                <div id="splashScreen">
+                    <p style="display: fixed; position: absolute; margin-left: 1%;">Made by Anthony Skyba</p>
+                    <center>
+                        <h1>Jumper</h1>
+                        <h1>Gain 30 score to win</h1>
+                        <h1>Press Start to play!</h1>
+                        <h3>Gain score by dodging stars</h3>
+                        <p>If the dimensions are bugged, try playing in full screen</p>
+                        <button id="startButton">Start</button>
+                    </center>
+                </div>
+        </div>
+        <div id="endScreen" style="display: none;">
+            <center>
+                <h1>You Won!</h1>
+                <h2>Press Space to play again!</h2>
+            </center>
+        </div>
+    </body>
+    <script>
+        document.getElementById("startButton").addEventListener("click", function() { start() }, {once: true});
+        let player = document.getElementById("player");
+        let keysDown = {};
+        let animationFrameId = null;
+        let gravity = 2;
+        let velocity = 15;
+        let score = document.getElementById("score");
+        let gameOver = false;
+        let spawnStarsInterval;
+        let flippedCounter = false;
+        let platform = document.getElementById("platform");
+        let platformSpeed = 10;
+        let notMoving = true;
+        let platformJump = false;
+        
+        function parse(str) {
+            return Number(str.replace(/[^\d.-]/g, ""));
+        }
+
+        function endGame() {
+            gameOver = true;
+            clearInterval(spawnStarsInterval);
+            document.getElementById("gameElements").style.display = "none";
+            document.getElementById("endScreen").style.display = "block";
+
+            document.body.addEventListener("keydown", function(event) {
+                if (event.key == " ") location.reload();
+            })
+        }
+    
+        function horizontalMovement() {
+            if (gameOver) return;
+
+            let speed = 15;
+
+            let bg1Parsed = parse(background1.style.left) - speed;
+            let bg2Parsed = parse(background2.style.left) - speed;
+
+            let platformLeft = parse(platform.style.left);
+            if (platformLeft < 0 - platformLeft) platformSpeed = 10;
+            else if (platformLeft > screen.width) platformSpeed = -10;
+
+            let playerLeft = parse(player.style.left);
+            let playerTop = parse(player.style.top);
+        
+            if (bg1Parsed <= -1920) bg1Parsed = 1920;
+            if (bg2Parsed <= -1920) bg2Parsed = 1920;
+
+            if (playerLeft >= screen.width / 4.5) {
+                background1.style.left = bg1Parsed + "px";
+                background2.style.left = bg2Parsed + "px";
+            } else {
+                player.style.left = (playerLeft + speed) + "px";
+            }
+            
+            if (keysDown["w"] && (playerTop >= 434 || playerTop <= 0 || (playerTop == 144 && notMoving))) {
+                if ((playerTop == 144 && notMoving)) platformJump = true;
+                else platformJump = false;
+
+                if (velocity < 0) velocity = 38;
+                else velocity = -38;
+                player.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusJump.gif?raw=true";
+            }
+
+            if (keysDown["s"] && !flippedCounter && (playerTop >= 434 || playerTop <= -10 || (playerTop == 144 && notMoving))) {
+                flippedCounter = true;
+                
+                if (playerTop <= 0) {
+                    player.style.transform = "scaleY(1)";
+                    player.style.top = "30px";
+                } else {
+                    player.style.top = (433 - velocity) + "px";
+                    player.style.transform = "scaleY(-1)";
+                }
+
+                gravity *= -1;
+                velocity *= -1;
+            }
+
+            platform.style.left = (platformLeft + platformSpeed) + "px";
+
+            requestAnimationFrame(horizontalMovement);
+        }
+
+        function verticalMovement() {
+            if (gameOver) return;
+
+            notMoving = false;
+            let playerTop = parse(player.style.top);
+            let playerLeft = parse(player.style.left);
+            let nextPosition = playerTop + velocity;
+
+            if (nextPosition > 434 || (nextPosition < -20 && !platformJump) || (nextPosition > playerTop && playerTop <= 200 && playerTop >= 130 && player.style.transform != "scaleY(-1)" && playerLeft < parse(platform.style.left) + platform.width - 200 && playerLeft + player.width > parse(platform.style.left) - 100)) {
+                notMoving = true;
+  
+                if (nextPosition < -20) {
+                    player.style.top = "-10px";
+                    velocity = -38;
+                } else {
+                    velocity = 38;
+                    if (nextPosition > 434)
+                        player.style.top = "434px";
+                    else
+                        player.style.top = "144px"
+                }
+
+                if (player.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true" && player.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/player.gif?raw=true") {
+                    player.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true";
+                }
+
+                requestAnimationFrame(verticalMovement);
+                return;
+            }
+
+            playerTop = playerTop + velocity;
+            velocity = velocity + gravity;
+        
+            player.style.top = playerTop + "px";
+            
+            requestAnimationFrame(verticalMovement);
+        }
+
+        function spawnStars() {
+            if (gameOver) return;
+
+            let star = document.createElement("img");
+            star.className = "star";
+            star.style.left = screen.width + "px";
+            star.style.top = Math.floor(Math.random() * screen.height - star.height - 50) + "px";
+            document.getElementById("gameElements").appendChild(star);
+            star.src = "/home/anthony/Downloads/projectile.gif";
+
+            requestAnimationFrame(() => moveStar(star));
+        }
+    
+        function updateScore(num) {
+            let score2 = Number(score.innerText.split(" ")[1]) + num;
+            score.innerText = "Score: " + score2;
+            // if (score2 >= 30) endGame();
+        }
+
+        function moveStar(star) {
+            let starSpeed = 20;
+
+            let starLeft = parse(star.style.left);
+            let starTop = parse(star.style.top);
+
+            let playerTop = parse(player.style.top);
+            let playerLeft = parse(player.style.left);
+
+            if (playerLeft < starLeft + star.width && playerLeft + player.width > starLeft &&
+                playerTop < starTop + star.height && playerTop + player.height > starTop) {
+                    updateScore(1);
+                    star.style.display = "none";
+                    return;
+            }
+
+            if (starLeft < star.width * -1) {
+                updateScore(1);
+                star.style.display = "none";
+                return;
+            }
+
+            star.style.left = (starLeft - starSpeed) + "px";
+            requestAnimationFrame(() => moveStar(star));
+        }
+
+        function start() {
+            let background1 = document.getElementById("background1");
+            let background2 = document.getElementById("background2");
+    
+            background1.style.display = "block";
+            background2.style.display = "block";
+
+            background1.style.left = "0px";
+            background2.style.left = "1920px";
+
+            player.style.display = "block";
+            score.style.display = "block";
+            platform.style.display = "block";
+
+            player.style.top = (Math.round(screen.height - screen.height / 2.3)) + "px";
+
+            document.getElementById("splashScreen").style.display = "none";
+    
+            document.body.addEventListener("keydown", function(event) {
+                if (event.key == "w" || event.key == "s") {
+                    keysDown[event.key] = true;
+                }
+            });
+    
+            document.body.addEventListener("keyup", function(event) {
+                if (event.key == "w" || event.key == "s") {
+                    if (event.key == "s") flippedCounter = false;
+                    keysDown[event.key] = false;
+                }
+            });
+
+            requestAnimationFrame(verticalMovement);
+            requestAnimationFrame(horizontalMovement);
+            spawnStarsInterval = setInterval(spawnStars, 1000);
+        }
+    </script>        
+</html>
