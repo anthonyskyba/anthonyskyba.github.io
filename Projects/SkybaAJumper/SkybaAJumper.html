@@ -79,7 +79,7 @@
         <div id="gameElements">
             <img class="background" id="background1" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/background.png?raw=true">
             <img class="background" id="background2" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/background.png?raw=true">
-            <img id="player" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true">
+            <img id="player" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/run.gif?raw=true">
             <img id="platform" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/platform.png?raw=true">
             <center>
                 <h3 id="score">Score: 0</h3>
@@ -91,7 +91,7 @@
                         <h1>Gain 30 score to win</h1>
                         <h1>Press Start to play!</h1>
                         <h3>Gain score by dodging stars</h3>
-                        <p>If the dimensions are bugged, try playing in full screen</p>
+                        <p>Don't play in full screen</p>
                         <button id="startButton">Start</button>
                     </center>
                 </div>
@@ -159,16 +159,16 @@
                 player.style.left = (playerLeft + speed) + "px";
             }
             
-            if (keysDown["w"] && (playerTop >= 434 || (playerTop <= 0 && !platformJump) || (playerTop == 144 && notMoving))) {
+            if (keysDown["w"] && (playerTop >= 400 || (playerTop <= 0 && !platformJump) || (playerTop == 144 && notMoving))) {
                 if ((playerTop == 144 && notMoving)) platformJump = true;
                 else platformJump = false;
 
                 if (velocity < 0) velocity = 38;
                 else velocity = -38;
-                player.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusJump.gif?raw=true";
+                player.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/jump.gif?raw=true";
             }
 
-            if (keysDown["s"] && !flippedCounter && (playerTop >= 434 || (playerTop <= -10 && !platformJump) || (playerTop == 144 && notMoving))) {
+            if (keysDown["s"] && !flippedCounter && (playerTop >= 400 || (playerTop <= -10 && !platformJump) || (playerTop == 144 && notMoving))) {
                 flippedCounter = true;
                 platformJump = false;
                 
@@ -176,7 +176,7 @@
                     player.style.transform = "scaleY(1)";
                     player.style.top = "30px";
                 } else {
-                    player.style.top = (433 - velocity) + "px";
+                    player.style.top = (399 - velocity) + "px";
                     player.style.transform = "scaleY(-1)";
                 }
 
@@ -192,13 +192,12 @@
         function verticalMovement() {
             if (gameOver) return;
 
-            console.log(velocity)
             notMoving = false;
             let playerTop = parse(player.style.top);
             let playerLeft = parse(player.style.left);
             let nextPosition = playerTop + velocity;
 
-            if (nextPosition > 434 || (nextPosition < -20 && !platformJump) || (nextPosition > playerTop && playerTop <= 200 && playerTop >= 130 && player.style.transform != "scaleY(-1)" && playerLeft < parse(platform.style.left) + platform.width - 200 && playerLeft + player.width > parse(platform.style.left) - 100)) {
+            if (nextPosition > 400 || (nextPosition < -20 && !platformJump) || (nextPosition > playerTop && playerTop <= 200 && playerTop >= 130 && player.style.transform != "scaleY(-1)" && playerLeft < parse(platform.style.left) + platform.width - 200 && playerLeft + player.width > parse(platform.style.left) - 100)) {
                 notMoving = true;
                 
                 if (nextPosition < -20) {
@@ -206,14 +205,14 @@
                     velocity = -38;
                 } else {
                     velocity = 38;
-                    if (nextPosition > 434)
-                        player.style.top = "434px";
+                    if (nextPosition > 400)
+                        player.style.top = "400px";
                     else
                         player.style.top = "144px";
                 }
 
-                if (player.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true" && player.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/player.gif?raw=true") {
-                    player.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true";
+                if (player.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/run.gif?raw=true") {
+                    player.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/run.gif?raw=true";
                 }
 
                 requestAnimationFrame(verticalMovement);
@@ -244,7 +243,7 @@
         function updateScore(num) {
             let score2 = Number(score.innerText.split(" ")[1]) + num;
             score.innerText = "Score: " + score2;
-            // if (score2 >= 30) endGame();
+            if (score2 >= 30) endGame();
         }
 
         function moveStar(star) {
@@ -256,16 +255,20 @@
             let playerTop = parse(player.style.top);
             let playerLeft = parse(player.style.left);
 
-            if (playerLeft < starLeft + star.width && playerLeft + player.width > starLeft &&
-                playerTop < starTop + star.height && playerTop + player.height > starTop) {
-                    updateScore(1);
-                    star.style.display = "none";
-                    return;
+            let playerHitboxWidth = player.width * 0.2;
+            let playerHitboxHeight = player.height * 0.05;
+
+            let playerHitboxTop = (playerTop + (player.height - playerHitboxHeight) / 2) - 70;
+            let playerHitboxLeft = playerLeft + (player.width - playerHitboxWidth) / 2;
+
+            if (playerHitboxLeft < starLeft + star.width && playerHitboxLeft + playerHitboxWidth > starLeft &&
+                playerHitboxTop < starTop + star.height && (playerHitboxTop + playerHitboxHeight) * 1.3 > starTop) {
+                location.reload();
             }
 
             if (starLeft < star.width * -1) {
                 updateScore(1);
-                star.style.display = "none";
+                star.remove();
                 return;
             }
 
@@ -306,7 +309,7 @@
 
             requestAnimationFrame(verticalMovement);
             requestAnimationFrame(horizontalMovement);
-            spawnStarsInterval = setInterval(spawnStars, 1000);
+            spawnStarsInterval = setInterval(spawnStars, 1100);
         }
     </script>        
 </html>
