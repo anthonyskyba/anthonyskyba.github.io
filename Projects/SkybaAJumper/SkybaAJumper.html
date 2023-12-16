@@ -120,7 +120,6 @@
 
         platform.style.top = window.innerHeight * 0.65 + "px";
         let platformHeight = Math.floor(window.innerHeight / 2.7);
-        console.log(platformHeight)
         
         function parse(str) {
             return Number(str.replace(/[^\d.-]/g, ""));
@@ -242,9 +241,7 @@
             star.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/star.gif?raw=true";
 
             if (Math.floor(Math.random() * 3) == 2) {
-                console.log(parse(star.style.height), star.style.height)
                 star.style.height = parse(star.style.height) * 4 + "px";
-                console.log(star.style.height);
             }
 
             requestAnimationFrame(() => moveStar(star));
