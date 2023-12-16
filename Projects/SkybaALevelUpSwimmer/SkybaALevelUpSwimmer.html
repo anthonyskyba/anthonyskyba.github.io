@@ -32,7 +32,7 @@
                 height: auto;
             }
 
-            #score, #blinker {
+            #score, #cooldown, #blinker {
                 display: block;
                 position: fixed;
                 margin-top: 0;
@@ -68,6 +68,7 @@
             <img id="bird" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaALevelUpSwimmer/bird.gif?raw=true">
             <center>
                 <h3 id="score">Score: 0</h3>
+                <h3 id="cooldown">Ready</h3>
             </center>
             <h2 id="blinker"></h2>
         </div>
@@ -78,11 +79,9 @@
                 <h1>Level Up Swimmer</h1>
                 <h1>Gain score by dodging rain</h1>
                 <h1>Press Start to play!</h1>
-                <p>If the dimensions are bugged, try playing in full screen</p>
                 <p>The rain's movement and dropping speed will increase as you get to higher levels</p>
                 <p>Use W to boost up. Use A and D to move left and right</p>
-                <p>Your level will increase as you gain score. Level 2 starts at 25 points</p>
-                <p>The page will reset if you touch the rain</p>
+                <P>Press Space to dash</P>
                 <button id="startButton">Start</button>
             </center>
         </div>
@@ -90,8 +89,6 @@
         <script>
             document.getElementById("startButton").addEventListener("click", function() { start() }, {once: true});
             document.addEventListener("dragstart", function(event) { event.preventDefault() });
-
-
 
             function start() {
                 document.getElementById("gameElements").style.display = "block";
@@ -108,6 +105,8 @@
                 let level = 1;
                 let blinker = document.getElementById("blinker");
                 let rainSpeed = 2;
+                let speed = 5;
+                let cooldown = document.getElementById("cooldown");
     
                 bird.style.display = "block";
                 bird.style.left = "500px";
@@ -118,6 +117,8 @@
                 blinker.style.transform = "translate(-50%, -50%)";
                 blinker.style.fontSize = "5em";
                 blinker.style.display = "none";
+
+                cooldown.style.top = "11%"
     
                 requestAnimationFrame(verticalMovement);
     
@@ -215,7 +216,6 @@
                 }
             
                 function horizontalMovement() {
-                    let speed = 5;
                     let birdLeft = parse(bird.style.left);
                     let birdTop = parse(bird.style.top);
                 
@@ -250,6 +250,43 @@
                     
                     requestAnimationFrame(verticalMovement);
                 }
+
+                function dash() {
+                    if (cooldown.innerText == "Ready") {
+                        clearInterval(dashTimer);
+                        function dash2(event) {
+                            if (event.key == " ") {
+                                cooldown.innerText = "999";
+                                speed = 15;
+                                setTimeout(function() {
+                                    speed = 5;
+                                }, 300);
+                                dashTimer = setInterval(dash, 25);
+                                document.body.removeEventListener("keydown", dash2);
+                            }
+                        }
+                        document.body.addEventListener("keydown", dash2);
+                    } else {
+                        if (cooldown.innerText == "00") {
+                            cooldown.innerText = "Ready";
+                        } else {
+                            let cooldownDecreased
+
+                            if (cooldown.innerText == "999")
+                                interval = 24;
+                            else
+                                interval = 25;
+                            
+                            cooldown.innerText = String(Number(cooldown.innerText) - interval);
+
+                            if (cooldown.innerText.length < 3)
+                                cooldown.innerText = "0" + cooldown.innerText;
+                        }
+                    }
+                }
+
+                let interval = 25;
+                let dashTimer = setInterval(dash, 10);
             }
         </script>
     </body>
