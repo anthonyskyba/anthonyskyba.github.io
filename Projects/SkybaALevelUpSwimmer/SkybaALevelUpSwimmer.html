@@ -75,7 +75,7 @@
         <div id="splashScreen">
             <p style="display: fixed; position: absolute; margin-left: 1%;">Made by Anthony Skyba</p>
             <center>
-                <h1>Falling Stars</h1>
+                <h1>Level Up Swimmer</h1>
                 <h1>Gain score by dodging rain</h1>
                 <h1>Press Start to play!</h1>
                 <p>If the dimensions are bugged, try playing in full screen</p>
@@ -155,7 +155,7 @@
     
                 function moveRain(rain) {
                     let rainTop = parse(rain.style.top);
-                    let rainLeft = parseInt(rain.style.left);
+                    let rainLeft = parse(rain.style.left);
     
                     if (rainTop > 800) {
                         rain.remove();
@@ -168,8 +168,8 @@
                     let birdHitboxWidth = bird.width * 0.3;
                     let birdHitboxHeight = bird.height * 0.2;
     
-                    let birdHitboxTop = parseInt(bird.style.top) + (bird.height - birdHitboxHeight) / 2;
-                    let birdHitboxLeft = parseInt(bird.style.left) + (bird.width - birdHitboxWidth) / 2;
+                    let birdHitboxTop = parse(bird.style.top) + (bird.height - birdHitboxHeight) / 2;
+                    let birdHitboxLeft = parse(bird.style.left) + (bird.width - birdHitboxWidth) / 2;
     
                     if (birdHitboxLeft < rainLeft + rain.width && birdHitboxLeft + birdHitboxWidth > rainLeft &&
                         birdHitboxTop < rainTop + rain.height && birdHitboxTop + birdHitboxHeight > rainTop) {
