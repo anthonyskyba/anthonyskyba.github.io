@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>jumper</title>
+        <title>Jumper</title>
         <style>
             body {
                 background-color: lightblue;
@@ -38,13 +38,12 @@
             #player {
                 z-index: 100;
                 position: absolute;
-                height: 285px;
+                height: 180px;
                 width: auto;
                 display: none;
             }
 
             .star {
-                height: 100px;
                 width: auto;
                 position: absolute;
                 z-index: 102;
@@ -68,7 +67,6 @@
                 z-index: 50;
                 height: 80px;
                 width: auto;
-                top: 65%;
                 left: 400px;
                 transform: translate(-50%, -50%);
             }
@@ -118,6 +116,11 @@
         let platformSpeed = 10;
         let notMoving = true;
         let platformJump = false;
+        let height = window.innerHeight - 180;
+
+        platform.style.top = window.innerHeight * 0.65 + "px";
+        let platformHeight = Math.floor(window.innerHeight / 2.7);
+        console.log(platformHeight)
         
         function parse(str) {
             return Number(str.replace(/[^\d.-]/g, ""));
@@ -126,7 +129,7 @@
         function endGame() {
             gameOver = true;
             clearInterval(spawnStarsInterval);
-            document.getElementById("gameElements").style.display = "none";
+            document.getElementById("gameElements").remove()
             document.getElementById("endScreen").style.display = "block";
 
             document.body.addEventListener("keydown", function(event) {
@@ -144,7 +147,7 @@
 
             let platformLeft = parse(platform.style.left);
             if (platformLeft < 0 - platformLeft) platformSpeed = 10;
-            else if (platformLeft > screen.width) platformSpeed = -10;
+            else if (platformLeft > window.innerWidth) platformSpeed = -10;
 
             let playerLeft = parse(player.style.left);
             let playerTop = parse(player.style.top);
@@ -152,15 +155,15 @@
             if (bg1Parsed <= -1920) bg1Parsed = 1920;
             if (bg2Parsed <= -1920) bg2Parsed = 1920;
 
-            if (playerLeft >= screen.width / 4.5) {
+            if (playerLeft >= window.innerWidth / 4.5) {
                 background1.style.left = bg1Parsed + "px";
                 background2.style.left = bg2Parsed + "px";
             } else {
                 player.style.left = (playerLeft + speed) + "px";
             }
             
-            if (keysDown["w"] && (playerTop >= 400 || (playerTop <= 0 && !platformJump) || (playerTop == 144 && notMoving))) {
-                if ((playerTop == 144 && notMoving)) platformJump = true;
+            if (keysDown["w"] && (playerTop >= height || (playerTop <= 0 && !platformJump) || (playerTop == platformHeight && notMoving))) {
+                if ((playerTop == platformHeight && notMoving)) platformJump = true;
                 else platformJump = false;
 
                 if (velocity < 0) velocity = 38;
@@ -168,7 +171,7 @@
                 player.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/jump.gif?raw=true";
             }
 
-            if (keysDown["s"] && !flippedCounter && (playerTop >= 400 || (playerTop <= -10 && !platformJump) || (playerTop == 144 && notMoving))) {
+            if (keysDown["s"] && !flippedCounter && (playerTop >= height || (playerTop <= -10 && !platformJump) || (playerTop == platformHeight && notMoving))) {
                 flippedCounter = true;
                 platformJump = false;
                 
@@ -176,7 +179,7 @@
                     player.style.transform = "scaleY(1)";
                     player.style.top = "30px";
                 } else {
-                    player.style.top = (399 - velocity) + "px";
+                    player.style.top = (height - velocity) + "px";
                     player.style.transform = "scaleY(-1)";
                 }
 
@@ -197,18 +200,18 @@
             let playerLeft = parse(player.style.left);
             let nextPosition = playerTop + velocity;
 
-            if (nextPosition > 400 || (nextPosition < -20 && !platformJump) || (nextPosition > playerTop && playerTop <= 200 && playerTop >= 130 && player.style.transform != "scaleY(-1)" && playerLeft < parse(platform.style.left) + platform.width - 200 && playerLeft + player.width > parse(platform.style.left) - 100)) {
+            if (nextPosition > height || (nextPosition < -20 && !platformJump) || (nextPosition > playerTop && playerTop <= platformHeight + 1 && playerTop >= platformHeight - 50 && player.style.transform != "scaleY(-1)" && playerLeft < parse(platform.style.left) + platform.width - 200 && playerLeft + player.width > parse(platform.style.left) - 100)) {
                 notMoving = true;
-                
+
                 if (nextPosition < -20) {
                     player.style.top = "-10px";
                     velocity = -38;
                 } else {
                     velocity = 38;
-                    if (nextPosition > 400)
-                        player.style.top = "400px";
-                    else
-                        player.style.top = "144px";
+                    if (nextPosition > height)
+                        player.style.top = height + "px";
+                    else 
+                        player.style.top = platformHeight + "px";
                 }
 
                 if (player.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/run.gif?raw=true") {
@@ -232,10 +235,17 @@
 
             let star = document.createElement("img");
             star.className = "star";
-            star.style.left = screen.width + "px";
-            star.style.top = Math.floor(Math.random() * screen.height - star.height - 50) + "px";
+            star.style.height = "80px"
+            star.style.left = window.innerWidth + "px";
+            star.style.top = Math.floor(Math.random() * window.innerHeight - star.height - 40) + "px";
             document.getElementById("gameElements").appendChild(star);
-            star.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/projectile.gif?raw=true";
+            star.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaAJumper/star.gif?raw=true";
+
+            if (Math.floor(Math.random() * 3) == 2) {
+                console.log(parse(star.style.height), star.style.height)
+                star.style.height = parse(star.style.height) * 4 + "px";
+                console.log(star.style.height);
+            }
 
             requestAnimationFrame(() => moveStar(star));
         }
@@ -255,15 +265,9 @@
             let playerTop = parse(player.style.top);
             let playerLeft = parse(player.style.left);
 
-            let playerHitboxWidth = player.width * 0.2;
-            let playerHitboxHeight = player.height * 0.05;
-
-            let playerHitboxTop = (playerTop + (player.height - playerHitboxHeight) / 2) - 70;
-            let playerHitboxLeft = playerLeft + (player.width - playerHitboxWidth) / 2;
-
-            if (playerHitboxLeft < starLeft + star.width && playerHitboxLeft + playerHitboxWidth > starLeft &&
-                playerHitboxTop < starTop + star.height && (playerHitboxTop + playerHitboxHeight) * 1.3 > starTop) {
-                location.reload();
+            if (playerLeft < starLeft + star.width && playerLeft + player.width > starLeft &&
+                playerTop < starTop + star.height && playerTop + player.height > starTop) {
+                    location.reload();
             }
 
             if (starLeft < star.width * -1) {
@@ -290,7 +294,7 @@
             score.style.display = "block";
             platform.style.display = "block";
 
-            player.style.top = (Math.round(screen.height - screen.height / 2.3)) + "px";
+            player.style.top = height + "px";
 
             document.getElementById("splashScreen").style.display = "none";
     
