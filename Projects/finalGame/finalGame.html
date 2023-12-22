@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TBD</title>
+        <style>
+            body, html {
+                /* prevent elements from being highlightable */
+                user-select: none;
+                background-image: url("");
+            }
+        </style>
+    </head>
+    <body>
+        <div id="splashScreen">
+            <center>
+                <p>Made by Anthony Skyba</p>
+                <h1>Title</h1>
+            </center>
+        </div>
+        <div id="gameScreen"></div>
+        <div id="loseScreen"></div>
+        <div id="winScreen"></div>
+
+        <script>
+            // prevent elements from being draggable
+            document.body.addEventListener("dragstart", function(event) { event.preventDefault(); });
+
+
+        </script>
+    </body>
+</html>
