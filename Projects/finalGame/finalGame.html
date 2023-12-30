@@ -1,30 +1,323 @@
+<!-- Anthony Skyba -->
+<!-- 12/22/2023 -->
+<!-- Top Down 2D Game inspired by Awesome Tanks -->
+
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TBD</title>
+        <!-- set a tab title -->
+        <title>Awesome Tanks</title>
         <style>
             body, html {
                 /* prevent elements from being highlightable */
                 user-select: none;
-                background-image: url("");
+                /* prevent scrollbars */
+                overflow: hidden;
+                margin: 0;
+                height: 100%;
+                width: 100%;
+                background-color: rgb(140, 79, 38);
             }
+
+            .screen {
+                /* set dimensions to the entire screen */
+                height: 100%;
+                width: 100%;
+                /* hide all screens to start */
+                display: none;
+            }
+
         </style>
     </head>
     <body>
-        <div id="splashScreen">
+        <div class="screen" id="splashScreen">
+            <!-- center splash screen elements -->
             <center>
                 <p>Made by Anthony Skyba</p>
                 <h1>Title</h1>
             </center>
         </div>
-        <div id="gameScreen"></div>
-        <div id="loseScreen"></div>
-        <div id="winScreen"></div>
+        <div class="screen" id="gameScreen">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="screen" id="loseScreen"></div>
+        <div class="screen" id="winScreen"></div>
 
         <script>
             // prevent elements from being draggable
             document.body.addEventListener("dragstart", function(event) { event.preventDefault(); });
 
+            // define the canvas and context
+            let canvas = document.getElementById("canvas");
+            let ctx = canvas.getContext("2d");
+
+            // initialize canvas dimensions
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // counters
+            let firstRedraw = true;
+            let bulletShot = false;
+            let calculate = true;
+
+            // define game screens
+            let splashScreen = document.getElementById("splashScreen");
+            let gameScreen = document.getElementById("gameScreen");
+            let loseScreen = document.getElementById("losescreen");
+            let winScreen = document.getElementById("winScreen");
+
+            // initialize velocities
+            let ySpeedUp = 0;
+            let ySpeedDown = 0;
+            let xSpeedLeft = 0;
+            let xSpeedRight = 0;
+            let bulletSpeed = 0;
+
+            // initialize coordinates
+            let x = 0;
+            let y = 0;
+
+            let bulletX = window.innerWidth / 2;
+            let bulletY = window.innerHeight / 2;
+
+            let mouseX;
+            let mouseY;
+
+            let directionX;
+            let directionY;
+
+            // track exisiting blocks
+            let blocks = [];
+
+            // create sprites
+
+            let tank = document.createElement("img");
+            tank.src = "https://cdn-icons-png.flaticon.com/512/942/942355.png";
+
+            let stone = document.createElement("img");
+            stone.src = "/Users/anthony/Pictures/final game/stone.png";
+
+            let cardboard = document.createElement("img");
+            cardboard.src = "/Users/anthony/Pictures/final game/cardboard.png";
+
+            let bullet = document.createElement("img");
+            bullet.src = "https://freesvg.org/img/CartoonBullet.png";
+
+            // game loop
+            function draw() {
+
+                // initialize sizes
+                let blockSize = 100;
+                let tankSize = 100;
+                let bulletSize = tankSize / 10;
+
+                // clear all elements
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // redraw elements
+
+                // function to draw line of blocks
+                function line(image, xPos, yPos, amount, direction) {
+                    // loop through the length of the line
+                    for (let i = 0; i < amount; i++) {
+                        if (direction == "left") {
+                            // shift position to the correct location if it's the first iteration
+                            if (!i) xPos -= blockSize;
+
+                            // find new coordinate
+                            let newXPos = xPos + blockSize * -i;
+
+                            // draw block
+                            ctx.drawImage(image, newXPos, yPos, blockSize, blockSize);
+                            // record block coordinates
+                            if (firstRedraw) blocks.push([newXPos, yPos, image]);
+
+                            // update position so the next line doesn't overlap
+                            startingX -= blockSize;
+                        // repeat for other directions
+                        } else if (direction == "right") {
+                            if (!i) xPos += blockSize;
+
+                            let newXPos = xPos + blockSize * i;
+
+                            ctx.drawImage(image, newXPos, yPos, blockSize, blockSize);
+                            if (firstRedraw) blocks.push([newXPos, yPos, image]);
+
+                            startingX += blockSize;
+                        } else if (direction == "up") {
+                            if (!i) yPos -= blockSize;
+
+                            let newYPos = yPos + blockSize * -i;
+
+                            ctx.drawImage(image, xPos, newYPos, blockSize, blockSize);
+                            if (firstRedraw) blocks.push([xPos, newYPos, image]);
+
+                            startingY -= blockSize;
+                        } else {
+                            if (!i) yPos += blockSize;
+
+                            let newYPos = yPos + blockSize * i;
+
+                            ctx.drawImage(image, xPos, newYPos, blockSize, blockSize);
+                            if (firstRedraw) blocks.push([xPos, newYPos, image]);
+
+                            startingY += blockSize;
+                        }
+                    }
+                }
+
+                // initiliaze middle of the screen
+                let middleX = window.innerWidth / 2 - tankSize / 2;
+                let middleY = window.innerHeight / 2 - tankSize / 2;
+
+                // initialize the position of the first block relative to the tank
+                let startingX = (middleX - x - blockSize * 2);
+                let startingY = (middleY - y - blockSize * 3);
+
+                // designing the levels
+
+                // draw tank
+                ctx.drawImage(tank, middleX, middleY, tankSize, tankSize);
+
+                // draw lines of blocks
+                line(stone, startingX, startingY, 5, "down");
+                line(stone, startingX, startingY, 4, "right");
+                line(stone, startingX, startingY, 4, "up");
+                line(cardboard, startingX, startingY, 3, "left");
+                // shift position to make floating blocks
+                startingX -= blockSize;
+                line(stone, startingX, startingY, 8, "left");
+                line(stone, startingX, startingY, 11, "up");
+                line(stone, startingX, startingY, 21, "right");
+                line(stone, startingX, startingY, 11, "down");
+                line(stone, startingX, startingY, 8, "left");
+                startingY -= blockSize * 2;
+                line(stone, startingX, startingY, 6, "up");
+                startingX -= blockSize * 2;
+                line(cardboard, startingX, startingY, 4, "left");
+                startingX -= blockSize * 2;
+                startingY += blockSize * 2;
+                line(cardboard, startingX, startingY, 4, "left");
+                startingX += blockSize * 4;
+                startingY += blockSize * 2;
+                line(cardboard, startingX, startingY, 4, "right");
+                line(cardboard, startingX, startingY, 1, "down");
+                line(cardboard, startingX, startingY, 3, "left");
+                startingX += blockSize * 7;
+                startingY -= blockSize * 3;
+                line(stone, startingX, startingY, 2, "left");
+                startingX += blockSize * 2;
+                line(stone, startingX, startingY, 3, "right");
+                startingY += blockSize * 3;
+                line(cardboard, startingX, startingY, 2, "right");
+                line(cardboard, startingX, startingY, 1, "up");
+                startingY -= blockSize * 4;
+                line(cardboard, startingX, startingY, 1, "up");
+                line(cardboard, startingX, startingY, 1, "right");
+                line(cardboard, startingX, startingY, 1, "down");
+
+
+                // update position
+                x += xSpeedLeft + xSpeedRight;
+                y += ySpeedDown + ySpeedUp;
+
+                for (let block of blocks) {
+                    // initialize block properties
+                    let blockX = block[0] - x;
+                    let blockY = block[1] - y;
+
+                    // initialize tank properties
+                    let tankX = middleX;
+                    let tankY = middleY;
+
+                    // collision detection
+
+                    if (blockX < tankX + tankSize && blockX + blockSize > tankX &&
+                        blockY < tankY + tankSize && blockY + blockSize > tankY) {
+                            console.log("touching");
+                    }
+
+                    if (blockX < bulletX + bulletSize && blockX + blockSize > bulletX &&
+                        blockY < bulletY + bulletSize && blockY + blockSize > bulletY) {
+                            bulletShot = false;
+                            calculate = true;
+                            bulletX = window.innerWidth / 2;
+                            bulletY = window.innerHeight / 2;
+                    }
+                }
+
+                // only run if the bullet was shot
+                if (bulletShot) {
+                    // run calculations only once
+                    if (calculate) {
+                        // avoid calculating again
+                        calculate = false;
+    
+                        // find differences between bullet and cursor
+                        directionX = mouseX - bulletX;
+                        directionY = mouseY - bulletY;
+    
+                        // find length of hypotenuse using pythagorean theorem
+                        let length = Math.sqrt(directionX ** 2 + directionY ** 2);
+    
+                        // divide by length so the distance of the cursor doesn't matter
+                        directionX = directionX / length;
+                        directionY = directionY / length;
+                    }
+
+                    // update positions
+                    bulletX += bulletSpeed * directionX - (xSpeedLeft + xSpeedRight);
+                    bulletY += bulletSpeed * directionY - (ySpeedUp + ySpeedDown);
+
+                    // draw the bullet
+                    ctx.drawImage(bullet, bulletX, bulletY, bulletSize, bulletSize);
+                }
+                
+                // toggle off firstRedraw
+                firstRedraw = false;
+                
+                // infinite recursion
+                requestAnimationFrame(draw);
+            }
+
+            function startGame() {
+                // show game screen
+                gameScreen.style.display = "block";
+
+                // create movement
+
+                document.body.addEventListener("keydown", function(event) {
+                    if (event.key == "w") ySpeedUp = -5;
+                    if (event.key == "a") xSpeedLeft = -5;
+                    if (event.key == "s") ySpeedDown = 5;
+                    if (event.key == "d") xSpeedRight = 5;
+                });
+
+                document.addEventListener("keyup", function(event) {
+                    if (event.key == "w") ySpeedUp = 0;
+                    if (event.key == "a") xSpeedLeft = 0;
+                    if (event.key == "s") ySpeedDown = 0;
+                    if (event.key == "d") xSpeedRight = 0;
+                });
+
+                // shoot bullets
+
+                document.addEventListener("mousedown", function(event) {
+                    // only shoot a bullet if the left mouse is clicked
+                    if (event.button == 0) {
+                        // set bullet speed
+                        bulletSpeed = 8;
+                        // toggle the counter
+                        bulletShot = true;
+                        // track cursor coordinates to know where to shoot the bullet
+                        mouseX = event.clientX;
+                        mouseY = event.clientY;
+                    }
+                })
+            }
+
+            startGame();
+            draw();
 
         </script>
     </body>
