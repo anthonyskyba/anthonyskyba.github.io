@@ -14,13 +14,14 @@
                 /* prevent scrollbars */
                 overflow: hidden;
                 margin: 0;
+                /* fill the entire screen */
                 height: 100%;
                 width: 100%;
-                background-color: rgb(140, 79, 38);
+                background-color: rgb(155, 74, 74);
             }
 
             .screen {
-                /* set dimensions to the entire screen */
+                /* fill the entire screen */
                 height: 100%;
                 width: 100%;
                 /* hide all screens to start */
@@ -43,7 +44,7 @@
         <div class="screen" id="loseScreen"></div>
         <div class="screen" id="winScreen"></div>
 
-        <!-- import library for pathfinding -->
+        <!-- import pathfinding library -->
         <script src="https://cdn.jsdelivr.net/npm/pathfinding@0.4.18/visual/lib/pathfinding-browser.min.js"></script>
         <script>
             // prevent elements from being draggable
@@ -57,8 +58,8 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
 
-            // initialize a layout for the grid
-            var layout = [];
+            // initialize variables for path finding globally
+            var finder = new PF.AStarFinder();
             var grid;
 
             // counters
@@ -80,6 +81,8 @@
             let xSpeedLeft = 0;
             let xSpeedRight = 0;
             let bulletSpeed = 8;
+            let enemySpeed = 2.5;
+            let enemyBulletSpeed = 6;
 
             // initialize coordinates
             let x = 0;
@@ -92,7 +95,7 @@
             let blockHP = 8;
 
             // initiliaze view distance
-            let viewDistance = 3;
+            let viewDistance = 2.9;
 
             // initialize the top corner of the map
             let smallestY = Infinity;
@@ -107,37 +110,51 @@
             let blockSize = 100;
             let tankSize = 90;
             let bulletSize = tankSize / 10;
+            let enemyBulletSize = tankSize / 5;
 
             // initiliaze middle of the screen
             let middleX = window.innerWidth / 2 - tankSize / 2;
             let middleY = window.innerHeight / 2 - tankSize / 2;
 
+            // create variables for the sources
 
-            let testingCounter = 1;
+            let tankSrc = "https://cdn-icons-png.flaticon.com/512/942/942355.png";
+            let stoneSrc = "file:///Users/anthony/Pictures/final%20game/stone.png";
+            let cardboardSrc = "file:///Users/anthony/Pictures/final%20game/cardboard.png";
+            let bulletSrc = "https://freesvg.org/img/CartoonBullet.png";
+            let enemySrc = "https://cdn-icons-png.flaticon.com/512/7145/7145327.png";
+            let enemyBulletSrc = "https://png.pngtree.com/png-vector/20220520/ourmid/pngtree-projectile-from-weapon-mortar-on-white-background-is-insulated-png-image_4697545.png";
+            let shadowSrc = "https://images.squarespace-cdn.com/content/v1/58f56c10d2b857170c9ac044/1519534019246-BTNF5DSIPKUZD7FB5VY6/Black+Square";
 
             // create sprites
 
             let tank = document.createElement("img");
-            tank.src = "https://cdn-icons-png.flaticon.com/512/942/942355.png";
+            tank.src = tankSrc;
 
             let stone = document.createElement("img");
-            stone.src = "/Users/anthony/Pictures/final game/stone.png";
+            stone.src = stoneSrc;
 
             let cardboard = document.createElement("img");
-            cardboard.src = "/Users/anthony/Pictures/final game/cardboard.png";
+            cardboard.src = cardboardSrc;
 
             let bullet = document.createElement("img");
-            bullet.src = "https://freesvg.org/img/CartoonBullet.png";
+            bullet.src = bulletSrc;
 
             let enemy = document.createElement("img");
-            enemy.src = "https://cdn-icons-png.flaticon.com/512/7145/7145327.png";
+            enemy.src = enemySrc;
+
+            let enemyBullet = document.createElement("img");
+            enemyBullet.src = enemyBulletSrc;
+
+            let shadow = document.createElement("img");
+            shadow.src = shadowSrc;
 
             // game loop
             function draw() {
-                // clear all elements
+                // clear all elements on screen
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                // redraw elements
+                // redraw elements in new positions
 
                 // initialize the position of the first block relative to the tank
                 let startingX = (middleX - x - blockSize * 2);
@@ -156,8 +173,8 @@
 
                             // draw block
                             ctx.drawImage(image, newXPos, yPos, blockSize, blockSize);
-                            // record block coordinates
-                            if (firstRedraw) blocks.push([newXPos, yPos, image, blockHP, false]);
+                            // record block data (coordinates, HP, block type, etc.)
+                            if (firstRedraw) blocks.push([newXPos, yPos, image, blockHP, false, false, [0, 0], false, [0, 0], 0, false]);
 
                             // update position so the next line doesn't overlap
                             startingX -= blockSize;
@@ -168,7 +185,7 @@
                             let newXPos = xPos + blockSize * i;
 
                             ctx.drawImage(image, newXPos, yPos, blockSize, blockSize);
-                            if (firstRedraw) blocks.push([newXPos, yPos, image, blockHP, false]);
+                            if (firstRedraw) blocks.push([newXPos, yPos, image, blockHP, false, false, [0, 0], false, [0, 0], 0, false]);
 
                             startingX += blockSize;
                         } else if (direction == "up") {
@@ -177,7 +194,7 @@
                             let newYPos = yPos + blockSize * -i;
 
                             ctx.drawImage(image, xPos, newYPos, blockSize, blockSize);
-                            if (firstRedraw) blocks.push([xPos, newYPos, image, blockHP, false]);
+                            if (firstRedraw) blocks.push([xPos, newYPos, image, blockHP, false, false, [0, 0], false, [0, 0], 0, false]);
 
                             startingY -= blockSize;
                         } else {
@@ -186,17 +203,43 @@
                             let newYPos = yPos + blockSize * i;
 
                             ctx.drawImage(image, xPos, newYPos, blockSize, blockSize);
-                            if (firstRedraw) blocks.push([xPos, newYPos, image, blockHP, false]);
+                            if (firstRedraw) blocks.push([xPos, newYPos, image, blockHP, false, false, [0, 0], false, [0, 0], 0, false]);
 
                             startingY += blockSize;
                         }
                     }
                 }
 
-                // designing the levels
+                function shadowMap(val1, val2) {
+                    // loop through height of shadow * 2
+                    for (let i = 0; i < val1; i++) {
+                        // make rows across the entire map with shadows
+                        line(shadow, startingX, startingY, 1, "down");
+                        line(shadow, startingX, startingY, val2, "right");
+                        line(shadow, startingX, startingY, 1, "down");
+                        line(shadow, startingX, startingY, val2, "left");
+                    }
+                }
+                
+                // save current canvas settings to the stack
+                ctx.save();
+                
+                // find angle (in radians)
+                let angle = Math.atan2(mouseY - (middleY + tankSize / 2), mouseX - (middleX + tankSize / 2)) + 1.5708;
+                
+                // translate rotation point to the center of the tank
+                ctx.translate(middleX + tankSize / 2, middleY + tankSize / 2);
 
+                // rotate the canvas to point to the cursor
+                ctx.rotate(angle);
+                
                 // draw tank
-                ctx.drawImage(tank, middleX, middleY, tankSize, tankSize);
+                ctx.drawImage(tank, -tankSize / 2, -tankSize / 2, tankSize, tankSize);
+
+                // load settings back
+                ctx.restore();
+                
+                // designing the levels
 
                 if (firstRedraw) {
                     // draw lines of blocks
@@ -252,12 +295,20 @@
                     startingY += blockSize * 5;
                     startingX -= blockSize;
                     line(enemy, startingX, startingY, 1, "down");
+                    startingX -= blockSize * 10;
+                    startingY -= blockSize * 18;
 
-                    // level is 22 wide, 16 tall (found by counting)
+                    // fill the map with shadows
+                    shadowMap(14, 37);
+
+                    // level is 22 wide, 16 tall (not including shadows)
                     grid = new PF.Grid(22, 16);
 
                     // loop through all blocks
                     for (let block of blocks) {
+                        // skip iteration if shadow
+                        if (block[2].src == shadowSrc) continue
+
                         // find top left corner X position
                         if (block[0] < smallestX) smallestX = block[0];
 
@@ -265,44 +316,60 @@
                         if (block[1] < smallestY) smallestY = block[1];
                     }
 
-                    // loop through horizontally
-                    for (let i = 0; i < 22; i++) {
-                        // loop through vertically
-                        for (let j = 0; j < 16; j++) {
-                            // loop through blocks
-                            for (block of blocks) {
-                                // check if it's a not walkable location
-                                if (block[0] == i * blockSize + smallestX && block[1] == j * blockSize + smallestY && block[2].src !== "https://cdn-icons-png.flaticon.com/512/7145/7145327.png") {
-                                    // set the location to non walkable
-                                    grid.setWalkableAt(i, j, false);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
                     // track index
                     let i = -1;
                     for (let block of blocks) {
                         // increment index
                         i++;
+                        // skip iteration if the block is broken or if the block is a shadow
+                        if (block[4] || block[2].src == shadowSrc) continue;
+
                         // push index to enemyIndexes it it's an enemy
-                        if (block[2].src == "https://cdn-icons-png.flaticon.com/512/7145/7145327.png") 
+                        if (block[2].src == enemySrc) 
                             enemyIndexes.push(i);
                     }
                 } else {
+                    // update non-walkable locations
+                    updateGrid();
+
+                    // update enemy positions
+                    updateEnemies();
+
+                    // loop through all blocks
                     for (let block of blocks) {
+                        // initialize enemy properties
+                        let blockX = block[0] - x;
+                        let blockY = block[1] - y;
+                        
+                        // add a range around the tank
+                        let tankX = (window.innerWidth / 2 - blockSize * (viewDistance / 2));
+                        let tankY = (window.innerHeight / 2 - blockSize * (viewDistance / 2));
+                        
+                        // clear shadows in view distance of tank
+                        if ((blockX < tankX + blockSize * viewDistance && blockX + blockSize > tankX &&
+                        blockY < tankY + blockSize * viewDistance && blockY + blockSize > tankY) &&
+                        block[2].src == shadowSrc) {
+                            // treat the block as "broken"
+                            block[4] = true;
+                        }    
+                        
                         // skip iteration if block is broken
                         if (block[4]) continue;
 
-                        // update enemy positions
-                        updateEnemies();
-                        // if block is an enemy
-                        if (block[2].src == "https://cdn-icons-png.flaticon.com/512/7145/7145327.png")
-                            ctx.drawImage(block[2], block[0] - x, block[1] - y, blockSize, blockSize);
-
                         // redraw block
-                        ctx.drawImage(block[2], block[0] - x, block[1] - y, blockSize, blockSize);
+
+                        // if moving right
+                        if (block[10]) {
+                            ctx.save();
+                            // flip image
+                            ctx.scale(-1, 1);
+                            // draw with offset to account for flipped positions
+                            ctx.drawImage(block[2], -block[0] - blockSize + x, block[1] - y, blockSize, blockSize);
+                            ctx.restore();
+                        } else {
+                            // else draw normally
+                            ctx.drawImage(block[2], block[0] - x, block[1] - y, blockSize, blockSize);
+                        }
                     }
                 }
 
@@ -318,8 +385,8 @@
 
                 // loop through all blocks
                 for (let block of blocks) {
-                    // skip iteration if block is broken
-                    if (block[4]) continue;
+                    // skip iteration if the block is broken or it's an enemy or it's a shadow
+                    if (block[4] || block[2].src == enemySrc || block[2].src == shadowSrc) continue;
 
                     // initialize block properties
                     let blockX = block[0];
@@ -399,7 +466,14 @@
                 updateBullet();
                 
                 // draw bullets
-                bullets.forEach((coordinates) => ctx.drawImage(bullet, coordinates[0], coordinates[1], bulletSize, bulletSize));
+                bullets.forEach((coordinates) => {
+                    // check which type of bullet to draw
+                    if (coordinates[4]) {
+                        ctx.drawImage(enemyBullet, coordinates[0], coordinates[1], enemyBulletSize, enemyBulletSize);
+                    } else {
+                        ctx.drawImage(bullet, coordinates[0], coordinates[1], bulletSize, bulletSize);
+                    }
+                });
                 
                 // toggle off firstRedraw
                 firstRedraw = false;
@@ -408,10 +482,37 @@
                 requestAnimationFrame(draw);
             }
 
+            function updateGrid() {
+                // loop through horizontally
+                for (let i = 0; i < 22; i++) {
+                    // loop through vertically
+                    for (let j = 0; j < 16; j++) {
+                        // loop through blocks
+                        for (block of blocks) {
+                            // make block walkable if it's broken
+                            if (block[4]) {
+                                grid.setWalkableAt(i, j, true);
+                                continue;
+                            }
+
+                            // check if it's a not walkable location
+                            if (block[0] == i * blockSize + smallestX && block[1] == j * blockSize + smallestY &&
+                                block[2].src != enemySrc && block[2].src != shadowSrc) {
+                                // set the location to non walkable
+                                grid.setWalkableAt(i, j, false);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
 
             function updateEnemies() {
                 // loop through all enemies
                 for (let i of enemyIndexes) {
+                    // skip iteration if enemy is destroyed
+                    if (blocks[i][4]) continue;
+
                     // initiliaze enemy properties
                     let enemyX = blocks[i][0] - x;
                     let enemyY = blocks[i][1] - y;
@@ -420,58 +521,107 @@
                     let tankX = (window.innerWidth / 2 - blockSize * (viewDistance / 2));
                     let tankY = (window.innerHeight / 2 - blockSize * (viewDistance / 2));
 
-                    // check if tank is in visible by enemies
-                    if ((enemyX < tankX + blockSize * viewDistance && enemyX + blockSize > tankX &&
-                        enemyY < tankY + blockSize * viewDistance && enemyY + blockSize > tankY) || 
-                        blocks[i][[5]]) {
+                    // check if enemies are in viewing range of the tank
+                    let inRange = enemyX < tankX + blockSize * viewDistance && enemyX + blockSize > tankX &&
+                                  enemyY < tankY + blockSize * viewDistance && enemyY + blockSize > tankY;
 
+                    // check if tank enemy should proceed the tank
+                    if ((inRange || blocks[i][5]) && !blocks[i][4]) {
                         // allow the enemy to continue chasing after it has seen you once
-                        if (!blocks[i][5]) blocks[i].push(true);
+                        blocks[i][5] = true;
+                        
+                        // add a delay to decrease fire rate
+                        if (blocks[i][9] == 0) {
+                            // shoot at the tank
+                            createBullet(enemyX, enemyY);
+                            // reset the buffer
+                            blocks[i][9] = 65;
+                        }
+                        
+                        // increment firerate buffer
+                        blocks[i][9]--;
 
-                        // path finding
-
-                        // initialize positions on the grid
-                        let enemyGridX = 0;
-                        let enemyGridY = 0;
-
-                        let tankGridX = Math.round(x / blockSize) + 10;
-                        let tankGridY = Math.round(y / blockSize) + 13;
-
-                        // avoid changing the original variables
-                        let enemyXClone = enemyX;
-                        let enemyYClone = enemyY;
-
-                        // let tankXClone = tankX - x;
-                        // let tankYClone = tankY - y;
-
-                        let topLeftX = smallestX - x;
-                        let topLeftY = smallestY - y;
-
-                        // find positions on the grid
-                        while (enemyXClone > topLeftX || enemyYClone > topLeftY) {
-                            // find enemy X
-                            if (enemyXClone > topLeftX) {
-                                enemyXClone -= blockSize;
-                                enemyGridX++;
+                        // remake the path only when the enemy has stopped moving
+                        if (!blocks[i][7]) {
+                            // initialize positions on the grid
+                            let enemyGridX = 0;
+                            let enemyGridY = 0;
+    
+                            let tankGridX = Math.floor(x / blockSize) + 10;
+                            let tankGridY = Math.floor(y / blockSize) + 13;
+    
+                            // avoid changing the original variables
+                            let enemyXClone = enemyX;
+                            let enemyYClone = enemyY;
+    
+                            let topLeftX = smallestX - x;
+                            let topLeftY = smallestY - y;
+    
+                            // find positions on the grid
+                            while (enemyXClone > topLeftX || enemyYClone > topLeftY) {
+                                // find enemy X
+                                if (enemyXClone > topLeftX) {
+                                    enemyXClone -= blockSize;
+                                    enemyGridX++;
+                                }
+    
+                                // find enemy Y
+                                if (enemyYClone > topLeftY) {
+                                    enemyYClone -= blockSize;
+                                    enemyGridY++;
+                                }
+                                
                             }
 
-                            // find enemy Y
-                            if (enemyYClone > topLeftY) {
-                                enemyYClone -= blockSize;
-                                enemyGridY++;
+                            // create the path
+                            var path = finder.findPath(enemyGridX, enemyGridY, tankGridX, tankGridY, grid.clone());
+
+                            // toggle enemy moving
+                            blocks[i][7] = true;
+                            
+                            // find the next direction
+                            try {
+                                blocks[i][8][0] = path[1][0] - enemyGridX;
+                                blocks[i][8][1] = path[1][1] - enemyGridY;
+                            } catch(e) {
+                                blocks[i][8][0] = 0;
+                                blocks[i][8][1] = 0;
                             }
                             
-                        }
-                        testingCounter--;
-                        
-                        var finder = new PF.AStarFinder();
-                        var path = finder.findPath(enemyGridX, enemyGridY, tankGridX, tankGridY, grid.clone());
+                            // record current coordinates
+                            blocks[i][6][0] = blocks[i][0];
+                            blocks[i][6][1] = blocks[i][1];
+                        } else {
+                            // simplified variables for original coodinates
+                            let originalEnemyX = blocks[i][6][0];
+                            let originalEnemyY = blocks[i][6][1];
 
-                        if (testingCounter == 0) {
-                            setTimeout(function() {
-                                testingCounter = 1;
-                                console.log(path)
-                            }, 100)
+                            // simplified variable for direction
+                            let xDifference = blocks[i][8][0];
+                            let yDifference = blocks[i][8][1];
+
+                            // move horizontally
+                            blocks[i][0] += enemySpeed * xDifference;
+                            
+                            // move vertically
+                            blocks[i][1] += enemySpeed * yDifference;
+
+                            // check if enemy is not moving
+                            if (xDifference == 0 && yDifference == 0) {
+                                // toggle enemy moving
+                                blocks[i][7] = false;
+                            } else {
+                                // flip image if moving right
+                                if (xDifference > 0) blocks[i][10] = true;
+                                else blocks[i][10] = false;
+                            }
+
+                            // check if enemy has moved a full square (or more)
+                            if (blocks[i][0] <= originalEnemyX - blockSize || blocks[i][0] >= originalEnemyX + blockSize ||
+                                blocks[i][1] >= originalEnemyY + blockSize || blocks[i][1] <= originalEnemyY - blockSize) {
+                                // toggle enemy moving
+                                blocks[i][7] = false;
+                            }
                         }
                     }
                 }
@@ -512,35 +662,78 @@
                 });
             }
 
-            function createBullet() {
-                // initialize bullet coordinates
-                let bulletX = window.innerWidth / 2;
-                let bulletY = window.innerHeight / 2;
+            function createBullet(enemyXPos, enemyYPos) {
+                // initialize type of bullet
+                let enemyShot = Boolean(enemyXPos);
 
-                // find differences between bullet and cursor
-                let directionX = mouseX - bulletX;
-                let directionY = mouseY - bulletY;
+                // initialize variables in outer scope
+                let bulletX;
+                let bulletY;
+
+                let deltaX;
+                let deltaY;
+
+                // initialize middle
+                let middleXPos = window.innerWidth / 2;
+                let middleYPos = window.innerHeight / 2;
+
+                // check if it's a tank bullet or enemy bullet
+                if (!enemyShot) {
+                    // initialize bullet coordinates
+                    bulletX = middleXPos;
+                    bulletY = middleYPos;
+
+                    // find direction
+                    deltaX = mouseX - bulletX;
+                    deltaY = mouseY - bulletY;
+                // repeat for enemy bullets
+                } else {
+                    bulletX = enemyXPos + blockSize / 2;
+                    bulletY = enemyYPos + blockSize / 2;
+
+                    deltaX = middleXPos - bulletX;
+                    deltaY = middleYPos - bulletY;
+                }
 
                 // find length of hypotenuse using pythagorean theorem
-                let length = Math.sqrt(directionX ** 2 + directionY ** 2);
+                let length = Math.sqrt(deltaX ** 2 + deltaY ** 2);
 
                 // divide by length so the distance of the cursor doesn't matter
-                directionX = directionX / length;
-                directionY = directionY / length;
+                deltaX /= length;
+                deltaY /= length;
 
                 // add the bullet to bullets
-                bullets.push([bulletX, bulletY, directionX, directionY])                
+                bullets.push([bulletX, bulletY, deltaX, deltaY, enemyShot]);             
             }
 
             function updateBullet() {
+                // loop through all bullets
                 for (let i = bullets.length - 1; i >= 0; i--) {
+                    // initialize bullet
                     let bullet = bullets[i];
 
-                    // Update bullet position
-                    bullet[0] += bulletSpeed * bullet[2]; //(xSpeedLeft + xSpeedRight);
-                    bullet[1] += bulletSpeed * bullet[3];//(ySpeedUp + ySpeedDown);
+                    // remove bullet if it goes off the screen (helps with lag)
+                    if (bullet[0] < 0 || bullet[0] > screen.innerWidth ||
+                        bullet[1] < 0 || bullet[1] > screen.innerHeight) {
+                        bullets.splice(i, 1);
+                        continue;
+                    }
 
-                    // fixes a bullet speed bug
+                    // initialize the type of bullet
+                    let enemyShot = bullet[4];
+
+                    // check the type of bullet
+                    if (enemyShot) {
+                        // update enemy bullet position
+                        bullet[0] += enemyBulletSpeed * bullet[2];
+                        bullet[1] += enemyBulletSpeed * bullet[3];
+                    } else {
+                        // update normal bullet position
+                        bullet[0] += bulletSpeed * bullet[2];
+                        bullet[1] += bulletSpeed * bullet[3];
+                    }
+
+                    // move bullet with the tank offset
                     if (movingDown) bullet[1] -= ySpeedDown;
                     if (movingUp) bullet[1] -= ySpeedUp;
                     if (movingRight) bullet[0] -= xSpeedRight;
@@ -548,27 +741,58 @@
 
                     // Check for collisions
                     let collision = false;
-                    let j = -1;
-                    for (let block of blocks) {
+
+                    outerLoop: for (let block of blocks) {
                         // skip iteration if block is broken
                         if (block[4]) continue;
 
+                        // initialize block coordinates
                         let blockX = block[0] - x;
                         let blockY = block[1] - y;
-                        // track index
-                        j++;
 
+                        // check if tank was hit (need hit detection not this garb) -----------------------------------------------------------
+                        if (block[2].src == tankSrc) {
+                            // conditions for tank hit ----------------------------------------------------------------------------------------
+                        }
+
+                        // hit detection
                         if (blockX < bullet[0] + bulletSize && blockX + blockSize > bullet[0] &&
                             blockY < bullet[1] + bulletSize && blockY + blockSize > bullet[1]) {
-                            // track collision
-                            collision = true;
 
-                            // check if block is cardboard
-                            if (block[2].src == "file:///Users/anthony/Pictures/final%20game/cardboard.png" || block[2].src == "https://cdn-icons-png.flaticon.com/512/7145/7145327.png") {
-                                // decrease block's HP
-                                block[3]--;
+                            // automatically stop the bullet if hits a shadow
+                            if (block[2].src == shadowSrc) {
+                                collision = true;
+                                break outerLoop;
+                            }
+                            
+                            // loop through all blocks again
+                            for (let block2 of blocks) {
+                                // check to see if the block is overlapping with a shadow to avoid shooting through shadows
+                                if (block2[0] == block[0] && block2[1] == block[1] &&
+                                    !enemyShot && block2[2].src == shadowSrc && !block2[4]) {
+                                    // stop the bullet
+                                    collision = true;
+                                    break outerLoop;
+                                }
+                            }
+
+                            // avoid enemy shots hitting the enemies
+                            if (enemyShot) {
+                                if (block[2].src != enemySrc)
+                                    collision = true;
+                            } else {
+                                collision = true;
+                            }
+
+                            // check if block is damagable
+                            if (block[2].src == cardboardSrc || (block[2].src == enemySrc && !enemyShot)) {
+
+                                // create a red flash animation
                                 ctx.fillStyle = "red";
                                 ctx.fillRect(blockX, blockY, blockSize, blockSize);
+                            
+                                // decrease block's HP
+                                block[3]--;
 
                                 // check block HP
                                 if (block[3] == 0) {
@@ -589,8 +813,10 @@
                 }
             }
 
-
+            // start the game
             startGame();
+
+            // start the game loop
             draw();
 
         </script>
