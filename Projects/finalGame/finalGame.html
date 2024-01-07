@@ -129,6 +129,25 @@
                 }
             }
 
+            @keyframes slideFromTop {
+                0% {
+                    top: -100%;
+                }
+
+                100% {
+                    top: 0%;
+                }
+            }
+
+            .instructions {
+                display: none;
+                position: absolute;
+                font-size: 100%;
+                top: 50%;
+                left: 50%;
+                color: white;
+            }
+
             /* create classes to automatically trigger fade animations */
             
             .fadeIn {
@@ -186,14 +205,11 @@
                 /* remove margin and padding */
             }
 
-            #splashScreen h1 span {
-                display: block;
-            }
-
             #splashScreen p {
-                margin-left: 0.8%;
+                /* add spacing below and to th left */
+                margin-left: 1em;
+                margin-bottom: 1em;
                 bottom: 0%;
-                margin-bottom: 0.8%;
                 font-family: "Chewy";
                 font-size: 120%;
                 text-align: center;
@@ -214,11 +230,39 @@
                 text-shadow:
                 -1px -1px 1px #000, 1px -1px 2px #000, -1px 1px 2px #000, 1px 1px 2px #000, 
                 -2px -2px 1px #000, 2px -2px 2px #000, -2px 2px 2px #000, 2px 2px 2px #000;
+                /* start as hidden */
                 display: none;
             }
 
             #preSplashScreen {
+                /* allow overlap */
+                position: absolute;
+                /* center text */
                 text-align: center;
+                /* center */
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            @keyframes dimBrightness {
+                0% {
+                    filter: brightness(1);
+                }
+
+                100% {
+                    filter: brightness(0.5);
+                }
+            }
+
+            @keyframes undimBrightness {
+                0% {
+                    filter: brightness(0.5);
+                }
+
+                100% {
+                    filter: brightness(1);
+                }
             }
 
         </style>
@@ -230,10 +274,17 @@
         <div id="preSplashScreen">
             <p style="color: white;">Please wait for the page to fully load before continuing.</p>
             <!-- start the splash screen on click -->
-            <button onclick="splashScreen()">Continue</button>
+            <button onclick="startSplash()">Continue</button>
         </div>
 
-        <div class="fill" style="display: none;" id="splashScreen">
+        <div id="instructionsDiv">
+            <h3 id="instructions1" class="instructions">Use WASD to move around.</h3>
+            <h3 id="instructions2" class="instructions"></h3>
+            <h3 id="instructions3" class="instructions"></h3>
+            <h3 id="instructions4" class="instructions"></h3>
+        </div>
+
+        <div class="fill" style="display: block;" id="splashScreen">
             <img class="fill" src="/Users/anthony/Pictures/final game/splashScreen.png">
             <p>Made by<br>Anthony Skyba</p>
             <h2 id="clickAnywhereText">Click Anywhere to Start</h2>
@@ -243,6 +294,7 @@
                 <span id="tactical">Tactical</span>
                 <span id="tanks">Tanks</span>
             </h1>
+        </div>
 
         <div class="fill" style="display: none;" id="gameScreen">
             <canvas id="canvas"></canvas>
@@ -268,7 +320,13 @@
 
             // initialize variables for path finding globally
             var finder = new PF.AStarFinder();
+
             var grid;
+            let gridWidth;
+            let gridLength;
+
+            let tankStartingX;
+            let tankStartingY;
 
             // counters
             let firstRedraw = true;
@@ -278,6 +336,7 @@
             let movingRight = false;
 
             // define game screens
+            let preSplashScreen = document.getElementById("preSplashScreen");
             let splashScreen = document.getElementById("splashScreen");
             let gameScreen = document.getElementById("gameScreen");
             let loseScreen = document.getElementById("losescreen");
@@ -313,6 +372,9 @@
             let blocks = [];
             let bullets = [];
             let enemyIndexes = [];
+
+            let pause = false;
+            let callStackDelay = 0;
 
             // initialize sizes
             let blockSize = 100;
@@ -359,6 +421,8 @@
 
             // game loop
             function draw() {
+                if (pause) return;
+
                 // clear all elements on screen
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -450,67 +514,361 @@
                 // designing the levels
 
                 if (firstRedraw) {
-                    // draw lines of blocks
-                    line(stone, startingX, startingY, 5, "down");
-                    line(stone, startingX, startingY, 4, "right");
-                    line(stone, startingX, startingY, 4, "up");
-                    line(cardboard, startingX, startingY, 3, "left");
-                    // shift position to make floating blocks
-                    startingX -= blockSize;
-                    line(stone, startingX, startingY, 8, "left");
-                    line(stone, startingX, startingY, 11, "up");
-                    line(stone, startingX, startingY, 21, "right");
-                    line(stone, startingX, startingY, 11, "down");
-                    line(stone, startingX, startingY, 8, "left");
-                    startingY -= blockSize * 2;
-                    line(stone, startingX, startingY, 6, "up");
-                    startingX -= blockSize * 2;
-                    line(cardboard, startingX, startingY, 4, "left");
-                    startingX -= blockSize * 2;
-                    startingY += blockSize * 2;
-                    line(cardboard, startingX, startingY, 4, "left");
-                    startingX += blockSize * 4;
-                    startingY += blockSize * 2;
-                    line(cardboard, startingX, startingY, 4, "right");
-                    line(cardboard, startingX, startingY, 1, "down");
-                    line(cardboard, startingX, startingY, 3, "left");
-                    startingX += blockSize * 7;
-                    startingY -= blockSize * 3;
-                    line(stone, startingX, startingY, 2, "left");
-                    startingX += blockSize * 2;
-                    line(stone, startingX, startingY, 3, "right");
-                    startingY += blockSize * 3;
-                    line(cardboard, startingX, startingY, 2, "right");
-                    line(cardboard, startingX, startingY, 1, "up");
-                    startingY -= blockSize * 4;
-                    line(cardboard, startingX, startingY, 1, "up");
-                    line(cardboard, startingX, startingY, 1, "right");
-                    line(cardboard, startingX, startingY, 1, "down");
-                    startingX -= blockSize * 4;
-                    line(enemy, startingX, startingY, 1, "up");
-                    startingY += blockSize;
-                    line(enemy, startingX, startingY, 1, "down");
-                    startingY += blockSize * 2;
-                    line(enemy, startingX, startingY, 1, "down");
-                    startingX -= blockSize * 7;
-                    startingY -= blockSize * 2;
-                    line(enemy, startingX, startingY, 1, "down");
-                    startingY -= blockSize * 5;
-                    line(enemy, startingX, startingY, 1, "down");
-                    startingY += blockSize;
-                    startingX -= blockSize * 5;
-                    line(enemy, startingX, startingY, 1, "down");
-                    startingY += blockSize * 5;
-                    startingX -= blockSize;
-                    line(enemy, startingX, startingY, 1, "down");
-                    startingX -= blockSize * 11;
-                    startingY -= blockSize * 18;
+                    if (level == 1) {
+                        
+                        // shift position to skip blocks
+                        startingY += blockSize;
+                        // draw lines of blocks
+                        line(stone, startingX, startingY, 14, "right");
+                        line(stone, startingX, startingY, 11, "down");
+                        line(stone, startingX, startingY, 14, "left");
+                        line(stone, startingX, startingY, 11, "up");
+                        startingY += blockSize * 9;
+                        startingX += blockSize * 2;
+                        line(stone, startingX, startingY, 1, "right");
+                        startingX += blockSize;
+                        line(stone, startingX, startingY, 1, "up");
+                        startingY -= blockSize;
+                        line(stone, startingX, startingY, 1, "left");
+                        startingY += blockSize;
+                        line(cardboard, startingX, startingY, 1, "left");
+                        line(enemy, startingX, startingY, 1, "right");
+                        startingY -= blockSize * 6;
+                        startingX += blockSize * 9;
+                        line(stone, startingX, startingY, 1, "left");
+                        startingY += blockSize;
+                        line(cardboard, startingX, startingY, 1, "right");
+                        startingY += blockSize;
+                        line(stone, startingX, startingY, 1, "left");
+                        startingY -= blockSize;
+                        line(stone, startingX, startingY, 1, "left");
+                        line(enemy, startingX, startingY, 1, "right");
+                        startingY -= blockSize * 10;
+                        startingX -= blockSize * 20;
 
-                    // fill the map with shadows
-                    shadowMap(14, 39);
+                        // fill the map with shadows
+                        shadowMap(12, 32);
 
-                    // level is 22 wide, 16 tall (not including shadows)
-                    grid = new PF.Grid(22, 16);
+                        // initialize tank starting point (on grid)
+                        tankStartingX = 2;
+                        tankStartingY = 2;
+
+                        // level is 22 wide, 16 tall
+                        gridWidth = 15;
+                        gridLength = 12;
+
+                        // tutorial
+
+                        // access instructions elements
+                        let instructions1 = document.getElementById("instructions1");
+                        let instructions2 = document.getElementById("instructions2");
+                        let instructions3 = document.getElementById("instructions3");
+                        let instructions4 = document.getElementById("instructions4");
+                        
+                        // run after 800ms
+                        setTimeout(function() {
+                            // dim the brightness
+                            document.body.style.filter = "brightness(0.5)";
+                            document.body.style.animation = "dimBrightness 1s";
+
+                            instructions1.style.display = "flex";
+
+                            // pause the game
+                            pause = true;
+                        }, 800);
+
+
+                        
+                    // repeat for other levels
+                    } else if (level == 2) {
+                        line(stone, startingX, startingY, 5, "down");
+                        line(stone, startingX, startingY, 4, "right");
+                        line(stone, startingX, startingY, 4, "up");
+                        line(cardboard, startingX, startingY, 3, "left");
+                        startingX -= blockSize;
+                        line(stone, startingX, startingY, 8, "left");
+                        line(stone, startingX, startingY, 11, "up");
+                        line(stone, startingX, startingY, 21, "right");
+                        line(stone, startingX, startingY, 11, "down");
+                        line(stone, startingX, startingY, 8, "left");
+                        startingY -= blockSize * 2;
+                        line(stone, startingX, startingY, 6, "up");
+                        startingX -= blockSize * 2;
+                        line(cardboard, startingX, startingY, 4, "left");
+                        startingX -= blockSize * 2;
+                        startingY += blockSize * 2;
+                        line(cardboard, startingX, startingY, 4, "left");
+                        startingX += blockSize * 4;
+                        startingY += blockSize * 2;
+                        line(cardboard, startingX, startingY, 4, "right");
+                        line(cardboard, startingX, startingY, 1, "down");
+                        line(cardboard, startingX, startingY, 3, "left");
+                        startingX += blockSize * 7;
+                        startingY -= blockSize * 3;
+                        line(stone, startingX, startingY, 2, "left");
+                        startingX += blockSize * 2;
+                        line(stone, startingX, startingY, 3, "right");
+                        startingY += blockSize * 3;
+                        line(cardboard, startingX, startingY, 2, "right");
+                        line(cardboard, startingX, startingY, 1, "up");
+                        startingY -= blockSize * 4;
+                        line(cardboard, startingX, startingY, 1, "up");
+                        line(cardboard, startingX, startingY, 1, "right");
+                        line(cardboard, startingX, startingY, 1, "down");
+                        startingX -= blockSize * 4;
+                        line(enemy, startingX, startingY, 1, "up");
+                        startingY += blockSize;
+                        line(enemy, startingX, startingY, 1, "down");
+                        startingY += blockSize * 2;
+                        line(enemy, startingX, startingY, 1, "down");
+                        startingX -= blockSize * 7;
+                        startingY -= blockSize * 2;
+                        line(enemy, startingX, startingY, 1, "down");
+                        startingY -= blockSize * 5;
+                        line(enemy, startingX, startingY, 1, "down");
+                        startingY += blockSize;
+                        startingX -= blockSize * 5;
+                        line(enemy, startingX, startingY, 1, "down");
+                        startingY += blockSize * 5;
+                        startingX -= blockSize;
+                        line(enemy, startingX, startingY, 1, "down");
+                        startingX -= blockSize * 11;
+                        startingY -= blockSize * 18;
+    
+                        shadowMap(14, 39);
+
+                        tankStartingX = 10;
+                        tankStartingY = 13;
+
+                        gridWidth = 22;
+                        gridLength = 16;
+
+                    } else if (level == 3) {
+                        startingY += blockSize * 8;
+                        line(stone, startingX, startingY, 9, "up");
+                        startingX += blockSize * 4;
+                        startingY -= blockSize;
+                        line(stone, startingX, startingY, 9, "down");
+                        line(cardboard, startingX, startingY, 2, "left");
+                        startingY -= blockSize * 2;
+                        startingX += blockSize;
+                        line(cardboard, startingX, startingY, 2, "left");
+                        startingY -= blockSize * 4;
+                        line(cardboard, startingX, startingY, 2, "right");
+                        startingY -= blockSize * 2;
+                        line(cardboard, startingX, startingY, 2, "left");
+                        startingY -= blockSize * 3;
+                        line(stone, startingX, startingY, 6, "left");
+                        line(stone, startingX, startingY, 14, "down");
+                        line(stone, startingX, startingY, 14, "right");
+                        line(stone, startingX, startingY, 14, "up");
+                        line(stone, startingX, startingY, 8, "left");
+                        startingY += blockSize * 2;
+                        startingX -= blockSize * 3;
+                        line(cardboard, startingX, startingY, 2, "down");
+                        startingX -= blockSize * 2;
+                        line(cardboard, startingX, startingY, 2, "down");
+                        startingX += blockSize * 3;
+                        startingY += blockSize;
+                        line(cardboard, startingX, startingY, 2, "down");
+                        startingX -= blockSize * 2;
+                        line(cardboard, startingX, startingY, 2, "down");
+                        startingX += blockSize * 10;
+                        startingY += blockSize;
+                        line(cardboard, startingX, startingY, 2, "up");
+                        startingX -= blockSize * 2;
+                        line(cardboard, startingX, startingY, 2, "up");
+                        startingY -= blockSize;
+                        startingX += blockSize * 3;
+                        line(cardboard, startingX, startingY, 2, "up");
+                        startingX -= blockSize * 2;
+                        line(cardboard, startingX, startingY, 2, "up");
+                        startingY += blockSize;
+                        line(enemy, startingX, startingY, 1, "right");
+                        startingY += blockSize * 3;
+                        line(enemy, startingX, startingY, 1, "right");
+                        startingY += blockSize * 3;
+                        line(enemy, startingX, startingY, 1, "down");
+                        startingX -= blockSize * 9;
+                        line(enemy, startingX, startingY, 1, "up");
+                        startingY -= blockSize * 7;
+                        startingX -= blockSize;
+                        line(enemy, startingX, startingY, 1, "up");
+                        startingX -= blockSize * 2;
+                        startingY += blockSize * 3;
+                        line(enemy, startingX, startingY, 1, "up");
+                        startingY -= blockSize * 10;
+                        startingX -= blockSize * 9;
+
+                        shadowMap(13, 30);
+
+                        tankStartingX = 7;
+                        tankStartingY = 7;
+
+                        gridWidth = 15;
+                        gridLength = 15;
+
+                    } else if (level == 4) {
+                        startingY += blockSize;
+                        startingX -= blockSize;
+                        line(stone, startingX, startingY, 5, "right");
+                        line(stone, startingX, startingY, 5, "down");
+                        startingX -= blockSize * 5;
+                        startingY += blockSize;
+                        line(stone, startingX, startingY, 6, "up");
+                        line(stone, startingX, startingY, 1, "right");
+                        startingY += blockSize * 4;
+                        line(cardboard, startingX, startingY, 2, "right");
+                        startingY += blockSize;
+                        startingX += blockSize * 2;
+                        line(stone, startingX, startingY, 17, "down");
+                        line(stone, startingX, startingY, 23, "left");
+                        line(stone, startingX, startingY, 22, "up");
+                        line(stone, startingX, startingY, 17, "right");
+                        startingY += blockSize * 5;
+                        startingX += blockSize;
+                        line(stone, startingX, startingY, 12, "down");
+                        line(stone, startingX, startingY, 13, "left");
+                        line(stone, startingX, startingY, 12, "up");
+                        line(stone, startingX, startingY, 8, "right");
+                        line(stone, startingX, startingY, 7, "down");
+                        line(stone, startingX, startingY, 3, "left");
+                        line(stone, startingX, startingY, 3, "up");
+                        line(cardboard, startingX, startingY, 2, "right");
+                        line(cardboard, startingX, startingY, 1, "down");
+                        line(cardboard, startingX, startingY, 1, "left");
+                        line(enemy, startingX, startingY, 1, "down");
+                        startingY -= blockSize * 3;
+                        line(enemy, startingX, startingY, 1, "up");
+                        startingX -= blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "up");
+                        startingY += blockSize * 2;
+                        startingX -= blockSize * 3;
+                        line(enemy, startingX, startingY, 1, "down");
+                        line(cardboard, startingX, startingY, 1, "up");
+                        startingY += blockSize;
+                        startingX += blockSize * 3;
+                        line(cardboard, startingX, startingY, 1, "down");
+                        startingY += blockSize * 2;
+                        startingX -= blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "left");
+                        startingY += blockSize;
+                        startingX += blockSize * 3;
+                        line(cardboard, startingX, startingY, 2, "down");
+                        startingX -= blockSize;
+                        line(enemy, startingX, startingY, 1, "left");
+                        startingY += blockSize;
+                        startingX += blockSize * 6;
+                        line(cardboard, startingX, startingY, 2, "up");
+                        startingX += blockSize * 4;
+                        startingY -= blockSize;
+                        line(cardboard, startingX, startingY, 2, "down");
+                        line(enemy, startingX, startingY, 1, "down");
+                        startingY -= blockSize * 4;
+                        line(cardboard, startingX, startingY, 1, "up");
+                        startingY -= blockSize * 2;
+                        startingX -= blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "left");
+                        startingY -= blockSize * 2;
+                        startingX += blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "right");
+                        startingX -= blockSize;
+                        line(enemy, startingX, startingY, 1, "down");
+                        startingY -= blockSize * 3;
+                        line(cardboard, startingX, startingY, 2, "left");
+                        startingY -= blockSize * 4;
+                        startingX += blockSize;
+                        line(cardboard, startingX, startingY, 2, "right");
+                        startingY += blockSize;
+                        startingX -= blockSize * 3;
+                        line(cardboard, startingX, startingY, 2, "left");
+                        line(enemy, startingX, startingY, 1, "up")
+                        startingY += blockSize * 2;
+                        startingX -= blockSize * 2;
+                        line(cardboard, startingX, startingY, 2, "left");
+                        startingY -= blockSize * 2;
+                        startingX -= blockSize * 2;
+                        line(cardboard, startingX, startingY, 2, "left");
+                        startingX -= blockSize * 3;
+                        startingY += blockSize * 2;
+                        line(cardboard, startingX, startingY, 2, "down");
+                        line(enemy, startingX, startingY, 1, "right");
+                        startingY += blockSize;
+                        startingX += blockSize * 2;
+                        line(cardboard, startingX, startingY, 2, "down");
+                        startingY += blockSize;
+                        startingX -= blockSize * 3;
+                        line(cardboard, startingX, startingY, 2, "down");
+                        startingY += blockSize;
+                        startingX += blockSize * 3;
+                        line(cardboard, startingX, startingY, 2, "down");
+                        startingY += blockSize;
+                        startingX -= blockSize * 3;
+                        line(cardboard, startingX, startingY, 2, "down");
+                        startingX += blockSize * 2;
+                        line(enemy, startingX, startingY, 1, "up");
+                        startingY += blockSize * 3;
+                        line(cardboard, startingX, startingY, 1, "down");
+                        line(cardboard, startingX, startingY, 1, "left");
+                        startingY -= blockSize;
+                        startingX += blockSize * 4;
+                        line(cardboard, startingX, startingY, 1, "up")
+                        startingY += blockSize;
+                        startingX -= blockSize;
+                        line(cardboard, startingX, startingY, 1, "down");
+                        startingY -= blockSize;
+                        startingX += blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "right");
+                        startingY += blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "left");
+                        startingX += blockSize * 3;
+                        line(cardboard, startingX, startingY, 1, "up");
+                        startingX += blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "down");
+                        startingY -= blockSize * 3;
+                        line(cardboard, startingX, startingY, 1, "left");
+                        startingX += blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "down");
+                        startingX += blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "down");
+                        startingX += blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "down");
+                        startingY -= blockSize * 3;
+                        line(cardboard, startingX, startingY, 1, "left");
+                        startingX += blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "down");
+                        startingX += blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "down");
+                        startingX += blockSize * 2;
+                        line(cardboard, startingX, startingY, 1, "down");
+                        startingY -= blockSize * 3;
+                        line(cardboard, startingX, startingY, 1, "left");
+                        startingX -= blockSize * 11;
+                        line(enemy, startingX, startingY, 1, "left");
+                        startingY += blockSize * 3;
+                        startingX += blockSize * 11;
+                        line(enemy, startingX, startingY, 1, "left");
+                        startingY -= blockSize * 6;
+                        line(cardboard, startingX, startingY, 2, "right");
+                        startingY -= blockSize * 3;
+                        line(enemy, startingX, startingY, 1, "left");
+                        startingY -= blockSize * 3;
+                        startingX -= blockSize;
+                        line(cardboard, startingX, startingY, 2, "right");
+                        startingX -= blockSize * 30;
+                        startingY -= blockSize * 15;
+             
+                        shadowMap(18, 40);
+
+                        tankStartingX = 21;
+                        tankStartingY = 2;
+
+                        gridWidth = 24;
+                        gridLength = 24;
+                    }
+
+                    // create grid
+                    grid = new PF.Grid(gridWidth, gridLength);
 
                     // loop through all blocks
                     for (let block of blocks) {
@@ -538,7 +896,7 @@
                     }
                 } else {
                     // update non-walkable locations
-                    updateGrid();
+                    updateGrid(gridWidth, gridLength);
 
                     // update enemy positions
                     updateEnemies();
@@ -559,7 +917,10 @@
                         block[2].src == shadowSrc) {
                             // treat the block as "broken"
                             block[4] = true;
-                        }    
+                        } else if (block[2].src == shadowSrc && level == 3) {
+                            // replace uncovered shadows
+                            block[4] = false;
+                        }
                         
                         // skip iteration if block is broken
                         if (block[4]) continue;
@@ -690,11 +1051,11 @@
                 requestAnimationFrame(draw);
             }
 
-            function updateGrid() {
+            function updateGrid(width, length) {
                 // loop through horizontally
-                for (let i = 0; i < 22; i++) {
+                for (let i = 0; i < width; i++) {
                     // loop through vertically
-                    for (let j = 0; j < 16; j++) {
+                    for (let j = 0; j < length; j++) {
                         // loop through blocks
                         for (block of blocks) {
                             // make block walkable if it's broken
@@ -755,8 +1116,10 @@
                             let enemyGridX = 0;
                             let enemyGridY = 0;
     
-                            let tankGridX = Math.floor(x / blockSize) + 10;
-                            let tankGridY = Math.floor(y / blockSize) + 13;
+                            // + 10
+                            // + 13
+                            let tankGridX = Math.floor(x / blockSize) + tankStartingX;
+                            let tankGridY = Math.floor(y / blockSize) + tankStartingY;
     
                             // avoid changing the original variables
                             let enemyXClone = enemyX;
@@ -781,6 +1144,7 @@
                                 
                             }
 
+                            console.log(enemyGridX, enemyGridY, tankGridX, tankGridY)
                             // create the path
                             var path = finder.findPath(enemyGridX, enemyGridY, tankGridX, tankGridY, grid.clone());
 
@@ -838,6 +1202,7 @@
             function startGame() {
                 // show game screen
                 gameScreen.style.display = "block";
+                level = 1;
 
                 // create movement
 
@@ -955,15 +1320,15 @@
 
                     outerLoop: for (let block of blocks) {
                         // skip iteration if block is broken
-                        if (block[4]) continue;
+                        if (block[4] || (block[2].src == shadowSrc && level == 3)) continue;
 
                         // initialize block coordinates
                         let blockX = block[0] - x;
                         let blockY = block[1] - y;
 
-                        // check if tank was hit (need hit detection not this garb) -----------------------------------------------------------
+                        // check if tank was hit (need hit detection not this garb) -------------------------------------------------------------------------------------------------
                         if (block[2].src == tankSrc) {
-                            // conditions for tank hit ----------------------------------------------------------------------------------------
+                            // conditions for tank hit ------------------------------------------------------------------------------------------------------------------------------
                         }
 
                         // hit detection
@@ -1025,30 +1390,51 @@
             }
 
             function startSplash() {
+                // access element
+                let clickAnywhereText = document.getElementById("clickAnywhereText");
+
                 // show splash screen
                 splashScreen.style.display = "block";
 
-                // access element
-                let clickAnywhereText = document.getElementById("clickAnywhereText");
+                // slide in splash screen
+                splashScreen.style.animation = "slideFromTop 0.5s ease-out";
+
+                // set splash screen height to visible
+                splashScreen.style.top = "0%";
+
+                // hide pre-splash screen
+                preSplashScreen.style.display = "none";
+
+                
 
                 // wait 3 seconds
                 setTimeout(function() {
                     // fade in click anywhere text
                     clickAnywhereText.classList.add("fadeIn");
+
                     // remove hidden property from click anywhere text
                     clickAnywhereText.style.display = "block";
 
+                    // listen for mousedown
+                    document.body.addEventListener("mousedown", function() {
+                        splashScreen.style.display = "none";
+                    // only listen once
+                    }, {once: true});
+
                     // wait until animation is done
                     clickAnywhereText.addEventListener("animationend", function() {
+                        // start animation
                         clickAnywhereText.style.animation = "fadeInOut ease-in-out 4s infinite";
-                    // only listen once
-                    }, {once: true})
-                }, 3000)
+                    }, {once: true});
+                }, 3000);
 
             }
 
+            preSplashScreen.style.display = "none";
+            splashScreen.style.display = "none";
             // start the game
-            // startGame();
+            startGame();
+
 
         </script>
     </body>
