@@ -7,6 +7,11 @@
     <head>
         <!-- set a tab title -->
         <title>Awesome Tanks</title>
+
+        <!-- import custom fonts for CSS -->
+        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
+
         <style>
             body, html {
                 /* prevent elements from being highlightable */
@@ -20,31 +25,234 @@
                 background-color: rgb(155, 74, 74);
             }
 
-            .screen {
-                /* fill the entire screen */
-                height: 100%;
+            #splashScreen h1 {
+                /* align text */
+                text-align: center;
+                /* set font properties */
+                font-family: "Chewy", cusive;
+                font-size: 1050%;
+                /* rotate text */
+                transform: rotate(-8deg);
+                top: 19%;
+                left: 1.5%;
+                text-transform: uppercase;
+                animation: titleRotate 5s ease-in-out infinite;
+            }
+
+            @keyframes titleRotate {
+                /* start at -8 degrees */
+                0% {
+                    transform: rotate(-8deg);
+                }
+
+                /* go to -6 degrees */
+                50% {
+                    transform: rotate(-6deg);
+                }
+
+                /* go back to -8 degrees */
+                100% {
+                    transform: rotate(-8deg);
+                }
+            }
+
+            @keyframes rotationWiggle {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                25% {
+                    transform: rotate(3deg);
+                }
+
+                50% {
+                    transform: rotate(0deg);
+                }
+
+                75% {
+                    transform: rotate(-3deg);
+                }
+
+                100% {
+                    transform: rotate(0deg);
+                }
+            }
+
+            @keyframes fadeInOut {
+                0% {
+                    font-size: 320%;
+                    opacity: 1;
+                }
+
+                /* 15% {
+                    font-size: 320%;
+                    opacity: 1;
+                } */
+
+                50% {
+                    font-size: 300%;
+                    opacity: 0;
+                }
+
+                /* 85% {
+                    font-size: 320%;
+                    opacity: 1;
+                } */
+
+                100% {
+                    font-size: 320%;
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeIn {
+                /* start at fully transparent */
+                0% { 
+                    opacity: 0;
+                }
+
+                /* become fully opaque */
+                100% {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeOut {
+                /* start fully opaque */
+                0% { 
+                    opacity: 1;
+                }
+
+                /* become fully transparent */
+                100% {
+                    opacity: 0;
+                }
+            }
+
+            /* create classes to automatically trigger fade animations */
+            
+            .fadeIn {
+                animation: fadeIn 1.5s;
+            }
+
+            .fadeOut {
+                animation: fadeOut 1.5s;
+            }
+
+            #splashScreen p {
+                /* allow image to overlap */
+                position: absolute;
+            }
+
+            #splashScreen {
+                top: -100%;
+            }
+
+            #tactical {
+                color: #FFA500;
+                /* flashy text shadow */
+                text-shadow: 0.025em 0.025em 0 white, 0.05em 0.05em 0 #CC0077;
+            }
+
+            #tanks {
+                margin-top: -3%;
+                color: #CC0077;
+                /* flashy text shadow */
+                text-shadow: 0.025em 0.025em 0 orange, 0.05em 0.05em 0 black;
+            }
+            
+            /* class to fill the screen to avoid repeating code */
+            .fill {
+                /* allow overlap */
+                position: absolute;
+                /* fill the screen */
                 width: 100%;
-                /* hide all screens to start */
+                height: 100%;
+                /* position at top left corner */
+                top: 0%;
+                left: 0%;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* class for centering element */
+            .center {
+                /* position half way horizontally */
+                left: 50%;
+                /* position half way vertically */
+                top: 50%;
+                /* move by half of your size */
+                transform: translate(-50%, -50%);
+                /* remove margin and padding */
+            }
+
+            #splashScreen h1 span {
+                display: block;
+            }
+
+            #splashScreen p {
+                margin-left: 0.8%;
+                bottom: 0%;
+                margin-bottom: 0.8%;
+                font-family: "Chewy";
+                font-size: 120%;
+                text-align: center;
+                color: white;
+                /* 1px border */
+                text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            }
+
+            #clickAnywhereText {
+                top: 70%;
+                left: 50%;
+                transform: translate(-50%);
+                font-size: 320%;
+                position: absolute;
+                font-family: "Nunito";
+                color: pink;
+                /* outline */
+                text-shadow:
+                -1px -1px 1px #000, 1px -1px 2px #000, -1px 1px 2px #000, 1px 1px 2px #000, 
+                -2px -2px 1px #000, 2px -2px 2px #000, -2px 2px 2px #000, 2px 2px 2px #000;
                 display: none;
+            }
+
+            #preSplashScreen {
+                text-align: center;
             }
 
         </style>
     </head>
     <body>
-        <div class="screen" id="splashScreen">
-            <!-- center splash screen elements -->
-            <center>
-                <p>Made by Anthony Skyba</p>
-                <h1>Title</h1>
-            </center>
+        <!-- containers for each screen -->
+
+        <!-- needed because you can't play music without user action and I want music on the splash screen -->
+        <div id="preSplashScreen">
+            <p style="color: white;">Please wait for the page to fully load before continuing.</p>
+            <!-- start the splash screen on click -->
+            <button onclick="splashScreen()">Continue</button>
         </div>
-        <div class="screen" id="gameScreen">
+
+        <div class="fill" style="display: none;" id="splashScreen">
+            <img class="fill" src="/Users/anthony/Pictures/final game/splashScreen.png">
+            <p>Made by<br>Anthony Skyba</p>
+            <h2 id="clickAnywhereText">Click Anywhere to Start</h2>
+            <!-- splash screen title -->
+            <h1 class="fill">
+                <!-- seperate words into containers to style them differently -->
+                <span id="tactical">Tactical</span>
+                <span id="tanks">Tanks</span>
+            </h1>
+
+        <div class="fill" style="display: none;" id="gameScreen">
             <canvas id="canvas"></canvas>
         </div>
-        <div class="screen" id="loseScreen"></div>
-        <div class="screen" id="winScreen"></div>
 
-        <!-- import pathfinding library -->
+        <div class="fill" style="display: none;" id="loseScreen"></div>
+
+        <div class="fill" style="display: none;" id="winScreen"></div>
+
+        <!-- import pathfinding liary -->
         <script src="https://cdn.jsdelivr.net/npm/pathfinding@0.4.18/visual/lib/pathfinding-browser.min.js"></script>
         <script>
             // prevent elements from being draggable
@@ -295,11 +503,11 @@
                     startingY += blockSize * 5;
                     startingX -= blockSize;
                     line(enemy, startingX, startingY, 1, "down");
-                    startingX -= blockSize * 10;
+                    startingX -= blockSize * 11;
                     startingY -= blockSize * 18;
 
                     // fill the map with shadows
-                    shadowMap(14, 37);
+                    shadowMap(14, 39);
 
                     // level is 22 wide, 16 tall (not including shadows)
                     grid = new PF.Grid(22, 16);
@@ -660,6 +868,9 @@
                     mouseX = event.clientX;
                     mouseY = event.clientY;
                 });
+
+                // start the game loop
+                draw();
             }
 
             function createBullet(enemyXPos, enemyYPos) {
@@ -813,11 +1024,31 @@
                 }
             }
 
-            // start the game
-            startGame();
+            function startSplash() {
+                // show splash screen
+                splashScreen.style.display = "block";
 
-            // start the game loop
-            draw();
+                // access element
+                let clickAnywhereText = document.getElementById("clickAnywhereText");
+
+                // wait 3 seconds
+                setTimeout(function() {
+                    // fade in click anywhere text
+                    clickAnywhereText.classList.add("fadeIn");
+                    // remove hidden property from click anywhere text
+                    clickAnywhereText.style.display = "block";
+
+                    // wait until animation is done
+                    clickAnywhereText.addEventListener("animationend", function() {
+                        clickAnywhereText.style.animation = "fadeInOut ease-in-out 4s infinite";
+                    // only listen once
+                    }, {once: true})
+                }, 3000)
+
+            }
+
+            // start the game
+            // startGame();
 
         </script>
     </body>
