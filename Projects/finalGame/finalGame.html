@@ -6,11 +6,12 @@
 <html>
     <head>
         <!-- set a tab title -->
-        <title>Awesome Tanks</title>
+        <title>Tactical Tanks</title>
 
         <!-- import custom fonts for CSS -->
         <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 
         <style>
             body, html {
@@ -25,11 +26,31 @@
                 background-color: rgb(155, 74, 74);
             }
 
+            @keyframes dimBrightness {
+                0% {
+                    opacity: 0;
+                }
+
+                100% {
+                    opacity: 0.7;
+                }
+            }
+
+            @keyframes undimBrightness {
+                0% {
+                    opacity: 0.7;
+                }
+
+                100% {
+                    opacity: 0;
+                }
+            }
+
             #splashScreen h1 {
                 /* align text */
                 text-align: center;
                 /* set font properties */
-                font-family: "Chewy", cusive;
+                font-family: "Chewy";
                 font-size: 1050%;
                 /* rotate text */
                 transform: rotate(-8deg);
@@ -129,7 +150,7 @@
                 }
             }
 
-            @keyframes slideFromTop {
+            @keyframes slideDownFromTop {
                 0% {
                     top: -100%;
                 }
@@ -139,23 +160,14 @@
                 }
             }
 
-            .instructions {
-                display: none;
-                position: absolute;
-                font-size: 100%;
-                top: 50%;
-                left: 50%;
-                color: white;
-            }
-
             /* create classes to automatically trigger fade animations */
             
             .fadeIn {
-                animation: fadeIn 1.5s;
+                animation: fadeIn 2s;
             }
 
             .fadeOut {
-                animation: fadeOut 1.5s;
+                animation: fadeOut 2s;
             }
 
             #splashScreen p {
@@ -245,46 +257,376 @@
                 transform: translate(-50%, -50%);
             }
 
-            @keyframes dimBrightness {
+            .textBackground {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                height: 50%;
+                width: 65%;
+                background-color: #FFA500;
+                border: solid orangered 0.7em;
+                border-radius: 4em;
+            }
+
+            .instructions {
+                display: none;
+                font-size: 400%;
+                /* top: 35%;
+                left: 50%; */
+                color: white;
+                z-index: 999;
+                /* transform: translate(-50%, -50%); */
+                text-align: center;
+                font-family: "Nunito";
+                max-width: 55%;
+                margin-left: 50%;
+                transform: translate(-50%);
+                margin-top: 15%;
+            }
+
+            .continueButton {
+                margin-top: 0;
+                display: none;
+                color: lightgreen;
+                text-shadow: 0.025em 0.025em 0 black;
+                text-transform: uppercase;
+                transition: all 0.5s;
+                z-index: 9999;
+            }
+
+            .continueButton:hover {
+                color: black;
+                text-shadow: 0.025em 0.025em 0 lightgreen;
+                font-size: 420%;
+            }
+
+            .instructionsSpan {
+                color: #ffffff;
+                margin-bottom: 10em;
+                font-family: "Chewy";
+            } 
+
+            .instructionsDiv {
+                display: none;
+                z-index: 50;
+                align-items: center;
+                justify-content: center;
+            }
+
+            @keyframes slideUpFromBottom {
                 0% {
-                    filter: brightness(1);
+                    top: 100%;
                 }
 
                 100% {
-                    filter: brightness(0.5);
+                    top: 0%;
                 }
             }
 
-            @keyframes undimBrightness {
+            @keyframes slideUpFromMiddle {
                 0% {
-                    filter: brightness(0.5);
+                    top: 0%;
                 }
 
                 100% {
-                    filter: brightness(1);
+                    top: -100%;
                 }
+            }
+
+            @keyframes slideDownFromMiddle {
+                0% {
+                    top: 0%;
+                }
+
+                100% {
+                    top: 100%;
+                }
+            }
+
+            .rectangle {
+                height: 120%;
+                width: 16.6666666667%;
+                background-color: #FFD1DC;
+                top: 100%;
+                position: absolute;
+                z-index: 100;
+            }
+
+            #loseScreenBackground {
+                /* position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 65%; */
+                height: 75%;
+                /* background-color: #483D8B; */
+                background-color: #7F0000;
+                border: solid #C0C0C0 0.7em;
+                border-radius: 4em;
+                margin-top: 30%;
+                top: -100%;
+            }
+
+            #gameOverTitle {
+                text-align: center;
+                margin-top: 10%;
+                z-index: 10;
+                font-size: 450%;
+                color: #E6E6FA;
+                opacity: 0.5;
+                margin-bottom: 20%;
+                /* text-shadow: 0.05em 0.05em 0 blue, -0.05em -0.05em 0 red; */
+                /* text-shadow: 0.05em 0.05em 0 blue, -0.05em -0.05em 0 red, 0 0 10px #fff, 0 0 20px #fff, 0 0 30px white, 0 0 40px white; */
+
+            } 
+
+            #gameOverText {
+                display: block;
+                text-align: center;
+                opacity: 0.5;
+                color: white;
+                margin-bottom: 0;
+                font-family: "Nunito";
+            }
+            
+            @keyframes glow {
+                100% {
+                    opacity: 1;
+                    text-shadow: 0.05em 0.05em 0 darkgreen, -0.05em -0.05em 0 black, 0 0 10px #fff, 0 0 20px darkgreen, 0 0 30px darkgreen;
+                }
+            }
+
+            #loseScreen {
+                z-index: 15;
+                top: 100%;
+            }
+
+            #brokenTank {
+                align-items: center;
+                margin-left: 50%;
+                transform: translate(-50%);
+                height: 35%;
+                width: auto;
+                margin-top: -75%;
+            }
+            
+            .button {
+                margin-left: 50%;
+                margin-top: 2%;
+                width: 15%;
+                height: 5%;
+                font-size: 150%;
+                font-family: "Nunito";
+                /* border-radius: 0.5em; */
+                border: none;
+                color: white;
+                transition: all 0.4s;
+                display: none;
+            }
+
+            #menuButton {
+                /* background-color: #FFC0CB; */
+                background: url(https://cdn5.vectorstock.com/i/1000x1000/65/44/camouflage-vector-966544.jpg);
+                transform: rotate(2deg) translate(-50%);
+                background-position: 15% 17%;
+                background-repeat: repeat;
+            }
+
+            #menuButton:hover {
+                width: 16%;
+                height: 6%;
+                font-size: 160%;
+                transform: translate(-50%) rotate(-2deg);
+                border: 2px white solid;
+
+            }
+
+            #playAgainButton:hover {
+                width: 16%;
+                height: 6%;
+                font-size: 160%;
+                transform: translate(-50%) rotate(2deg);
+                border: 2px white solid;
+            }
+
+
+            #playAgainButton {
+                background-position: 0% 5%;
+                background: url(https://cdn5.vectorstock.com/i/1000x1000/65/44/camouflage-vector-966544.jpg);
+                /* background-color: #FFD700; */
+                transform: rotate(-2deg) translate(-50%);
+            }
+
+            #levelSelectTitle {
+                font-size: 1000%;
+                z-index: 100;
+                color: white;
+                position: absolute;
+                left: 50%;
+                white-space: nowrap;
+                transform: translate(-50%);
+                margin: 0;
+                letter-spacing: 0.2em;
+                font-family: "chewy";
+                height: 100%;
+                transform-origin: center;
+            }
+
+            .levelSelectSpan {
+                position: relative;
+                top: -100%;
+            }
+
+            @keyframes levelSelectTitleAnimation {
+                0% {
+                    text-shadow: none;
+                }
+
+                100% {
+                    text-shadow: 0.025em 0.025em 0 orange, 0.05em 0.05em 0 black;
+                }
+            }
+
+            @keyframes levelSelectTitleGrow {
+                0% {
+                    font-size: 1000%;
+                }
+
+                50% {
+                    font-size: 1030%;
+                }
+
+                100% {
+                    font-size: 1000%;
+                }
+            }
+            
+            .levelSelectButton {
+                position: absolute;
+                width: 200px;
+                height: 200px;
+                top: 40%;
+                z-index: 999;
+                transform: translate(-50%);
+                background-color: #FF4136;
+                color: white;
+                font-family: "Luckiest Guy";
+                font-size: 500%;
+                border: 2px solid black;
+                padding-top: 30px;
+                transition: all 0.4s;
+            }
+
+            .levelSelectButton:hover {
+                color: black;
+                background-color: lawngreen;
+            }
+
+            #level1Button {
+                left: 20%;
+            }
+
+            #level2Button {
+                left: 40%;
+            }
+
+            #level3Button {
+                left: 60%;
+            }
+
+            #level4Button {
+                left: 80%;
             }
 
         </style>
     </head>
     <body>
+
         <!-- containers for each screen -->
 
         <!-- needed because you can't play music without user action and I want music on the splash screen -->
-        <div id="preSplashScreen">
+        <div id="preSplashScreen" style="z-index: 15;">
             <p style="color: white;">Please wait for the page to fully load before continuing.</p>
             <!-- start the splash screen on click -->
             <button onclick="startSplash()">Continue</button>
         </div>
 
-        <div id="instructionsDiv">
-            <h3 id="instructions1" class="instructions">Use WASD to move around.</h3>
-            <h3 id="instructions2" class="instructions"></h3>
-            <h3 id="instructions3" class="instructions"></h3>
-            <h3 id="instructions4" class="instructions"></h3>
+        <!-- coment stuff ere ----------------------------------------------------------------------------------------------------------------------------------------------------- -->
+        <div class="fill instructionsDiv">
+            <div class="textBackground"></div>
+
+            <h3 id="instructions1" class="instructions">
+                <span class="instructionsSpan">Controls:</span><br>Use WASD to move and the mouse to aim and shoot.
+            </h3>
+
+            <h3 id="instructions3" class="instructions">
+                <span class="instructionsSpan">Gameplay:</span><br>Move around to uncover the map.
+            </h3>
+            
+            <h3 id="instructions5" class="instructions">
+                <span class="instructionsSpan">Gameplay:</span><br>Your tank has limited hitpoints, avoid getting hit.
+            </h3>
+
+            <h4 class="continueButton instructions">Continue</h4>
+        </div>
+        
+        <div class="fill instructionsDiv">
+            <div class="textBackground"></div>
+
+            <h3 id="instructions2" class="instructions"><span class="instructionsSpan">
+                Controls:</span><br>Press the Escape key to pause the game.
+            </h3>
+
+            <h3 id="instructions4" class="instructions">
+                <span class="instructionsSpan">Gameplay:</span><br>Win by shooting and eliminating all enemy tanks.
+            </h3>
+
+            <h3 id="instructions6" class="instructions">
+                <span class="instructionsSpan">Tip:</span><br>Certain blocks can be broken by shooting at them.
+            </h3>
+
+            <h4 class="instructions continueButton">Continue</h4>
+        </div>
+        
+        <div class="fill" style="display: none;" id="gameScreen">
+            <canvas id="canvas"></canvas>
         </div>
 
-        <div class="fill" style="display: block;" id="splashScreen">
+        <div id="loseScreenBackground" class="textBackground"></div>
+        <div class="fill" id="loseScreen">
+            <h1 id="gameOverTitle" class="instructionsSpan">GAME OVER</h1>
+            <img id="brokenTank" src="/Users/anthony/Pictures/final game/destroyedTank.png">
+            <h2 id="gameOverText">You ran out of hitpoints.</h2>
+            <button id="playAgainButton" class="button">Play Again</button>
+            <button id="menuButton" class="button">Menu</button>
+        </div>
+
+        <div class="fill" style="display: none;" id="winScreen"></div>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------------------------------- -->
+        <div id="levelSelectScreen" style="display: none;" class="fill">
+            <h1 id="levelSelectTitle">
+                <span class="levelSelectSpan">L</span><span class="levelSelectSpan">E</span><span class="levelSelectSpan">V</span><span class="levelSelectSpan">E</span><span class="levelSelectSpan">L</span> <span class="levelSelectSpan">S</span><span class="levelSelectSpan">E</span><span class="levelSelectSpan">L</span><span class="levelSelectSpan">E</span><span class="levelSelectSpan">C</span><span class="levelSelectSpan">T</span>
+            </h1>
+            <img class="fill" src="/Users/anthony/Pictures/final game/levelSelectScreen.png">
+            <button id="level1Button" class="levelSelectButton">1</button>
+            <button id="level2Button" class="levelSelectButton">2</button>
+            <button id="level3Button" class="levelSelectButton">3</button>
+            <button id="level4Button" class="levelSelectButton">4</button>
+            <button id="shopButton">Shop</button>
+        </div>
+
+        <div id="brightnessDiv" class="fill" style="opacity: 0; background-color: black; z-index: 10;"></div>
+
+        <div class="rectangle"></div>
+        <div class="rectangle"></div>
+        <div class="rectangle"></div>
+        <div class="rectangle"></div>
+        <div class="rectangle"></div>
+        <div class="rectangle"></div>
+
+        <div class="fill" style="display: block; z-index: 15;" id="splashScreen">
             <img class="fill" src="/Users/anthony/Pictures/final game/splashScreen.png">
             <p>Made by<br>Anthony Skyba</p>
             <h2 id="clickAnywhereText">Click Anywhere to Start</h2>
@@ -296,15 +638,7 @@
             </h1>
         </div>
 
-        <div class="fill" style="display: none;" id="gameScreen">
-            <canvas id="canvas"></canvas>
-        </div>
-
-        <div class="fill" style="display: none;" id="loseScreen"></div>
-
-        <div class="fill" style="display: none;" id="winScreen"></div>
-
-        <!-- import pathfinding liary -->
+        <!-- import pathfinding library -->
         <script src="https://cdn.jsdelivr.net/npm/pathfinding@0.4.18/visual/lib/pathfinding-browser.min.js"></script>
         <script>
             // prevent elements from being draggable
@@ -328,6 +662,9 @@
             let tankStartingX;
             let tankStartingY;
 
+            // initialize fading element
+            let brightnessDiv = document.getElementById("brightnessDiv");
+
             // counters
             let firstRedraw = true;
             let movingUp = false;
@@ -338,8 +675,9 @@
             // define game screens
             let preSplashScreen = document.getElementById("preSplashScreen");
             let splashScreen = document.getElementById("splashScreen");
+            let levelSelectScreen = document.getElementById("levelSelectScreen");
             let gameScreen = document.getElementById("gameScreen");
-            let loseScreen = document.getElementById("losescreen");
+            let loseScreen = document.getElementById("loseScreen");
             let winScreen = document.getElementById("winScreen");
 
             // initialize velocities
@@ -372,6 +710,8 @@
             let blocks = [];
             let bullets = [];
             let enemyIndexes = [];
+            let tutorialCounter = 0;
+            let tankHealth = 5;
 
             let pause = false;
             let callStackDelay = 0;
@@ -418,6 +758,40 @@
 
             let shadow = document.createElement("img");
             shadow.src = shadowSrc;
+
+            function pageTransition(hardcode) {
+                let rects = Array.from(document.getElementsByClassName("rectangle"));
+
+                for (let i = 0; i < 6; i++) {
+                    setTimeout(function() {
+                        rects[i].style.animation = "slideUpFromBottom 1s ease-in-out";
+                        rects[i].style.left = `${(100 / 6) * i}%`;
+                        rects[i].style.display = "block";
+                        rects[i].style.top = "0%";
+                    }, (i + 1) * 100);
+                }
+
+                rects[5].addEventListener("animationend", function() {
+                    if (hardcode == 1) {
+                        splashScreen.style.display = "none";
+                        startGame();
+                    }
+
+                    setTimeout(function() {
+                        for (let i = 5; i >= 0; i--) {
+                            setTimeout(function() {
+                                rects[i].style.animation = "slideDownFromMiddle 1s ease-in-out";
+                                rects[i].style.top = "100%";
+                                rects[i].addEventListener("animationend", function() {
+                                    setTimeout(function() {
+                                        rects[i].style.display = "none";
+                                    }, 500);
+                                }, {once: true});
+                            }, ((5 - i) + 1) * 100);
+                        }
+                    }, 500);
+                }, {once: true});
+            }
 
             // game loop
             function draw() {
@@ -513,6 +887,111 @@
                 
                 // designing the levels
 
+                function tutorial() {
+                    // access elements
+                    let instructions1 = document.getElementById("instructions1");
+                    let instructions2 = document.getElementById("instructions2");
+                    let instructions3 = document.getElementById("instructions3");
+                    let instructions4 = document.getElementById("instructions4");
+
+                    let continueButton = Array.from(document.getElementsByClassName("continueButton"))[0];
+                    let continueButtonClone = Array.from(document.getElementsByClassName("continueButton"))[1];
+
+                    let instructionsDiv = Array.from(document.getElementsByClassName("instructionsDiv"))[0];
+                    let instructionsDivClone = Array.from(document.getElementsByClassName("instructionsDiv"))[1];
+                    
+                    let textBackground = Array.from(document.getElementsByClassName("textBackground"))[0];
+                    let textBackgroundClone = Array.from(document.getElementsByClassName("textBackground"))[1];
+                    
+                    // run after 1400ms
+                    setTimeout(function() {
+                        startTutorial(instructions1, instructions2);
+                    }, 1400);
+
+                    function startTutorial(inst1, inst2) {
+                        // increment counter
+                        tutorialCounter++;
+
+                        // dim the brightness
+                        brightnessDiv.style.animation = "dimBrightness 1s";
+                        brightnessDiv.style.opacity = "0.7";
+
+                        // pause the game
+                        pause = true;
+
+                        document.body.addEventListener("animationend", function() {
+                            // show elements
+                            inst1.style.display = "block";
+                            instructionsDiv.style.display = "block";
+
+                            // animate in
+                            instructionsDiv.style.top = "0%";
+                            instructionsDiv.style.animation = "slideUpFromBottom 1s ease-in-out";
+
+                            // comment all this later--------------------------------------------------------------------------------------------------------------
+
+                            instructionsDiv.addEventListener("animationend", function() {
+                                setTimeout(function() {
+                                    continueButton.classList.add("fadeIn");
+                                    continueButton.style.display = "block";
+                                }, 200);
+
+                                continueClick(inst1, inst2);
+
+                            }, {once: true});
+                        }, {once: true});
+                    }
+
+                    function continueClick(inst1, inst2) {
+                        continueButton.addEventListener("click", function() {
+                            instructionsDiv.style.animation = "slideUpFromMiddle 1s ease-in-out";
+
+                            instructionsDivClone.style.display = "block";
+                            instructionsDivClone.style.top = "0%";
+                            instructionsDivClone.style.animation = "slideUpFromBottom 1s ease-in-out";
+                            inst2.style.display = "block";
+                            
+                            instructionsDiv.addEventListener("animationend", function() {
+                                instructionsDiv.style.display = "none";
+                                inst1.style.display = "none";
+                                continueButton.style.display = "none";
+
+                                setTimeout(function() {
+                                    continueButtonClone.classList.add("fadeIn");
+                                    continueButtonClone.style.display = "block";
+                                }, 200);
+
+                                continueButtonClone.addEventListener("click", function() {
+                                    instructionsDivClone.style.animation = "slideUpFromMiddle 1s ease-in-out";
+                                    instructionsDivClone.style.top = "-100%";
+                                    postContinueClick(inst1, inst2);
+                                }, {once: true});
+                            }, {once: true});
+                        }, {once: true});
+                    }
+
+                    function postContinueClick(inst1, inst2) {
+                        instructionsDivClone.addEventListener("animationend", function() {
+                            instructionsDivClone.style.display = "none";
+                            inst2.style.display = "none";
+                            continueButton.style.display = "none";
+
+                            brightnessDiv.style.animation = "undimBrightness 1s";
+                            brightnessDiv.style.opacity = "0";
+
+                            brightnessDiv.addEventListener("animationend", function() {
+                                pause = false;
+                                requestAnimationFrame(draw);
+
+                                if (tutorialCounter == 1)
+                                    setTimeout(() => startTutorial(instructions3, instructions4), 3000);
+                                else if (tutorialCounter == 2)
+                                    setTimeout(() => startTutorial(instructions5, instructions6), 5000);
+                            }, {once: true});
+                        }, {once: true});
+                    }
+                }
+
                 if (firstRedraw) {
                     if (level == 1) {
                         
@@ -525,25 +1004,33 @@
                         line(stone, startingX, startingY, 11, "up");
                         startingY += blockSize * 9;
                         startingX += blockSize * 2;
-                        line(stone, startingX, startingY, 1, "right");
+                        line(cardboard, startingX, startingY, 1, "right");
                         startingX += blockSize;
-                        line(stone, startingX, startingY, 1, "up");
+                        line(cardboard, startingX, startingY, 1, "up");
                         startingY -= blockSize;
-                        line(stone, startingX, startingY, 1, "left");
+                        line(cardboard, startingX, startingY, 1, "left");
                         startingY += blockSize;
                         line(cardboard, startingX, startingY, 1, "left");
                         line(enemy, startingX, startingY, 1, "right");
                         startingY -= blockSize * 6;
                         startingX += blockSize * 9;
-                        line(stone, startingX, startingY, 1, "left");
+                        line(cardboard, startingX, startingY, 1, "left");
                         startingY += blockSize;
                         line(cardboard, startingX, startingY, 1, "right");
                         startingY += blockSize;
-                        line(stone, startingX, startingY, 1, "left");
+                        line(cardboard, startingX, startingY, 1, "left");
                         startingY -= blockSize;
-                        line(stone, startingX, startingY, 1, "left");
+                        line(cardboard, startingX, startingY, 1, "left");
                         line(enemy, startingX, startingY, 1, "right");
-                        startingY -= blockSize * 10;
+                        startingY += blockSize * 5;
+                        line(cardboard, startingX, startingY, 1, "left");
+                        line(enemy, startingX, startingY, 1, "right");
+                        line(cardboard, startingX, startingY, 1, "down");
+                        startingX += blockSize;
+                        line(cardboard, startingX, startingY, 1, "up");
+                        startingY -= blockSize;
+                        line(cardboard, startingX, startingY, 1, "left");
+                        startingY -= blockSize * 15;
                         startingX -= blockSize * 20;
 
                         // fill the map with shadows
@@ -558,26 +1045,6 @@
                         gridLength = 12;
 
                         // tutorial
-
-                        // access instructions elements
-                        let instructions1 = document.getElementById("instructions1");
-                        let instructions2 = document.getElementById("instructions2");
-                        let instructions3 = document.getElementById("instructions3");
-                        let instructions4 = document.getElementById("instructions4");
-                        
-                        // run after 800ms
-                        setTimeout(function() {
-                            // dim the brightness
-                            document.body.style.filter = "brightness(0.5)";
-                            document.body.style.animation = "dimBrightness 1s";
-
-                            instructions1.style.display = "flex";
-
-                            // pause the game
-                            pause = true;
-                        }, 800);
-
-
                         
                     // repeat for other levels
                     } else if (level == 2) {
@@ -1043,6 +1510,9 @@
                         ctx.drawImage(bullet, coordinates[0], coordinates[1], bulletSize, bulletSize);
                     }
                 });
+
+                // run tutorial
+                // if (firstRedraw) tutorial();
                 
                 // toggle off firstRedraw
                 firstRedraw = false;
@@ -1144,7 +1614,6 @@
                                 
                             }
 
-                            console.log(enemyGridX, enemyGridY, tankGridX, tankGridY)
                             // create the path
                             var path = finder.findPath(enemyGridX, enemyGridY, tankGridX, tankGridY, grid.clone());
 
@@ -1202,7 +1671,7 @@
             function startGame() {
                 // show game screen
                 gameScreen.style.display = "block";
-                level = 1;
+                level = 4;
 
                 // create movement
 
@@ -1223,9 +1692,9 @@
                 });
 
                 // shoot bullets when mouse is clicked
-                document.addEventListener("mousedown", function(event) {
+                document.addEventListener("click", function(event) {
                     // only create a bullet if the left mouse is clicked
-                    if (event.button == 0) createBullet();
+                    if (event.button == 0 && !pause) createBullet();
                 });
 
                 // track mouse coordinates whem mouse is moved
@@ -1317,6 +1786,23 @@
 
                     // Check for collisions
                     let collision = false;
+                    
+                    if (middleX < bullet[0] + bulletSize && middleX + tankSize > bullet[0] &&
+                        middleY < bullet[1] + bulletSize && middleY + tankSize > bullet[1] && enemyShot) {
+                        collision = true;
+                        tankHealth--;
+                        if (tankHealth <= 0) {
+                            pause = true;
+                            setTimeout(function() {
+                                brightnessDiv.style.animation = "dimBrightness 1s";
+                                brightnessDiv.style.opacity = "0.7";
+                                brightnessDiv.addEventListener("animationend", function() {
+
+                                }, {once: true});
+                            }, 50);
+                        }
+                        // conditions for tank hit --------------------------------------------------------------------------add commenets----------------------------------------------------
+                    }   
 
                     outerLoop: for (let block of blocks) {
                         // skip iteration if block is broken
@@ -1325,11 +1811,6 @@
                         // initialize block coordinates
                         let blockX = block[0] - x;
                         let blockY = block[1] - y;
-
-                        // check if tank was hit (need hit detection not this garb) -------------------------------------------------------------------------------------------------
-                        if (block[2].src == tankSrc) {
-                            // conditions for tank hit ------------------------------------------------------------------------------------------------------------------------------
-                        }
 
                         // hit detection
                         if (blockX < bullet[0] + bulletSize && blockX + blockSize > bullet[0] &&
@@ -1397,15 +1878,13 @@
                 splashScreen.style.display = "block";
 
                 // slide in splash screen
-                splashScreen.style.animation = "slideFromTop 0.5s ease-out";
+                splashScreen.style.animation = "slideDownFromTop 0.5s ease-out";
 
                 // set splash screen height to visible
                 splashScreen.style.top = "0%";
 
                 // hide pre-splash screen
                 preSplashScreen.style.display = "none";
-
-                
 
                 // wait 3 seconds
                 setTimeout(function() {
@@ -1417,7 +1896,7 @@
 
                     // listen for mousedown
                     document.body.addEventListener("mousedown", function() {
-                        splashScreen.style.display = "none";
+                        pageTransition(1);
                     // only listen once
                     }, {once: true});
 
@@ -1427,14 +1906,82 @@
                         clickAnywhereText.style.animation = "fadeInOut ease-in-out 4s infinite";
                     }, {once: true});
                 }, 3000);
-
             }
 
             preSplashScreen.style.display = "none";
-            splashScreen.style.display = "none";
-            // start the game
-            startGame();
 
+            function showLoseScreen() {
+                let loseScreenBackground = document.getElementById("loseScreenBackground");
+                let gameOverTitle = document.getElementById("gameOverTitle");
+                let gameOverText = document.getElementById("gameOverText");
+                let playAgainButton = document.getElementById("playAgainButton");
+                let menuButton = document.getElementById("menuButton");
+    
+                loseScreen.style.animation = "slideUpFromBottom ease-in-out 1s";
+                loseScreen.style.top = "0%";
+                
+                loseScreenBackground.style.animation = "slideDownFromTop ease-in-out 1s";
+                loseScreenBackground.style.top = "0%";
+    
+                loseScreenBackground.addEventListener("animationend", function() {
+                    gameOverTitle.style.animation = "glow ease-in-out 1s";
+                    gameOverText.style.animation = "glow ease-in-out 1s";
+    
+                    playAgainButton.style.display = "block";
+                    menuButton.style.display = "block";
+    
+                    playAgainButton.classList.add("fadeIn");
+                    menuButton.classList.add("fadeIn");
+
+                    // add click even tlistenres here.-----------------------.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-._>_._>-_>->_.-.-.-.-.-.-.->_>_>_>_>_>_>_>_>_>_>->_.->_.->_.->_.
+                    gameOverText.addEventListener("animationend", function() {
+                        gameOverTitle.style.opacity = 1;
+                        gameOverTitle.style.textShadow = "0.05em 0.05em 0 darkgreen, -0.05em -0.05em 0 black, 0 0 10px #fff, 0 0 20px darkgreen, 0 0 30px darkgreen";
+
+                        gameOverText.style.opacity = 1;
+                        gameOverText.style.textShadow = "0.05em 0.05em 0 darkgreen, -0.05em -0.05em 0 black, 0 0 10px #fff, 0 0 20px darkgreen, 0 0 30px darkgreen";
+                    }, {once: true});
+                }, {once: true});
+            }
+
+            function levelSelect() {
+                levelSelectScreen.style.display = "block";
+                let levelSelectSpans = Array.from(document.getElementsByClassName("levelSelectSpan"));
+
+                for (let i = 0; i < levelSelectSpans.length; i++) {
+                    setTimeout(function() {
+                        let letter = levelSelectSpans[i];
+                        letter.style.animation = "slideDownFromTop 1s ease-in-out";
+                        letter.style.top = "0%";
+    
+                        if (i == levelSelectSpans.length - 1) {
+                            letter.addEventListener("animationend", function() {
+                                let levelSelectTitle = document.getElementById("levelSelectTitle");
+                                levelSelectTitle.style.animation = "levelSelectTitleAnimation 1s ease-in-out";
+    
+                                levelSelectTitle.addEventListener("animationend", function() {
+                                    levelSelectTitle.style.textShadow = "0.025em 0.025em 0 orange, 0.05em 0.05em 0 black";
+    
+                                    levelSelectTitle.addEventListener("animationend", function() {
+                                        setTimeout(function() {
+                                            levelSelectTitle.style.animation = "levelSelectTitleGrow 6s ease-in-out infinite";
+                                        }, 1000);
+                                    }, {once: true});
+                                }, {once: true});
+    
+                            }, {once: true});
+                        }
+                    }, (i + 1) * 150);
+                }
+            }
+
+            levelSelect()
+
+
+            // splashScreen.style.display = "none";
+
+            // start the game
+            // startGame();
 
         </script>
     </body>
