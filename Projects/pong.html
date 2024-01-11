@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #duck {
+                width: 300px;
+                height: auto;
+                position: absolute;
+            }
+            #paddle {
+                width: 100px;
+                height: 20px;
+                background-color: black;
+                position: absolute;
+                bottom: 20px;
+            }
+            body {
+                user-select: none;
+            }
+        </style>
+        <title>Duck Paddle Game</title>
+    </head>
+    <body>
+        <center>
+            <img id="duck" src="https://pngimg.com/d/rubber_duck_PNG54.png">
+            <div id="paddle"></div>
+        </center>
+
+        <script>
+            window.addEventListener("dragstart", function(event) {
+                event.preventDefault();
+            });
+
+            let ducky = document.getElementById("duck");
+            let paddle = document.getElementById("paddle");
+
+            ducky.style.left = "0px";
+            ducky.style.top = "0px";
+
+            let duckyVelocityX = 4;
+            let duckyVelocityY = 4;
+            let hardCode = 0;
+
+            paddle.style.left = "50%";
+
+            document.addEventListener("mousemove", function(event) {
+                paddle.style.left = event.clientX - (paddle.offsetWidth / 2) + "px";
+            });
+
+            function move() {
+                hardCode++;
+                let XPos = parseInt(ducky.style.left, 10);
+                let YPos = parseInt(ducky.style.top, 10);
+                let paddleX = parseInt(paddle.style.left, 10);
+                let paddleWidth = paddle.offsetWidth;
+
+                if (XPos < 0 || XPos > window.innerWidth - ducky.width) {
+                    duckyVelocityX *= -1;
+                }
+
+                if (YPos < 0 || (YPos > window.innerHeight - ducky.height && hardCode > 50)) {
+                    duckyVelocityY *= -1;
+                }
+
+                if (YPos + ducky.height >= window.innerHeight - paddle.offsetHeight - 20 && 
+                    XPos + ducky.width > paddleX && XPos < paddleX + paddleWidth) {
+                    duckyVelocityY *= -1;
+                }
+
+                ducky.style.left = `${XPos + duckyVelocityX}px`;
+                ducky.style.top = `${YPos + duckyVelocityY}px`;
+
+                requestAnimationFrame(move);
+            }
+
+            requestAnimationFrame(move);
+
+        </script>
+    </body>
+</html>
