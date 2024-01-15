@@ -6,6 +6,7 @@
                 width: 300px;
                 height: auto;
                 position: absolute;
+                transform: scaleX(-1);
             }
             #paddle {
                 width: 100px;
@@ -48,6 +49,11 @@
             });
 
             function move() {
+                if (duckyVelocityX < 0)
+                    ducky.style.transform = "scaleX(1)";
+                else 
+                    ducky.style.transform = "scaleX(-1)";
+
                 hardCode++;
                 let XPos = parseInt(ducky.style.left, 10);
                 let YPos = parseInt(ducky.style.top, 10);
