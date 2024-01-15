@@ -77,28 +77,6 @@
                 }
             }
 
-            @keyframes rotationWiggle {
-                0% {
-                    transform: rotate(0deg);
-                }
-
-                25% {
-                    transform: rotate(3deg);
-                }
-
-                50% {
-                    transform: rotate(0deg);
-                }
-
-                75% {
-                    transform: rotate(-3deg);
-                }
-
-                100% {
-                    transform: rotate(0deg);
-                }
-            }
-
             @keyframes fadeInOut {
                 0% {
                     font-size: 320%;
@@ -350,10 +328,10 @@
                 background-color: #FFD1DC;
                 top: 100%;
                 position: absolute;
-                z-index: 100;
+                z-index: 9999999;
             }
 
-            #loseScreenBackground {
+            #loseScreenBackground, #winScreenBackground {
                 /* position: absolute;
                 top: 50%;
                 left: 50%;
@@ -378,10 +356,9 @@
                 margin-bottom: 20%;
                 /* text-shadow: 0.05em 0.05em 0 blue, -0.05em -0.05em 0 red; */
                 /* text-shadow: 0.05em 0.05em 0 blue, -0.05em -0.05em 0 red, 0 0 10px #fff, 0 0 20px #fff, 0 0 30px white, 0 0 40px white; */
-
             } 
 
-            #gameOverText {
+            #gameOverText, #winText {
                 display: block;
                 text-align: center;
                 opacity: 0.5;
@@ -397,7 +374,7 @@
                 }
             }
 
-            #loseScreen {
+            #loseScreen, #winScreen {
                 z-index: 15;
                 top: 100%;
             }
@@ -425,24 +402,38 @@
                 display: none;
             }
 
-            #menuButton {
+            #menuButton, #menuButton2 {
                 /* background-color: #FFC0CB; */
                 background: url(https://cdn5.vectorstock.com/i/1000x1000/65/44/camouflage-vector-966544.jpg);
-                transform: rotate(2deg) translate(-50%);
+                transform: translate(-50%) rotate(2deg);
                 background-position: 15% 17%;
                 background-repeat: repeat;
             }
 
-            #menuButton:hover {
+            #menuButton2, #playAgainButton2 {
+                background: url() !important;
+                background-color: yellow !important;
+                color: black;
+            }
+
+            #playAgainButton2 {
+                background: url();
+            }
+
+            #menuButton2:hover, #playAgainButton2:hover {
+                border: 2px solid black !important;
+            }
+
+            #menuButton:hover, #menuButton2:hover {
                 width: 16%;
                 height: 6%;
                 font-size: 160%;
                 transform: translate(-50%) rotate(-2deg);
-                border: 2px white solid;
+                border: 3px white solid;
 
             }
 
-            #playAgainButton:hover {
+            #playAgainButton:hover, #playAgainButton2:hover {
                 width: 16%;
                 height: 6%;
                 font-size: 160%;
@@ -451,14 +442,14 @@
             }
 
 
-            #playAgainButton {
+            #playAgainButton, #playAgainButton2 {
                 background-position: 0% 5%;
                 background: url(https://cdn5.vectorstock.com/i/1000x1000/65/44/camouflage-vector-966544.jpg);
                 /* background-color: #FFD700; */
-                transform: rotate(-2deg) translate(-50%);
+                transform: translate(-50%) rotate(-2deg);
             }
 
-            #levelSelectTitle {
+            #levelSelectTitle, #winTitle {
                 font-size: 1000%;
                 z-index: 100;
                 color: white;
@@ -470,12 +461,11 @@
                 letter-spacing: 0.2em;
                 font-family: "chewy";
                 height: 100%;
-                transform-origin: center;
             }
 
             .levelSelectSpan {
                 position: relative;
-                top: -100%;
+                margin-top: -100%;
             }
 
             @keyframes levelSelectTitleAnimation {
@@ -513,14 +503,20 @@
                 color: white;
                 font-family: "Luckiest Guy";
                 font-size: 500%;
-                border: 2px solid black;
+                border: 3px solid black;
                 padding-top: 30px;
-                transition: all 0.4s;
+                transition: all 0.4s ease   ;
             }
 
             .levelSelectButton:hover {
-                color: black;
+                color: black !important;
                 background-color: lawngreen;
+                top: 39%;
+                width: 220px;
+                height: 220px;
+                font-size: 510%;
+                transform: translate(-50%) rotate(3deg);
+                box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.34), 0 6px 20px 0 rgba(0,0,0,0.34);
             }
 
             #level1Button {
@@ -538,10 +534,330 @@
             #level4Button {
                 left: 80%;
             }
+            
+            #shopButton, #backButton {
+                font-family: "Nunito";
+                position: absolute;
+                left: 50%;
+                transform: translate(-50%);
+                width: 20%;
+                height: 13%;
+                top: 75%;
+                font-size: 300%;
+                z-index: 999;
+                border-radius: 5%;
+                color: white;
+                background-color: orange;
+                border: 3px solid black;
+                transition: all 0.4s;
+            }
 
+            #shopButton:hover, #backButton:hover {
+                color: black;
+                background-color: lawngreen;
+                box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.34), 0 6px 20px 0 rgba(0,0,0,0.34);
+                transform: translate(-50%);
+                width: 25%;
+                font-size: 350%;
+                letter-spacing: 0.3em;
+            }
+
+            #trophy {
+                align-items: center;
+                margin-left: 50%;
+                transform: translate(-50%);
+                height: 30%;
+                width: auto;
+                margin-top: 19%;
+                animation: linear infinite 6s rotationWiggle;
+            }
+
+            #winScreenBackground {
+                background-color: magenta;
+                z-index: 15;
+            }
+
+            #winTitle {
+                margin-top: 9%;
+                font-size: 750%;
+                animation: winScreenAnimation 6s infinite ease-in-out;
+                height: auto;
+                text-shadow: 0.05em 0.05em 0 black;
+            }
+
+            #winText {
+                opacity: 1;
+            }
+
+            @keyframes rotationWiggle {
+                0% {
+                    transform: translate(-50%) rotate(0deg);
+                }
+
+                25% {
+                    transform: translate(-50%) rotate(3deg);
+                }
+
+                50% {
+                    transform: translate(-50%) rotate(0deg);
+                }
+
+                75% {
+                    transform: translate(-50%) rotate(-3deg);
+                }
+
+                100% {
+                    transform: translate(-50%) rotate(0deg);
+                }
+            }
+
+            @keyframes winScreenAnimation {
+                0% {
+                    font-size: 750%;
+                }
+                
+                50% {
+                    font-size: 780%;
+                }
+
+                100% {
+                    font-size: 750%;
+                }
+            }
+
+            #healthDisplay {
+                display: block;
+                position: fixed;
+                z-index: 50;
+                margin-top: 20px;
+                margin-left: 20px;
+                height: 5%;
+                width: auto;
+            }
+
+            #shopScreen {
+                display: none;
+                z-index: 999;
+            }
+
+            #upgrades {
+                color: #fff;
+                text-shadow:
+                    0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+                    0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+                font-family: "Vibur", sans-serif;
+                text-transform: uppercase;
+                position: absolute;
+                left: 50%;
+                transform: translate(-50%);
+                font-size: 950%;
+                margin-bottom: 0;
+                margin-top: 5%;
+                top: -100%;
+            }
+
+            @keyframes lightFlicker {
+                0% {
+                    text-shadow: 
+                        0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+                        0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+                }
+
+                40% {
+                    text-shadow: 
+                        0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+                        0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+                }
+
+                42% {
+                    text-shadow: none;
+                }
+
+                43% {
+                    text-shadow: 
+                        0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+                        0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+                }
+
+                44% {
+                    text-shadow: none;
+                }
+
+                45% {
+                    text-shadow: 
+                        0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+                        0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+                }
+
+                98% {
+                    text-shadow: 
+                        0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+                        0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+                }
+
+                99% {
+                    text-shadow: none;
+                }
+
+                100% {
+                    text-shadow: 
+                        0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+                        0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+                }
+            }
+
+            @keyframes lightFlicker2 {
+                0% {
+                    text-shadow: 
+                        0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+                        0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+                }
+
+                50% {
+                    text-shadow: 
+                        0 0 5px #fff, 0 0 7px #fff, 0 0 15px #fff, 0 0 30px #0fa,
+                        0 0 60px #0fa, 0 0 70px #0fa, 0 0 80px #0fa, 0 0 110px #0fa;
+                }
+
+                100% {
+                    text-shadow: 
+                        0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+                        0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+                }
+            }
+
+            @keyframes spin360 {
+                0% {
+                    transform: translate(-50%, -50%) rotate(0deg);
+                }
+
+                100% {
+                    transform: translate(-50%, -50%) rotate(360deg);
+                }
+            }
+
+            #upgrades span {
+                animation: lightFlicker2 0.1s ease-in-out infinite;
+            }
+
+            #healthUpgrade, #doubleShotUpgrade, #fireRateUpgrade {
+                position: absolute;
+                left: 21%;
+                width: 10%;
+                height: auto;
+                background-color: rgb(0, 0, 0, 0.85);
+                padding: 3%;
+                top: 55%;
+                transform: translate(-50%, -50%);
+                padding-bottom: 6%;
+                border: 3px #0fa solid;
+                transition: all 0.4s;
+            }
+
+            #doubleShotUpgrade {
+                left: 50%;
+                padding-top: 1.6%;
+                padding-bottom: 4.9%;
+            }
+
+            #priceTagDoubleShot {
+                left: 50% !important;
+            }
+
+            #priceTagFireRate {
+                left: 80% !important;
+            }
+
+            #fireRateUpgrade {
+                padding-left: 2%;
+                padding-right: 2%;
+                padding-top: 2.88%;
+                padding-bottom: 5%;
+                left: 80%;
+                width: 12%;
+            }
+
+            #priceTagHealth, #priceTagDoubleShot, #priceTagFireRate {
+                position: absolute;
+                color: rgb(0, 223, 119);
+                font-family: "Luckiest Guy";
+                left: 21%;
+                top: 62.8%;
+                transform: translate(-50%, -50%);
+                transform: all 0.4s ease-in-out;
+                pointer-events: none;
+                font-size: 230%;
+            }
+
+            #healthUpgrade:hover ~ #priceTagHealth {
+                animation: spin360 0.5s ease-in-out;
+                color: black;
+                font-size: 250%;
+            }
+
+            #doubleShotUpgrade:hover ~ #priceTagDoubleShot {
+                animation: spin360 0.5s ease-in-out;
+                color: black;
+                font-size: 250%;
+            }
+
+            #fireRateUpgrade:hover ~ #priceTagFireRate {
+                animation: spin360 0.5s ease-in-out;
+                color: black;
+                font-size: 250%;
+            }
+
+            #healthUpgrade:hover, #doubleShotUpgrade:hover, #fireRateUpgrade:hover {
+                background-color: white;
+                border: black 3px solid;
+                width: 11%;
+            }
+
+            #fireRateUpgrade:hover {
+                width: 13%;
+            }
+
+            #backButton:hover {
+                background-color: white;
+                border: 3px solid black;
+            }
+
+            #backButton {
+                background-color: rgb(0, 0, 0, 0.85);
+                color: #0fa;
+                border: 3px solid #0fa;
+                top: 80%;
+            }
+
+            #shopItems {
+                position: absolute;
+                display: none;
+            }
+
+            #money {
+                position: fixed;
+                display: none;
+                right: 0.5em;
+                top: 0.5em;
+                color: black;
+                font-family: "Luckiest Guy";
+                z-index: 9999;
+                padding: 0.3%;
+                padding-bottom: 0;
+                padding-top: 0.45%;
+                margin: 0;
+                background-color: #0fa;
+                border: 3px black solid;
+                font-size: 250%;
+            }
+
+            /* bookmark */
         </style>
     </head>
     <body>
+
+        <img id="healthDisplay">
+        <h1 id="money">$0</h1>
 
         <!-- containers for each screen -->
 
@@ -550,6 +866,24 @@
             <p style="color: white;">Please wait for the page to fully load before continuing.</p>
             <!-- start the splash screen on click -->
             <button onclick="startSplash()">Continue</button>
+        </div>
+
+        <div id="shopScreen" class="fill">
+            <img id="shopScreenBackground" class="fill" src="/Users/anthony/Documents/shopScreen.png">
+            <h1 id="upgrades">upg<span>r</span>ad<span>e</span>s</h1>
+
+            <div id="shopItems" class="fill">
+                <img id="healthUpgrade" src="https://png.pngtree.com/png-vector/20220723/ourmid/pngtree-vector-symbol-of-video-game-icon-sign-representing-menu-layer-for-game-assets-vector-png-image_25064284.png">
+                <h1 id="priceTagHealth">$1500</h1>
+    
+                <img id="doubleShotUpgrade" src="/Users/anthony/Documents/fireRate.png">
+                <h1 id="priceTagDoubleShot">$1000</h1>
+
+                <img id="fireRateUpgrade" src="/Users/anthony/Documents/fireRateSymbol.png">
+                <h1 id="priceTagFireRate">$500</h1>
+    
+                <button id="backButton">Back</button>
+            </div>
         </div>
 
         <!-- coment stuff ere ----------------------------------------------------------------------------------------------------------------------------------------------------- -->
@@ -561,7 +895,7 @@
             </h3>
 
             <h3 id="instructions3" class="instructions">
-                <span class="instructionsSpan">Gameplay:</span><br>Move around to uncover the map.
+                <span class="instructionsSpan">Gameplay:</span><br>Win by shooting and eliminating all enemy tanks.
             </h3>
             
             <h3 id="instructions5" class="instructions">
@@ -575,11 +909,11 @@
             <div class="textBackground"></div>
 
             <h3 id="instructions2" class="instructions"><span class="instructionsSpan">
-                Controls:</span><br>Press the Escape key to pause the game.
+                <span class="instructionsSpan">Gameplay:</span><br>Move around to uncover the map.
             </h3>
 
             <h3 id="instructions4" class="instructions">
-                <span class="instructionsSpan">Gameplay:</span><br>Win by shooting and eliminating all enemy tanks.
+                <span class="instructionsSpan">Gameplay:</span><br>Eliminating enemies will gain you currency
             </h3>
 
             <h3 id="instructions6" class="instructions">
@@ -602,19 +936,35 @@
             <button id="menuButton" class="button">Menu</button>
         </div>
 
-        <div class="fill" style="display: none;" id="winScreen"></div>
+        <!--  win screeeeeegrdiughdfsiughfuighsifdhguifdhgiusfdhgisufdhuidshgiuofdhgiusdfhisudfhgiudsfhgiusdfhgioufdshguisdfhgsdiufghfduisghfsduighfdsiuohgfsdiuogh -->
+        <div id="winScreenBackground" class="textBackground"></div>
+        <div class="fill" style="display: none;" id="winScreen">
+            <h1 id="winTitle" class="instructionsSpan">You Win!</h1>
+            <img id="trophy" src="https://static.wikia.nocookie.net/little-alchemy/images/c/cd/Trophy.png/revision/latest?cb=20231126154014">
+            <h2 id="winText">You eliminated all enemy tanks.</h2>
+            <button id="playAgainButton2" class="button">Play Again</button>
+            <button id="menuButton2" class="button">Menu</button>
+        </div>
 
         <!-- ---------------------------------------------------------------------------------------------------------------------------------------- -->
         <div id="levelSelectScreen" style="display: none;" class="fill">
             <h1 id="levelSelectTitle">
-                <span class="levelSelectSpan">L</span><span class="levelSelectSpan">E</span><span class="levelSelectSpan">V</span><span class="levelSelectSpan">E</span><span class="levelSelectSpan">L</span> <span class="levelSelectSpan">S</span><span class="levelSelectSpan">E</span><span class="levelSelectSpan">L</span><span class="levelSelectSpan">E</span><span class="levelSelectSpan">C</span><span class="levelSelectSpan">T</span>
+                <!-- add zero width spaces at the end to be able to put the code on multiple lines -->
+                <span class="levelSelectSpan">L</span><span class="levelSelectSpan">E</span>&#8203;
+                <span class="levelSelectSpan">V</span><span class="levelSelectSpan">E</span>&#8203;
+                <span class="levelSelectSpan">L</span> <span class="levelSelectSpan">S</span>&#8203;
+                <span class="levelSelectSpan">E</span><span class="levelSelectSpan">L</span>&#8203;
+                <span class="levelSelectSpan">E</span><span class="levelSelectSpan">C</span>&#8203;
+                <span class="levelSelectSpan">T</span>&#8203;
             </h1>
             <img class="fill" src="/Users/anthony/Pictures/final game/levelSelectScreen.png">
-            <button id="level1Button" class="levelSelectButton">1</button>
-            <button id="level2Button" class="levelSelectButton">2</button>
-            <button id="level3Button" class="levelSelectButton">3</button>
-            <button id="level4Button" class="levelSelectButton">4</button>
-            <button id="shopButton">Shop</button>
+            <div id="levelSelectButtonsDiv" style="top: 100%;" class="fill">
+                <button id="level1Button" class="levelSelectButton">1</button>
+                <button id="level2Button" class="levelSelectButton">2</button>
+                <button id="level3Button" class="levelSelectButton">3</button>
+                <button id="level4Button" class="levelSelectButton">4</button>
+                <button id="shopButton">Shop</button>
+            </div>
         </div>
 
         <div id="brightnessDiv" class="fill" style="opacity: 0; background-color: black; z-index: 10;"></div>
@@ -640,6 +990,7 @@
 
         <!-- import pathfinding library -->
         <script src="https://cdn.jsdelivr.net/npm/pathfinding@0.4.18/visual/lib/pathfinding-browser.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
         <script>
             // prevent elements from being draggable
             document.body.addEventListener("dragstart", function(event) { event.preventDefault(); });
@@ -666,6 +1017,7 @@
             let brightnessDiv = document.getElementById("brightnessDiv");
 
             // counters
+
             let firstRedraw = true;
             let movingUp = false;
             let movingDown = false;
@@ -676,9 +1028,24 @@
             let preSplashScreen = document.getElementById("preSplashScreen");
             let splashScreen = document.getElementById("splashScreen");
             let levelSelectScreen = document.getElementById("levelSelectScreen");
+            let shopScreen = document.getElementById("shopScreen");
             let gameScreen = document.getElementById("gameScreen");
             let loseScreen = document.getElementById("loseScreen");
             let winScreen = document.getElementById("winScreen");
+
+            // lose screen elements
+            let loseScreenBackground = document.getElementById("loseScreenBackground");
+            let gameOverTitle = document.getElementById("gameOverTitle");
+            let gameOverText = document.getElementById("gameOverText");
+            let playAgainButton = document.getElementById("playAgainButton");
+            let menuButton = document.getElementById("menuButton");
+
+            // win screen elements
+            let winScreenBackground = document.getElementById("winScreenBackground");
+            let winScreenTitle = document.getElementById("winTitle");
+            let winScreenText = document.getElementById("winText");
+            let playAgainButton2 = document.getElementById("playAgainButton2");
+            let menuButton2 = document.getElementById("menuButton2");
 
             // initialize velocities
             let ySpeedUp = 0;
@@ -711,7 +1078,8 @@
             let bullets = [];
             let enemyIndexes = [];
             let tutorialCounter = 0;
-            let tankHealth = 5;
+            let fullTankHealth = 10;
+            let tankHealth = fullTankHealth;
 
             let pause = false;
             let callStackDelay = 0;
@@ -736,28 +1104,60 @@
             let enemyBulletSrc = "https://png.pngtree.com/png-vector/20220520/ourmid/pngtree-projectile-from-weapon-mortar-on-white-background-is-insulated-png-image_4697545.png";
             let shadowSrc = "https://images.squarespace-cdn.com/content/v1/58f56c10d2b857170c9ac044/1519534019246-BTNF5DSIPKUZD7FB5VY6/Black+Square";
 
+            // health bars
+            let health1 = "/Users/anthony/Documents/healthBars/health1.png";
+            let health2 = "/Users/anthony/Documents/healthBars/health2.png";
+            let health3 = "/Users/anthony/Documents/healthBars/health3.png";
+            let health4 = "/Users/anthony/Documents/healthBars/health4.png";
+            let health5 = "/Users/anthony/Documents/healthBars/health5.png";
+            let health6 = "/Users/anthony/Documents/healthBars/health6.png";
+
             // create sprites
 
+            // active
             let tank = document.createElement("img");
             tank.src = tankSrc;
-
-            let stone = document.createElement("img");
-            stone.src = stoneSrc;
-
-            let cardboard = document.createElement("img");
-            cardboard.src = cardboardSrc;
-
+            
             let bullet = document.createElement("img");
             bullet.src = bulletSrc;
-
+            
             let enemy = document.createElement("img");
             enemy.src = enemySrc;
 
             let enemyBullet = document.createElement("img");
             enemyBullet.src = enemyBulletSrc;
 
+            // passive
+            let stone = document.createElement("img");
+            stone.src = stoneSrc;
+            
+            let cardboard = document.createElement("img");
+            cardboard.src = cardboardSrc;
+
             let shadow = document.createElement("img");
             shadow.src = shadowSrc;
+
+            let healthDisplay = document.getElementById("healthDisplay");
+            let moneyDisplay = document.getElementById("money");
+
+            function resetGame(func) {
+                middleX = window.innerWidth / 2 - tankSize / 2;
+                middleY = window.innerHeight / 2 - tankSize / 2;
+                blocks = [];
+                bullets = [];
+                enemyIndexes = [];
+                tutorialCounter = 0;
+                tankHealth = fullTankHealth;
+                firstRedraw = true;
+                callStackDelay = 0;
+                smallestX = Infinity;
+                smallestY = Infinity;
+                moneyDisplay.style.display = "none";
+                healthDisplay.style.display = "none";
+                x = 0;
+                y = 0;
+                func();
+            }
 
             function pageTransition(hardcode) {
                 let rects = Array.from(document.getElementsByClassName("rectangle"));
@@ -775,6 +1175,45 @@
                     if (hardcode == 1) {
                         splashScreen.style.display = "none";
                         startGame();
+                    } else if (hardcode == 2) {
+                        setTimeout(function() {
+                            pause = true;
+                        }, 100);
+
+                        setTimeout(function() {
+                            brightnessDiv.style.animation = "undimBrightness 1s ease-in-out";
+                            brightnessDiv.addEventListener("animationend", function() {
+                                brightnessDiv.style.opacity = "0";
+                                pause = false;
+                                draw();
+                            }, {once: true});
+                        }, 1500);
+
+                        hideLoseScreen();
+                        hideWinScreen();
+
+                        pause = false;
+                        resetGame(draw);
+                    } else if (hardcode == 3) {
+                        hideLoseScreen();
+                        hideWinScreen();
+
+                        pause = true;
+
+                        resetGame(levelSelect)
+
+                        setTimeout(function() {
+                            brightnessDiv.style.animation = "undimBrightness 1s ease-in-out";
+                            brightnessDiv.style.opacity = "0";
+                        }, 1500);
+
+                    } else if (hardcode == 4) {
+                        levelSelectScreen.style.display = "none";
+                        pause = false;
+                        resetGame(draw);
+                    } else if (hardcode == 5) {
+                        levelSelectScreen.style.display = "none";
+                        showShop();
                     }
 
                     setTimeout(function() {
@@ -782,11 +1221,6 @@
                             setTimeout(function() {
                                 rects[i].style.animation = "slideDownFromMiddle 1s ease-in-out";
                                 rects[i].style.top = "100%";
-                                rects[i].addEventListener("animationend", function() {
-                                    setTimeout(function() {
-                                        rects[i].style.display = "none";
-                                    }, 500);
-                                }, {once: true});
                             }, ((5 - i) + 1) * 100);
                         }
                     }, 500);
@@ -796,6 +1230,21 @@
             // game loop
             function draw() {
                 if (pause) return;
+
+                if (tankHealth == 10) {
+                    healthDisplay.src = health1;
+                } else if (tankHealth == 8) {
+                    healthDisplay.src = health2;
+                } else if (tankHealth == 6) {
+                    healthDisplay.src = health3;
+                } else if (tankHealth == 4) {
+                    healthDisplay.src = health4;
+                } else if (tankHealth == 2) {
+                    healthDisplay.src = health5;
+                }
+
+                healthDisplay.style.display = "block";
+                moneyDisplay.style.display = "block";
 
                 // clear all elements on screen
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -884,9 +1333,8 @@
 
                 // load settings back
                 ctx.restore();
-                
-                // designing the levels
 
+                // tutorial
                 function tutorial() {
                     // access elements
                     let instructions1 = document.getElementById("instructions1");
@@ -991,6 +1439,8 @@
                         }, {once: true});
                     }
                 }
+                
+                // designing the levels
 
                 if (firstRedraw) {
                     if (level == 1) {
@@ -1044,7 +1494,8 @@
                         gridWidth = 15;
                         gridLength = 12;
 
-                        // tutorial
+                        // start tutorial
+                        // tutorial();
                         
                     // repeat for other levels
                     } else if (level == 2) {
@@ -1547,10 +1998,19 @@
             }
 
             function updateEnemies() {
+                let defeatedEnemies = 0;
+
                 // loop through all enemies
                 for (let i of enemyIndexes) {
+                    // // temporary delete this later-                    --------------------------------------------------
+                    // defeatedEnemies = enemyIndexes.length;
+                    // break;
+
                     // skip iteration if enemy is destroyed
-                    if (blocks[i][4]) continue;
+                    if (blocks[i][4]) {
+                        defeatedEnemies++;
+                        continue;
+                    }
 
                     // initiliaze enemy properties
                     let enemyX = blocks[i][0] - x;
@@ -1574,7 +2034,7 @@
                             // shoot at the tank
                             createBullet(enemyX, enemyY);
                             // reset the buffer
-                            blocks[i][9] = 65;
+                            blocks[i][9] = 65; //-----------------------------------------------------sdfhsdiuhgfsdiuhgsdiufhgidsfhgiudfshgiuodfshgoidufshgiudfshgiusfdhgiusdfhg
                         }
                         
                         // increment firerate buffer
@@ -1666,12 +2126,54 @@
                         }
                     }
                 }
+
+                if (defeatedEnemies == enemyIndexes.length) {
+                    pause = true;
+                    brightnessDiv.style.animation = "dimBrightness 1s";
+                    brightnessDiv.style.opacity = "0.7";
+
+                    brightnessDiv.addEventListener("animationend", function() {
+                        document.getElementById("level" + String(level) + "Button").style.color = "lawngreen";
+    
+                        winScreen.style.animation = "slideUpFromBottom ease-in-out 1s";
+                        winScreen.style.top = "0%";
+                        winScreen.style.display = "block";
+    
+                        winScreenBackground.style.animation = "slideDownFromTop ease-in-out 1s";
+                        winScreenBackground.style.top = "0%";
+                        winScreenBackground.style.display = "block";
+
+                        winScreenBackground.addEventListener("animationend", function() {
+                            confetti({spread: 180, particleCount: 250, gravity: 0.5, ticks: 400});
+                            menuButton2.style.display = "block";
+                            playAgainButton2.style.display = "block";
+    
+                            menuButton2.classList.add("fadeIn");
+                            playAgainButton2.classList.add("fadeIn");
+
+                            function playAgain2EventListener() {
+                                pageTransition(2);
+                                menuButton.removeEventListener("click", menuButton2EventListener);
+                            }
+
+                            function menuButton2EventListener() {
+                                pageTransition(3);
+                                playAgainButton.removeEventListener("click", playAgain2EventListener);
+                            }
+
+                            playAgainButton2.addEventListener("click", playAgain2EventListener, {once: true});
+                            menuButton2.addEventListener("click", menuButton2EventListener, {once: true});
+
+                        }, {once: true});
+                    }, {once: true});
+
+                }
             }
 
             function startGame() {
                 // show game screen
                 gameScreen.style.display = "block";
-                level = 4;
+                level = 1;
 
                 // create movement
 
@@ -1792,16 +2294,17 @@
                         collision = true;
                         tankHealth--;
                         if (tankHealth <= 0) {
+                            healthDisplay.src = health6;
                             pause = true;
                             setTimeout(function() {
                                 brightnessDiv.style.animation = "dimBrightness 1s";
                                 brightnessDiv.style.opacity = "0.7";
                                 brightnessDiv.addEventListener("animationend", function() {
-
+                                    showLoseScreen();
                                 }, {once: true});
                             }, 50);
                         }
-                        // conditions for tank hit --------------------------------------------------------------------------add commenets----------------------------------------------------
+                        // conditions for tank hit --------------------------------------------------------------------------commenets----------------------------------------------------
                     }   
 
                     outerLoop: for (let block of blocks) {
@@ -1857,6 +2360,9 @@
                                     ctx.clearRect(blockX, blockY, blockSize, blockSize);
                                     // internally remove the block
                                     block[4] = true;
+
+                                    if (block[2].src == enemySrc)
+                                        moneyDisplay.innerText = "$" + (Number(moneyDisplay.innerText.slice(1)) + 50);
                                 }
                             }
 
@@ -1908,21 +2414,48 @@
                 }, 3000);
             }
 
-            preSplashScreen.style.display = "none";
+            function hideLoseScreen() {
+                loseScreen.style.top = "100%";
+                loseScreen.style.display = "none";
+
+                loseScreenBackground.style.top = "100%";
+                loseScreenBackground.style.display = "none";
+
+                playAgainButton.style.display = "none";
+                menuButton.style.display = "none";
+
+                gameOverTitle.style.opacity = 0.5;
+                gameOverTitle.style.textShadow = "none";
+
+                gameOverText.style.opacity = 0,5;
+                gameOverText.style.textShadow = "none";
+            }
+
+            function hideWinScreen() {
+                winScreen.style.top = "100%";
+                winScreen.style.display = "none";
+
+                winScreenBackground.style.top = "100%";
+                winScreenBackground.style.display = "none";
+
+                playAgainButton2.style.display = "none";
+                menuButton2.style.display = "none";
+
+                winScreenTitle.style.textShadow = "none";
+                winScreenText.style.textShadow = "none";
+
+                confetti.reset();
+            }
 
             function showLoseScreen() {
-                let loseScreenBackground = document.getElementById("loseScreenBackground");
-                let gameOverTitle = document.getElementById("gameOverTitle");
-                let gameOverText = document.getElementById("gameOverText");
-                let playAgainButton = document.getElementById("playAgainButton");
-                let menuButton = document.getElementById("menuButton");
-    
                 loseScreen.style.animation = "slideUpFromBottom ease-in-out 1s";
                 loseScreen.style.top = "0%";
+                loseScreen.style.display = "block";
                 
                 loseScreenBackground.style.animation = "slideDownFromTop ease-in-out 1s";
                 loseScreenBackground.style.top = "0%";
-    
+                loseScreenBackground.style.display = "block";
+
                 loseScreenBackground.addEventListener("animationend", function() {
                     gameOverTitle.style.animation = "glow ease-in-out 1s";
                     gameOverText.style.animation = "glow ease-in-out 1s";
@@ -1932,6 +2465,19 @@
     
                     playAgainButton.classList.add("fadeIn");
                     menuButton.classList.add("fadeIn");
+
+                    function playAgainEventListener() {
+                        pageTransition(2);
+                        menuButton.removeEventListener("click", menuButtonEventListener);
+                    }
+
+                    function menuButtonEventListener() {
+                        pageTransition(3);
+                        playAgainButton.removeEventListener("click", playAgainEventListener);
+                    }
+
+                    playAgainButton.addEventListener("click", playAgainEventListener, {once: true});
+                    menuButton.addEventListener("click", menuButtonEventListener, {once: true});
 
                     // add click even tlistenres here.-----------------------.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-._>_._>-_>->_.-.-.-.-.-.-.->_>_>_>_>_>_>_>_>_>_>->_.->_.->_.->_.
                     gameOverText.addEventListener("animationend", function() {
@@ -1944,44 +2490,145 @@
                 }, {once: true});
             }
 
+            
             function levelSelect() {
-                levelSelectScreen.style.display = "block";
                 let levelSelectSpans = Array.from(document.getElementsByClassName("levelSelectSpan"));
+                let levelSelectButtonsDiv = document.getElementById("levelSelectButtonsDiv");
+                let levelSelectTitle = document.getElementById("levelSelectTitle");
+                let levelSelectButtons = Array.from(document.getElementsByClassName("levelSelectButton"));
+                let shopButton = document.getElementById("shopButton");
+                
+                levelSelectScreen.style.display = "block";
+                shopButton.style.display = "block";
 
-                for (let i = 0; i < levelSelectSpans.length; i++) {
-                    setTimeout(function() {
-                        let letter = levelSelectSpans[i];
-                        letter.style.animation = "slideDownFromTop 1s ease-in-out";
-                        letter.style.top = "0%";
-    
-                        if (i == levelSelectSpans.length - 1) {
-                            letter.addEventListener("animationend", function() {
-                                let levelSelectTitle = document.getElementById("levelSelectTitle");
-                                levelSelectTitle.style.animation = "levelSelectTitleAnimation 1s ease-in-out";
-    
-                                levelSelectTitle.addEventListener("animationend", function() {
-                                    levelSelectTitle.style.textShadow = "0.025em 0.025em 0 orange, 0.05em 0.05em 0 black";
-    
-                                    levelSelectTitle.addEventListener("animationend", function() {
-                                        setTimeout(function() {
-                                            levelSelectTitle.style.animation = "levelSelectTitleGrow 6s ease-in-out infinite";
-                                        }, 1000);
-                                    }, {once: true});
-                                }, {once: true});
-    
-                            }, {once: true});
-                        }
-                    }, (i + 1) * 150);
+                levelSelectButtons[0].addEventListener("click", button1);
+                levelSelectButtons[1].addEventListener("click", button2);
+                levelSelectButtons[2].addEventListener("click", button3);
+                levelSelectButtons[3].addEventListener("click", button4);
+
+                shopButton.addEventListener("click", shopClicked);
+
+                function shopClicked() {
+                    removeListeners();
+                    pageTransition(5);
                 }
+
+                function removeListeners() {
+                    pause = true;
+                    levelSelectButtons[0].removeEventListener("click", button1);
+                    levelSelectButtons[1].removeEventListener("click", button2);
+                    levelSelectButtons[2].removeEventListener("click", button3);
+                    levelSelectButtons[3].removeEventListener("click", button4);
+                    shopButton.removeEventListener("click", shopClicked);
+                }
+
+                function button1() {
+                    pageTransition(4);
+                    level = 1;
+                    removeListeners();
+                }
+
+                function button2() {
+                    pageTransition(4);
+                    level = 2;
+                    removeListeners();
+                }
+
+                function button3() {
+                    pageTransition(4);
+                    level = 3;
+                    removeListeners();
+                } 
+                
+                function button4() {
+                    pageTransition(4);
+                    level = 4;
+                    removeListeners();
+                }
+
+                for (let letterSpan of levelSelectSpans) {
+                    letterSpan.style.top = "-100%";
+                    letterSpan.style.animation = "";
+                }
+
+                levelSelectTitle.style.animation = "";
+                levelSelectTitle.style.textShadow = "none";
+
+                levelSelectButtonsDiv.style.display = "none";
+                
+                setTimeout(function() {
+                    for (let i = 0; i < levelSelectSpans.length; i++) {
+                        setTimeout(function() {
+                            let letter = levelSelectSpans[i];
+                            letter.style.animation = "slideDownFromTop 1s ease-in-out";
+                            letter.style.top = "0%";
+        
+                            if (i == levelSelectSpans.length - 1) {
+                                letter.addEventListener("animationend", function() {
+                                    levelSelectTitle.style.animation = "levelSelectTitleAnimation 1s ease-in-out";
+        
+                                    levelSelectTitle.addEventListener("animationend", function() {
+                                        levelSelectButtonsDiv.style.animation = "slideUpFromBottom 2s ease-in-out";
+                                        levelSelectButtonsDiv.style.display = "block";
+                                        levelSelectButtonsDiv.style.top = "0%";
+    
+                                        levelSelectTitle.style.textShadow = "0.025em 0.025em 0 orange, 0.05em 0.05em 0 black";
+        
+                                        levelSelectTitle.addEventListener("animationend", function() {
+                                            setTimeout(function() {
+                                                levelSelectTitle.style.animation = "levelSelectTitleGrow 6s ease-in-out infinite";
+                                            }, 1000);
+                                        }, {once: true});
+                                    }, {once: true});
+        
+                                }, {once: true});
+                            }
+                        }, (i + 1) * 150);
+                    }
+                }, 1000);
             }
 
-            levelSelect()
+            // levelSelect()
 
+            preSplashScreen.style.display = "none";
 
-            // splashScreen.style.display = "none";
+            splashScreen.style.display = "none";
 
             // start the game
             // startGame();
+
+            showShop()
+            function showShop() {
+                shopScreen.style.display = "block";
+    
+                let shopItems = document.getElementById("shopItems");
+                
+                setTimeout(function() {
+                    shopItems.style.display = "block";
+                    shopItems.style.animation = "slideUpFromBottom 2s ease-in-out"
+                }, 1000);
+    
+                let upgrades = document.getElementById("upgrades");
+                upgrades.style.animation = "slideDownFromTop 2s ease-in-out";
+                upgrades.style.top = "0%";
+                
+                upgrades.addEventListener("animationend", function() {
+                    upgrades.style.animation = "lightFlicker 10s linear infinite";
+                    moneyDisplay.className = "fadeIn";
+                    moneyDisplay.style.display = "block";
+                }, {once: true});
+
+                let healthUpgrade = document.getElementById("healthUpgrade");
+                let doubleShotUpgrade = document.getElementById("doubleShotUpgrade");
+                let fireRateUpgrade = document.getElementById("fireRateUpgrade");
+                let backButton = document.getElementById("backButton");
+
+                let money = Number(moneyDisplay.splice(1));
+
+                function healthListener() {
+
+                }
+            }            
 
         </script>
     </body>
