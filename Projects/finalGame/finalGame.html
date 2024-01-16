@@ -23,9 +23,11 @@
                 /* fill the entire screen */
                 height: 100%;
                 width: 100%;
-                background-color: rgb(155, 74, 74);
+                /* background-color: rgb(155, 74, 74); */
+                background-color: rgb(107, 107, 107);
             }
 
+            /* make a black box less see through to dim the screen */
             @keyframes dimBrightness {
                 0% {
                     opacity: 0;
@@ -36,6 +38,7 @@
                 }
             }
 
+            /* make a black box more see through to undim the screen */
             @keyframes undimBrightness {
                 0% {
                     opacity: 0.7;
@@ -46,7 +49,7 @@
                 }
             }
 
-            #splashScreen h1 {
+            #splashScreen h1, #victoryTitle {
                 /* align text */
                 text-align: center;
                 /* set font properties */
@@ -56,7 +59,9 @@
                 transform: rotate(-8deg);
                 top: 19%;
                 left: 1.5%;
+                /* make text uppercase */
                 text-transform: uppercase;
+                /* add animation */
                 animation: titleRotate 5s ease-in-out infinite;
             }
 
@@ -78,26 +83,19 @@
             }
 
             @keyframes fadeInOut {
+                /* full opacity */
                 0% {
                     font-size: 320%;
                     opacity: 1;
                 }
 
-                /* 15% {
-                    font-size: 320%;
-                    opacity: 1;
-                } */
-
+                /* no opacity */
                 50% {
                     font-size: 300%;
                     opacity: 0;
                 }
 
-                /* 85% {
-                    font-size: 320%;
-                    opacity: 1;
-                } */
-
+                /* full opacity */
                 100% {
                     font-size: 320%;
                     opacity: 1;
@@ -105,7 +103,7 @@
             }
 
             @keyframes fadeIn {
-                /* start at fully transparent */
+                /* start fully transparent */
                 0% { 
                     opacity: 0;
                 }
@@ -127,8 +125,9 @@
                     opacity: 0;
                 }
             }
-
+ 
             @keyframes slideDownFromTop {
+                /* start off of the screen (above) */
                 0% {
                     top: -100%;
                 }
@@ -154,19 +153,18 @@
             }
 
             #splashScreen {
+                /* send image off the screen for animation */
                 top: -100%;
             }
 
             #tactical {
                 color: #FFA500;
-                /* flashy text shadow */
                 text-shadow: 0.025em 0.025em 0 white, 0.05em 0.05em 0 #CC0077;
             }
 
             #tanks {
                 margin-top: -3%;
                 color: #CC0077;
-                /* flashy text shadow */
                 text-shadow: 0.025em 0.025em 0 orange, 0.05em 0.05em 0 black;
             }
             
@@ -180,38 +178,32 @@
                 /* position at top left corner */
                 top: 0%;
                 left: 0%;
+                /* remove all extra space around element */
                 margin: 0;
                 padding: 0;
             }
 
-            /* class for centering element */
-            .center {
-                /* position half way horizontally */
-                left: 50%;
-                /* position half way vertically */
-                top: 50%;
-                /* move by half of your size */
-                transform: translate(-50%, -50%);
-                /* remove margin and padding */
-            }
-
             #splashScreen p {
-                /* add spacing below and to th left */
+                /* set position to the bottom of the screen */
+                bottom: 0%;
+                /* add margins to avoid touching the border */
                 margin-left: 1em;
                 margin-bottom: 1em;
-                bottom: 0%;
+                /* center lines on each other */
+                text-align: center;
+                /* change font properties */
                 font-family: "Chewy";
                 font-size: 120%;
-                text-align: center;
                 color: white;
                 /* 1px border */
                 text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
             }
 
             #clickAnywhereText {
-                top: 70%;
+                /* center horizontally */
                 left: 50%;
                 transform: translate(-50%);
+                top: 70%;
                 font-size: 320%;
                 position: absolute;
                 font-family: "Nunito";
@@ -236,14 +228,16 @@
             }
 
             .textBackground {
-                position: absolute;
+                /* center */
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
+                position: absolute;
                 height: 50%;
                 width: 65%;
                 background-color: #FFA500;
                 border: solid orangered 0.7em;
+                /* round edges */
                 border-radius: 4em;
             }
 
@@ -257,7 +251,9 @@
                 /* transform: translate(-50%, -50%); */
                 text-align: center;
                 font-family: "Nunito";
+                /* make text wrap onto new line */
                 max-width: 55%;
+                /* center horizontally */
                 margin-left: 50%;
                 transform: translate(-50%);
                 margin-top: 15%;
@@ -269,14 +265,17 @@
                 color: lightgreen;
                 text-shadow: 0.025em 0.025em 0 black;
                 text-transform: uppercase;
-                transition: all 0.5s;
+                /* send to top */
                 z-index: 9999;
+                /* add transition delay */
+                transition: all 0.5s;
             }
 
             .continueButton:hover {
                 color: black;
                 text-shadow: 0.025em 0.025em 0 lightgreen;
                 font-size: 420%;
+                letter-spacing: 0.1em;
             }
 
             .instructionsSpan {
@@ -286,17 +285,20 @@
             } 
 
             .instructionsDiv {
+                /* hide to start */
                 display: none;
                 z-index: 50;
+                /* center contents */
                 align-items: center;
                 justify-content: center;
             }
 
             @keyframes slideUpFromBottom {
+                /* start below the screen */
                 0% {
                     top: 100%;
                 }
-
+ 
                 100% {
                     top: 0%;
                 }
@@ -307,6 +309,7 @@
                     top: 0%;
                 }
 
+                /* end above the screen */
                 100% {
                     top: -100%;
                 }
@@ -317,6 +320,7 @@
                     top: 0%;
                 }
 
+                /* end below the screen */
                 100% {
                     top: 100%;
                 }
@@ -328,21 +332,18 @@
                 background-color: #FFD1DC;
                 top: 100%;
                 position: absolute;
+                /* send to the front */
                 z-index: 9999999;
             }
 
             #loseScreenBackground, #winScreenBackground {
-                /* position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 65%; */
                 height: 75%;
-                /* background-color: #483D8B; */
                 background-color: #7F0000;
                 border: solid #C0C0C0 0.7em;
+                /* round corners */
                 border-radius: 4em;
                 margin-top: 30%;
+                /* start above the screen */
                 top: -100%;
             }
 
@@ -352,15 +353,15 @@
                 z-index: 10;
                 font-size: 450%;
                 color: #E6E6FA;
+                /* start half transparent */
                 opacity: 0.5;
                 margin-bottom: 20%;
-                /* text-shadow: 0.05em 0.05em 0 blue, -0.05em -0.05em 0 red; */
-                /* text-shadow: 0.05em 0.05em 0 blue, -0.05em -0.05em 0 red, 0 0 10px #fff, 0 0 20px #fff, 0 0 30px white, 0 0 40px white; */
             } 
 
             #gameOverText, #winText {
                 display: block;
                 text-align: center;
+                /* start half transparent */
                 opacity: 0.5;
                 color: white;
                 margin-bottom: 0;
@@ -369,13 +370,16 @@
             
             @keyframes glow {
                 100% {
+                    /* become fully opaque */
                     opacity: 1;
+                    /* add large text shadow */
                     text-shadow: 0.05em 0.05em 0 darkgreen, -0.05em -0.05em 0 black, 0 0 10px #fff, 0 0 20px darkgreen, 0 0 30px darkgreen;
                 }
             }
 
             #loseScreen, #winScreen {
                 z-index: 15;
+                /* start below the screen */
                 top: 100%;
             }
 
@@ -384,6 +388,7 @@
                 margin-left: 50%;
                 transform: translate(-50%);
                 height: 35%;
+                /* keep width automatic to the ratio */
                 width: auto;
                 margin-top: -75%;
             }
@@ -395,28 +400,35 @@
                 height: 5%;
                 font-size: 150%;
                 font-family: "Nunito";
-                /* border-radius: 0.5em; */
+                /* remove border */
                 border: none;
                 color: white;
+                /* add transition delay */
                 transition: all 0.4s;
+                /* hide element to start */
                 display: none;
             }
 
             #menuButton, #menuButton2 {
-                /* background-color: #FFC0CB; */
+                /* set backgroud to an image */
                 background: url(https://cdn5.vectorstock.com/i/1000x1000/65/44/camouflage-vector-966544.jpg);
+                /* center and have a slight angle */
                 transform: translate(-50%) rotate(2deg);
+                /* scroll the image */
                 background-position: 15% 17%;
+                /* have the background infinitely repeated */
                 background-repeat: repeat;
             }
 
             #menuButton2, #playAgainButton2 {
+                /* remove background image */
                 background: url() !important;
                 background-color: yellow !important;
                 color: black;
             }
 
             #playAgainButton2 {
+                /* remove background image */
                 background: url();
             }
 
@@ -428,6 +440,7 @@
                 width: 16%;
                 height: 6%;
                 font-size: 160%;
+                /* add slight angle */
                 transform: translate(-50%) rotate(-2deg);
                 border: 3px white solid;
 
@@ -437,15 +450,18 @@
                 width: 16%;
                 height: 6%;
                 font-size: 160%;
+                /* add slight angle */
                 transform: translate(-50%) rotate(2deg);
                 border: 2px white solid;
             }
 
 
             #playAgainButton, #playAgainButton2 {
+                /* scroll background */
                 background-position: 0% 5%;
+                /* add background image */
                 background: url(https://cdn5.vectorstock.com/i/1000x1000/65/44/camouflage-vector-966544.jpg);
-                /* background-color: #FFD700; */
+                /* add slight angle */
                 transform: translate(-50%) rotate(-2deg);
             }
 
@@ -453,11 +469,14 @@
                 font-size: 1000%;
                 z-index: 100;
                 color: white;
+                /* allow overlap */
                 position: absolute;
-                left: 50%;
                 white-space: nowrap;
+                /* center horizontally */
+                left: 50%;
                 transform: translate(-50%);
                 margin: 0;
+                /* add space between letters */
                 letter-spacing: 0.2em;
                 font-family: "chewy";
                 height: 100%;
@@ -465,9 +484,11 @@
 
             .levelSelectSpan {
                 position: relative;
+                /* start above the screen */
                 margin-top: -100%;
             }
 
+            /* animate a text shadow */
             @keyframes levelSelectTitleAnimation {
                 0% {
                     text-shadow: none;
@@ -478,25 +499,31 @@
                 }
             }
 
+            /* slightly grow in and out */
             @keyframes levelSelectTitleGrow {
                 0% {
+                    /* start at default size */
                     font-size: 1000%;
                 }
 
                 50% {
+                    /* become larger */
                     font-size: 1030%;
                 }
 
                 100% {
+                    /* go back to default size */
                     font-size: 1000%;
                 }
             }
             
             .levelSelectButton {
+                /* allow overlap */
                 position: absolute;
                 width: 200px;
                 height: 200px;
                 top: 40%;
+                /* send to front */
                 z-index: 999;
                 transform: translate(-50%);
                 background-color: #FF4136;
@@ -505,7 +532,8 @@
                 font-size: 500%;
                 border: 3px solid black;
                 padding-top: 30px;
-                transition: all 0.4s ease   ;
+                /* add transition delay */
+                transition: all 0.4s ease;
             }
 
             .levelSelectButton:hover {
@@ -515,9 +543,12 @@
                 width: 220px;
                 height: 220px;
                 font-size: 510%;
+                /* add slight angle */
                 transform: translate(-50%) rotate(3deg);
                 box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.34), 0 6px 20px 0 rgba(0,0,0,0.34);
             }
+
+            /* position each level button */
 
             #level1Button {
                 left: 20%;
@@ -538,17 +569,21 @@
             #shopButton, #backButton {
                 font-family: "Nunito";
                 position: absolute;
+                /* center horizontally */
                 left: 50%;
                 transform: translate(-50%);
                 width: 20%;
                 height: 13%;
                 top: 75%;
                 font-size: 300%;
+                /* send to top */
                 z-index: 999;
+                /* round corners */
                 border-radius: 5%;
                 color: white;
                 background-color: orange;
                 border: 3px solid black;
+                /* add transition delay */
                 transition: all 0.4s;
             }
 
@@ -559,16 +594,20 @@
                 transform: translate(-50%);
                 width: 25%;
                 font-size: 350%;
+                /* add spacing between letters */
                 letter-spacing: 0.3em;
             }
 
             #trophy {
-                align-items: center;
+                /* center horizontally */
                 margin-left: 50%;
                 transform: translate(-50%);
+                align-items: center;
                 height: 30%;
+                /* automatic width to keep size ratio */
                 width: auto;
                 margin-top: 19%;
+                /* infinitely wiggle */
                 animation: linear infinite 6s rotationWiggle;
             }
 
@@ -580,46 +619,56 @@
             #winTitle {
                 margin-top: 9%;
                 font-size: 750%;
+                /* infinitely grow in and out */
                 animation: winScreenAnimation 6s infinite ease-in-out;
                 height: auto;
-                text-shadow: 0.05em 0.05em 0 black;
+                text-shadow: 0.05em 0.05em 0 black !important;
             }
 
             #winText {
+                /* fully opaque */
                 opacity: 1;
             }
 
             @keyframes rotationWiggle {
+                /* start at middle */
                 0% {
                     transform: translate(-50%) rotate(0deg);
                 }
 
+                /* angle one direction */
                 25% {
                     transform: translate(-50%) rotate(3deg);
                 }
 
+                /* back to middle */
                 50% {
                     transform: translate(-50%) rotate(0deg);
                 }
 
+                /* angle other direction */
                 75% {
                     transform: translate(-50%) rotate(-3deg);
                 }
 
+                /* back to middle */
                 100% {
                     transform: translate(-50%) rotate(0deg);
                 }
             }
 
             @keyframes winScreenAnimation {
+                /* start at normal size */
                 0% {
                     font-size: 750%;
                 }
                 
+                /* become larger */
                 50% {
                     font-size: 780%;
                 }
 
+                /* back to normal size */
                 100% {
                     font-size: 750%;
                 }
@@ -627,15 +676,18 @@
 
             #healthDisplay {
                 display: block;
+                /* stay fixed in the same place */
                 position: fixed;
                 z-index: 50;
                 margin-top: 20px;
                 margin-left: 20px;
                 height: 5%;
+                /* keep size ratio */
                 width: auto;
             }
 
             #shopScreen {
+                /* start as hidden */
                 display: none;
                 z-index: 999;
             }
@@ -646,38 +698,48 @@
                     0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
                     0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
                 font-family: "Vibur", sans-serif;
+                /* change to uppercase */
                 text-transform: uppercase;
                 position: absolute;
+                /* center horizontally */
                 left: 50%;
                 transform: translate(-50%);
                 font-size: 950%;
                 margin-bottom: 0;
                 margin-top: 5%;
+                /* start above the screen */
                 top: -100%;
             }
 
+            /* change text shadow at irregular intervals to make a light flicker effect */
             @keyframes lightFlicker {
+                /* start at normal text shadow */
                 0% {
                     text-shadow: 
                         0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
                         0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
                 }
 
+                /* stay as normal text shadow to make a rapid change */
                 40% {
                     text-shadow: 
                         0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
                         0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
                 }
 
+                /* quickly change to no text shadow */
                 42% {
                     text-shadow: none;
                 }
 
+                /* quickly change back to a text shadow */
                 43% {
                     text-shadow: 
                         0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
                         0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
                 }
+
+                /* repeat for a consecutive flash */
 
                 44% {
                     text-shadow: none;
@@ -688,6 +750,8 @@
                         0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
                         0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
                 }
+
+                /* add a single flash */
 
                 98% {
                     text-shadow: 
@@ -706,19 +770,23 @@
                 }
             }
 
+            /* flicker between a large and small text shadow as a secondary effect */
             @keyframes lightFlicker2 {
+                /* start at normal text shadow */
                 0% {
                     text-shadow: 
                         0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
                         0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
                 }
 
+                /* decreae values of text shadow */
                 50% {
                     text-shadow: 
                         0 0 5px #fff, 0 0 7px #fff, 0 0 15px #fff, 0 0 30px #0fa,
                         0 0 60px #0fa, 0 0 70px #0fa, 0 0 80px #0fa, 0 0 110px #0fa;
                 }
 
+                /* reset to normal text shadow */
                 100% {
                     text-shadow: 
                         0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
@@ -726,6 +794,7 @@
                 }
             }
 
+            /* spin 360 degrees back to orginal location */
             @keyframes spin360 {
                 0% {
                     transform: translate(-50%, -50%) rotate(0deg);
@@ -737,6 +806,7 @@
             }
 
             #upgrades span {
+                /* infinitely flicker very quickly */
                 animation: lightFlicker2 0.1s ease-in-out infinite;
             }
 
@@ -746,29 +816,36 @@
                 width: 10%;
                 height: auto;
                 background-color: rgb(0, 0, 0, 0.85);
+                /* add extra background around the image */
                 padding: 3%;
                 top: 55%;
                 transform: translate(-50%, -50%);
+                /* add more background below to have room for the price tag */
                 padding-bottom: 6%;
                 border: 3px #0fa solid;
-                transition: all 0.4s;
+                /* add transition */
+                transition: all 0.4s ease-in-out;
             }
 
             #doubleShotUpgrade {
                 left: 50%;
+                /* slightly change padding to keep the same size between all upgrade buttons */
                 padding-top: 1.6%;
                 padding-bottom: 4.9%;
             }
 
             #priceTagDoubleShot {
+                /* center price tag on the button */
                 left: 50% !important;
             }
 
             #priceTagFireRate {
+                /* center price tag on the button */
                 left: 80% !important;
             }
 
             #fireRateUpgrade {
+                /* slightly change padding to keep the same size between all upgrade buttons */
                 padding-left: 2%;
                 padding-right: 2%;
                 padding-top: 2.88%;
@@ -782,85 +859,209 @@
                 color: rgb(0, 223, 119);
                 font-family: "Luckiest Guy";
                 left: 21%;
-                top: 62.8%;
+                top: 62.4%;
                 transform: translate(-50%, -50%);
+                /* add animation delay */
                 transform: all 0.4s ease-in-out;
                 pointer-events: none;
                 font-size: 230%;
             }
 
+            /* access price tag when hovering over button */
             #healthUpgrade:hover ~ #priceTagHealth {
+                /* spin when hovering */
                 animation: spin360 0.5s ease-in-out;
                 color: black;
                 font-size: 250%;
             }
 
+            /* access price tag when hovering over button */
             #doubleShotUpgrade:hover ~ #priceTagDoubleShot {
+                /* spin when hovering */
                 animation: spin360 0.5s ease-in-out;
                 color: black;
                 font-size: 250%;
             }
 
+            /* access price tag when hovering over button */
             #fireRateUpgrade:hover ~ #priceTagFireRate {
+                /* spin when hovering */
                 animation: spin360 0.5s ease-in-out;
                 color: black;
                 font-size: 250%;
             }
 
+            /* add hovering animation */
             #healthUpgrade:hover, #doubleShotUpgrade:hover, #fireRateUpgrade:hover {
+                /* change colour */
                 background-color: white;
                 border: black 3px solid;
+                /* enlarge */
                 width: 11%;
             }
 
+            /* seperate hover animation for the fire rate since it's bigger */
             #fireRateUpgrade:hover {
                 width: 13%;
             }
 
+            /* back button hover animation */
             #backButton:hover {
                 background-color: white;
                 border: 3px solid black;
             }
 
             #backButton {
+                /* change colours */
                 background-color: rgb(0, 0, 0, 0.85);
                 color: #0fa;
                 border: 3px solid #0fa;
+                /* position button */
                 top: 80%;
             }
 
             #shopItems {
+                /* allow overlap */
                 position: absolute;
+                /* start as hidden */
                 display: none;
             }
 
             #money {
+                /* fix position on the screen */
                 position: fixed;
+                /* start as hidden */
                 display: none;
                 right: 0.5em;
                 top: 0.5em;
                 color: black;
                 font-family: "Luckiest Guy";
+                /* send to front */
                 z-index: 9999;
                 padding: 0.3%;
                 padding-bottom: 0;
                 padding-top: 0.45%;
                 margin: 0;
+                /* add colouring */
                 background-color: #0fa;
                 border: 3px black solid;
                 font-size: 250%;
             }
 
-            /* bookmark */
+            /* shake left and right */
+            @keyframes shake {
+                0% {
+                    /* start at mimddle */
+                    transform: translate(-50%, -50%);
+                }
+
+                25% {
+                    /* move left */
+                    transform: translate(-51%, -50%);
+                }
+
+                75% {
+                    /* move right */
+                    transform: translate(-49%, -50%);
+                }
+
+                100% {
+                    /* return to middle */
+                    transform: translate(-50%, -50%);
+                }
+            }
+
+            /* position pause menu elements */
+
+            #pauseBackButton, #pauseRestartButton, #pauseMenuButton {
+                position: absolute;
+                display: block;
+            }
+
+            #pauseBackButton {
+                top: 44%;
+            }
+
+            #pauseMenuButton {
+                top: 54%;
+            }
+
+            #pauseRestartButton {
+                top: 64%;
+            }
+
+            #pauseTitle {
+                text-shadow: 0.05em 0.05em 0 black;
+                /* allow overlap */
+                position: absolute;
+                top: 1%;
+                /* increase font size */
+                font-size: 700%;   
+                display: block; 
+            }
+            
+            #victoryTitle {
+                color: black;
+                text-shadow: 0.025em 0.025em 0 orange, 0.05em 0.05em 0 black;
+                /* increase font size */
+                font-size: 1500%;
+                /* allow overlap */
+                position: absolute;
+                top: -13%;
+            }
+
+            #restartButton {
+                color: black;
+                position: absolute;
+                bottom: 2%;
+                right: 2%;
+                font-family: "Chewy";
+                /* add text shadow */
+                text-shadow: 0.05em 0.05em 0 white;
+                font-size: 700%;
+                /* add slight rotation */
+                transform: rotate(-15deg);
+                display: none;
+                /* add transition delay */
+                transition: all 0.4s ease-in-out;
+            }
+
+            #restartButton:hover {
+                /* rotate and change colour when hovering */
+                letter-spacing: 0.01em;
+                transform: rotate(-17deg);
+                font-size: 720%;
+                text-shadow: 0.05em 0.05em 0 lawngreen;
+            }
+
+            @keyframes fadeInOut2 {
+                /* start fully visible */
+                0% {
+                    opacity: 1;
+                }
+
+                /* become invisible */
+                50% {
+                    opacity: 0;
+                }
+
+                /* return to being visible */
+                100% {
+                    opacity: 1;
+                }
+            }
+
         </style>
     </head>
     <body>
 
+        <!-- game score elements -->
         <img id="healthDisplay">
         <h1 id="money">$0</h1>
 
         <!-- containers for each screen -->
 
+        <!-- a splash screen before the splash screen -->
         <!-- needed because you can't play music without user action and I want music on the splash screen -->
         <div id="preSplashScreen" style="z-index: 15;">
             <p style="color: white;">Please wait for the page to fully load before continuing.</p>
@@ -868,88 +1069,81 @@
             <button onclick="startSplash()">Continue</button>
         </div>
 
+        <!-- shop screen -->
         <div id="shopScreen" class="fill">
+            <!-- background image -->
             <img id="shopScreenBackground" class="fill" src="/Users/anthony/Documents/shopScreen.png">
+            <!-- title -->
             <h1 id="upgrades">upg<span>r</span>ad<span>e</span>s</h1>
 
+            <!-- shop buttons -->
             <div id="shopItems" class="fill">
+                <!-- button -->
                 <img id="healthUpgrade" src="https://png.pngtree.com/png-vector/20220723/ourmid/pngtree-vector-symbol-of-video-game-icon-sign-representing-menu-layer-for-game-assets-vector-png-image_25064284.png">
-                <h1 id="priceTagHealth">$1500</h1>
+                <!-- price tag -->
+                <h1 id="priceTagHealth">$750</h1>
+
+                <!-- repeat for other buttons -->
     
                 <img id="doubleShotUpgrade" src="/Users/anthony/Documents/fireRate.png">
-                <h1 id="priceTagDoubleShot">$1000</h1>
+                <h1 id="priceTagDoubleShot">$2500</h1>
 
                 <img id="fireRateUpgrade" src="/Users/anthony/Documents/fireRateSymbol.png">
-                <h1 id="priceTagFireRate">$500</h1>
-    
+                <h1 id="priceTagFireRate">$100</h1>
+
+                <!-- button to return to level select -->
                 <button id="backButton">Back</button>
             </div>
         </div>
-
-        <!-- coment stuff ere ----------------------------------------------------------------------------------------------------------------------------------------------------- -->
-        <div class="fill instructionsDiv">
-            <div class="textBackground"></div>
-
-            <h3 id="instructions1" class="instructions">
-                <span class="instructionsSpan">Controls:</span><br>Use WASD to move and the mouse to aim and shoot.
-            </h3>
-
-            <h3 id="instructions3" class="instructions">
-                <span class="instructionsSpan">Gameplay:</span><br>Win by shooting and eliminating all enemy tanks.
-            </h3>
-            
-            <h3 id="instructions5" class="instructions">
-                <span class="instructionsSpan">Gameplay:</span><br>Your tank has limited hitpoints, avoid getting hit.
-            </h3>
-
-            <h4 class="continueButton instructions">Continue</h4>
-        </div>
         
-        <div class="fill instructionsDiv">
-            <div class="textBackground"></div>
-
-            <h3 id="instructions2" class="instructions"><span class="instructionsSpan">
-                <span class="instructionsSpan">Gameplay:</span><br>Move around to uncover the map.
-            </h3>
-
-            <h3 id="instructions4" class="instructions">
-                <span class="instructionsSpan">Gameplay:</span><br>Eliminating enemies will gain you currency
-            </h3>
-
-            <h3 id="instructions6" class="instructions">
-                <span class="instructionsSpan">Tip:</span><br>Certain blocks can be broken by shooting at them.
-            </h3>
-
-            <h4 class="instructions continueButton">Continue</h4>
-        </div>
-        
+        <!-- game screen with canvas -->
         <div class="fill" style="display: none;" id="gameScreen">
             <canvas id="canvas"></canvas>
         </div>
 
+        <!-- screen after beating boss -->
+        <div id="finalWinScreen" class="fill" style="display: none; z-index: 999999; top: -100%;">
+            <img id="finalWinImage" class="fill" src="/Users/anthony/Documents/finalWinScreen.png">
+            <h1 id="victoryTitle">Victory!</h1>
+            <h1 id="restartButton">Play Again</h1>
+        </div>
+
+        <!-- lose screen background outside of the div so it can get dimmed by brightnessDiv -->
         <div id="loseScreenBackground" class="textBackground"></div>
+        <!-- lose screen -->
         <div class="fill" id="loseScreen">
+            <!-- title -->
             <h1 id="gameOverTitle" class="instructionsSpan">GAME OVER</h1>
+            <!-- broken tank image -->
             <img id="brokenTank" src="/Users/anthony/Pictures/final game/destroyedTank.png">
+            <!-- informational text -->
             <h2 id="gameOverText">You ran out of hitpoints.</h2>
+            <!-- buttons -->
             <button id="playAgainButton" class="button">Play Again</button>
             <button id="menuButton" class="button">Menu</button>
         </div>
 
-        <!--  win screeeeeegrdiughdfsiughfuighsifdhguifdhgiusfdhgisufdhuidshgiuofdhgiusdfhisudfhgiudsfhgiusdfhgioufdshguisdfhgsdiufghfduisghfsduighfdsiuohgfsdiuogh -->
+        <!-- win screen background outside of the div -->
         <div id="winScreenBackground" class="textBackground"></div>
+        <!-- win screen -->
         <div class="fill" style="display: none;" id="winScreen">
+            <!-- title -->
             <h1 id="winTitle" class="instructionsSpan">You Win!</h1>
+            <!-- trophy image -->
             <img id="trophy" src="https://static.wikia.nocookie.net/little-alchemy/images/c/cd/Trophy.png/revision/latest?cb=20231126154014">
+            <!-- informational text -->
             <h2 id="winText">You eliminated all enemy tanks.</h2>
+            <!-- buttons -->
             <button id="playAgainButton2" class="button">Play Again</button>
             <button id="menuButton2" class="button">Menu</button>
         </div>
 
-        <!-- ---------------------------------------------------------------------------------------------------------------------------------------- -->
+        <!-- level select screen -->
         <div id="levelSelectScreen" style="display: none;" class="fill">
+            <!-- title -->
             <h1 id="levelSelectTitle">
                 <!-- add zero width spaces at the end to be able to put the code on multiple lines -->
+                <!-- seperate container for each letter to animate it in -->
                 <span class="levelSelectSpan">L</span><span class="levelSelectSpan">E</span>&#8203;
                 <span class="levelSelectSpan">V</span><span class="levelSelectSpan">E</span>&#8203;
                 <span class="levelSelectSpan">L</span> <span class="levelSelectSpan">S</span>&#8203;
@@ -957,8 +1151,10 @@
                 <span class="levelSelectSpan">E</span><span class="levelSelectSpan">C</span>&#8203;
                 <span class="levelSelectSpan">T</span>&#8203;
             </h1>
+            <!-- level select background image -->
             <img class="fill" src="/Users/anthony/Pictures/final game/levelSelectScreen.png">
             <div id="levelSelectButtonsDiv" style="top: 100%;" class="fill">
+                <!-- buttons for each level -->
                 <button id="level1Button" class="levelSelectButton">1</button>
                 <button id="level2Button" class="levelSelectButton">2</button>
                 <button id="level3Button" class="levelSelectButton">3</button>
@@ -966,18 +1162,12 @@
                 <button id="shopButton">Shop</button>
             </div>
         </div>
-
-        <div id="brightnessDiv" class="fill" style="opacity: 0; background-color: black; z-index: 10;"></div>
-
-        <div class="rectangle"></div>
-        <div class="rectangle"></div>
-        <div class="rectangle"></div>
-        <div class="rectangle"></div>
-        <div class="rectangle"></div>
-        <div class="rectangle"></div>
-
+        
+        <!-- splash screen -->
         <div class="fill" style="display: block; z-index: 15;" id="splashScreen">
+            <!-- background image -->
             <img class="fill" src="/Users/anthony/Pictures/final game/splashScreen.png">
+            <!-- author name -->
             <p>Made by<br>Anthony Skyba</p>
             <h2 id="clickAnywhereText">Click Anywhere to Start</h2>
             <!-- splash screen title -->
@@ -987,6 +1177,123 @@
                 <span id="tanks">Tanks</span>
             </h1>
         </div>
+
+        <!-- instructions container  -->
+        <div class="fill instructionsDiv">
+            <div class="textBackground"></div>
+            
+            <!-- first instruction -->
+            <h3 id="instructions1" class="instructions">
+                <span class="instructionsSpan">Controls:</span><br>Use WASD to move and the mouse to aim and shoot.
+            </h3>
+            
+            <!-- third instruction -->
+            <h3 id="instructions3" class="instructions">
+                <span class="instructionsSpan">Gameplay:</span><br>Win by shooting and eliminating all enemy tanks.
+            </h3>
+            
+            <!-- fifth instruction -->
+            <h3 id="instructions5" class="instructions">
+                <span class="instructionsSpan">Gameplay:</span><br>Your tank has limited hitpoints, avoid getting hit.
+            </h3>
+            
+            <!-- button to flip to next instruction -->
+            <h4 class="continueButton instructions">Continue</h4>
+        </div>
+        
+        <!-- second instructions container to be able to flip through -->
+        <div class="fill instructionsDiv">
+            <div class="textBackground"></div>
+            
+            <!-- second instruction -->
+            <h3 id="instructions2" class="instructions">
+                <span class="instructionsSpan">Gameplay:</span><br>Uncover the shadows by moving around the map.
+            </h3>
+            
+            <!-- fourth instruction -->
+            <h3 id="instructions4" class="instructions">
+                <span class="instructionsSpan">Tip:</span><br>Certain blocks can be broken by shooting at them.
+            </h3>
+            
+            <!-- sixth instruction -->
+            <h3 id="instructions6" class="instructions">
+                <span class="instructionsSpan">Tip:</span><br>Press Escape to pause the game.
+            </h3>
+            
+            <!-- button to flip to next instruction -->
+            <h4 class="instructions continueButton">Continue</h4>
+        </div>
+
+        <!-- pause menu -->
+        <div class="fill instructionsDiv" id="pauseScreen">
+            <div class="textBackground"></div>
+            <!-- title -->
+            <h3 id="pauseTitle" class="instructions"><span class="instructionsSpan">Game is Paused</span></h3>
+
+            <!-- add buttons -->
+            <h4 class="continueButton instructions" id="pauseBackButton">Back</h4>
+            <h4 class="continueButton instructions" id="pauseMenuButton">Menu</h4>
+            <h4 class="continueButton instructions" id="pauseRestartButton">Restart</h4>
+        </div>
+        
+        <!-- black box over the screen set to different opacities to change brightness -->
+        <div id="brightnessDiv" class="fill" style="opacity: 0; background-color: black; z-index: 10;"></div>
+        
+        <!-- 6 rectangles for page transition animation -->
+        <div class="rectangle"></div>
+        <div class="rectangle"></div>
+        <div class="rectangle"></div>
+        <div class="rectangle"></div>
+        <div class="rectangle"></div>
+        <div class="rectangle"></div>
+        
+        <!-- audio -->
+        
+        <!-- sound effects -->
+        <audio id="damageSound">
+            <source src="/Users/anthony/Documents/damageSound.mp3">
+        </audio>
+
+        <audio id="cashSound">
+            <source src="/Users/anthony/Documents/cashSound.mp3">
+        </audio>
+
+        <audio id="loseSound">
+            <source src="/Users/anthony/Documents/loseSound.mp3">
+        </audio>
+
+        <!-- music -->
+        <audio id="victorySong" class="music">
+            <source src="/Users/anthony/Documents/send/victorySong.webm">
+        </audio>
+
+        <audio id="splashMusic" class="music">
+            <source src="/Users/anthony/Documents/send/splashMusic2.webm">
+        </audio>
+
+        <audio id="level1Music" class="music">
+            <source src="/Users/anthony/Documents/send/level1Music.webm">
+        </audio>
+
+        <audio id="level2Music" class="music">
+            <source src="/Users/anthony/Documents/send/level2Music.webm">
+        </audio>
+
+        <audio id="level3Music" class="music">
+            <source src="/Users/anthony/Documents/send/level3Music.webm">
+        </audio>
+
+        <audio id="level4Music" class="music">
+            <source src="/Users/anthony/Documents/send/level4Music.webm">
+        </audio>
+
+        <audio id="bossMusic" class="music">
+            <source src="/Users/anthony/Documents/send/bossMusic.webm">
+        </audio>
+
+        <audio id="shopMusic" class="music">
+            <source src="/Users/anthony/Documents/shopMusic.mp3">
+        </audio>
 
         <!-- import pathfinding library -->
         <script src="https://cdn.jsdelivr.net/npm/pathfinding@0.4.18/visual/lib/pathfinding-browser.min.js"></script>
@@ -1006,10 +1313,12 @@
             // initialize variables for path finding globally
             var finder = new PF.AStarFinder();
 
+            // grid variables
             var grid;
             let gridWidth;
             let gridLength;
 
+            // tank coordinates for grid
             let tankStartingX;
             let tankStartingY;
 
@@ -1018,11 +1327,49 @@
 
             // counters
 
-            let firstRedraw = true;
+            //tutorial counters
+            let tutorialCounter = 0;
+            let tutorialFinished;
+            
+            // movement counters
             let movingUp = false;
             let movingDown = false;
             let movingLeft = false;
             let movingRight = false;
+            
+            // other
+            let firstRedraw = true;
+            let bossSeen = false;
+
+            // audio
+
+            // sound effects
+            let damageSound = document.getElementById("damageSound");
+            let cashSound = document.getElementById("cashSound");
+            let loseSound = document.getElementById("loseSound");
+
+            // level music
+            let level1Music = document.getElementById("level1Music");
+            let level2Music = document.getElementById("level2Music");
+            let level3Music = document.getElementById("level3Music");
+            let level4Music = document.getElementById("level4Music");
+
+            // other music
+            let victorySong = document.getElementById("victorySong");
+            let splashMusic = document.getElementById("splashMusic");
+            let bossMusic = document.getElementById("bossMusic");
+            let shopMusic = document.getElementById("shopMusic");
+
+            // make all music loop and decrease volume
+            for (let song of Array.from(document.getElementsByClassName("music"))) {
+                song.volume = 0.5;
+                song.loop = true;
+            }
+
+            // manually change some songs
+            level1Music.volume = 1;
+            level4Music.volume = 0.8;
+            shopMusic.volume = 0.9;
 
             // define game screens
             let preSplashScreen = document.getElementById("preSplashScreen");
@@ -1032,6 +1379,8 @@
             let gameScreen = document.getElementById("gameScreen");
             let loseScreen = document.getElementById("loseScreen");
             let winScreen = document.getElementById("winScreen");
+            let finalWinScreen = document.getElementById("finalWinScreen");
+            let pauseScreen = document.getElementById("pauseScreen");
 
             // lose screen elements
             let loseScreenBackground = document.getElementById("loseScreenBackground");
@@ -1048,13 +1397,19 @@
             let menuButton2 = document.getElementById("menuButton2");
 
             // initialize velocities
+
+            // tank speeds
             let ySpeedUp = 0;
             let ySpeedDown = 0;
             let xSpeedLeft = 0;
             let xSpeedRight = 0;
+
+            // bullet speeds
             let bulletSpeed = 8;
-            let enemySpeed = 2.5;
             let enemyBulletSpeed = 6;
+
+            // enemy speeds
+            let enemySpeed = 2.5;
 
             // initialize coordinates
             let x = 0;
@@ -1077,7 +1432,11 @@
             let blocks = [];
             let bullets = [];
             let enemyIndexes = [];
-            let tutorialCounter = 0;
+            let boughtUpgrades = {"health": false, "doubleShot": false, "fireRate": false};
+
+            let enemyFireRate = 65;
+
+            // initialize health
             let fullTankHealth = 10;
             let tankHealth = fullTankHealth;
 
@@ -1096,13 +1455,14 @@
 
             // create variables for the sources
 
-            let tankSrc = "https://cdn-icons-png.flaticon.com/512/942/942355.png";
+            let tankSrc = "/Users/anthony/Pictures/final game/tank2.png";
             let stoneSrc = "file:///Users/anthony/Pictures/final%20game/stone.png";
             let cardboardSrc = "file:///Users/anthony/Pictures/final%20game/cardboard.png";
             let bulletSrc = "https://freesvg.org/img/CartoonBullet.png";
             let enemySrc = "https://cdn-icons-png.flaticon.com/512/7145/7145327.png";
-            let enemyBulletSrc = "https://png.pngtree.com/png-vector/20220520/ourmid/pngtree-projectile-from-weapon-mortar-on-white-background-is-insulated-png-image_4697545.png";
+            let enemyBulletSrc = "https://pngimg.com/d/bullets_PNG35531.png";
             let shadowSrc = "https://images.squarespace-cdn.com/content/v1/58f56c10d2b857170c9ac044/1519534019246-BTNF5DSIPKUZD7FB5VY6/Black+Square";
+            let bossTankSrc = "file:///Users/anthony/Documents/bossTank.png";
 
             // health bars
             let health1 = "/Users/anthony/Documents/healthBars/health1.png";
@@ -1127,6 +1487,10 @@
             let enemyBullet = document.createElement("img");
             enemyBullet.src = enemyBulletSrc;
 
+            let bossTank = document.createElement("img");
+            bossTank.src = bossTankSrc;
+            console.log(bossTank.src)
+
             // passive
             let stone = document.createElement("img");
             stone.src = stoneSrc;
@@ -1140,7 +1504,16 @@
             let healthDisplay = document.getElementById("healthDisplay");
             let moneyDisplay = document.getElementById("money");
 
+            function stopAllMusic() {
+                for (let song of Array.from(document.getElementsByClassName("music"))) {
+                    song.pause();
+                    song.currentTime = 0;
+                }
+            }
+
+            // reset game variables
             function resetGame(func) {
+                // change all variables back to default
                 middleX = window.innerWidth / 2 - tankSize / 2;
                 middleY = window.innerHeight / 2 - tankSize / 2;
                 blocks = [];
@@ -1152,97 +1525,188 @@
                 callStackDelay = 0;
                 smallestX = Infinity;
                 smallestY = Infinity;
-                moneyDisplay.style.display = "none";
-                healthDisplay.style.display = "none";
                 x = 0;
                 y = 0;
-                func();
+
+                // hide game elements
+                moneyDisplay.style.display = "none";
+                healthDisplay.style.display = "none";
+                pauseScreen.style.display = "none";
+
+                // run function after reset
+                if (func) {
+                    func();
+                }
             }
 
+            // page transition effect
             function pageTransition(hardcode) {
+                // access all rectangles in an array
                 let rects = Array.from(document.getElementsByClassName("rectangle"));
 
+                // loop through all rectangles
                 for (let i = 0; i < 6; i++) {
                     setTimeout(function() {
+                        // slide rectangle up
                         rects[i].style.animation = "slideUpFromBottom 1s ease-in-out";
+                        // move each rectangle one rectangle width to the right
                         rects[i].style.left = `${(100 / 6) * i}%`;
+                        // show rectangle
                         rects[i].style.display = "block";
+                        // set top style to visible
                         rects[i].style.top = "0%";
+                    // set a delay between each rectangle
                     }, (i + 1) * 100);
                 }
 
+                // wait until final rectangle has finished animating to change screens  
                 rects[5].addEventListener("animationend", function() {
+                    // show and hide screens depending on what is supposed to be shown after the animation
                     if (hardcode == 1) {
+                        // hide splash screen
                         splashScreen.style.display = "none";
+
+                        setTimeout(function() {
+                            stopAllMusic();
+                            level1Music.play();
+                        }, 1000);
+
+                        // start the game
                         startGame();
                     } else if (hardcode == 2) {
                         setTimeout(function() {
-                            pause = true;
-                        }, 100);
+                            stopAllMusic();
+                            if (level == 1) level1Music.play();
+                            else if (level == 2) level2Music.play();
+                            else if (level == 3) level3Music.play();
+                            else if (level == 4) level4Music.play();
+                        }, 1000);
 
                         setTimeout(function() {
+                            // undim the screen
                             brightnessDiv.style.animation = "undimBrightness 1s ease-in-out";
                             brightnessDiv.addEventListener("animationend", function() {
                                 brightnessDiv.style.opacity = "0";
-                                pause = false;
+                                // unpause after screen is undimmed
+                                if (level != 1) pause = false;
+                                // start drawing again
                                 draw();
+                            // only run once
                             }, {once: true});
                         }, 1500);
 
+                        // hide screens
                         hideLoseScreen();
                         hideWinScreen();
+                        pauseScreen.style.display = "none";
 
                         pause = false;
+
+                        // reset the game
                         resetGame(draw);
+
+                        // pause after 100ms
+                        setTimeout(function() {
+                            pause = true;
+                        }, 100);
                     } else if (hardcode == 3) {
+                        // hide screens
                         hideLoseScreen();
                         hideWinScreen();
 
+                        // pause to avoid the game running in the background
                         pause = true;
 
-                        resetGame(levelSelect)
+                        setTimeout(function() {
+                            stopAllMusic();
+                            splashMusic.play();
+                        }, 1000);
+
+                        // reset the game and start level select screen
+                        resetGame(levelSelect);
 
                         setTimeout(function() {
+                            // undim the screen
                             brightnessDiv.style.animation = "undimBrightness 1s ease-in-out";
                             brightnessDiv.style.opacity = "0";
                         }, 1500);
 
                     } else if (hardcode == 4) {
+                        // hide level select
                         levelSelectScreen.style.display = "none";
+
+                        // unpause
                         pause = false;
+
+                        // reset the game and start
                         resetGame(draw);
                     } else if (hardcode == 5) {
+                        // hide level select
                         levelSelectScreen.style.display = "none";
+
+                        setTimeout(function() {
+                            stopAllMusic();
+                            shopMusic.play();
+                        }, 1000);
+
+                        // show shop
                         showShop();
+                    } else if (hardcode == 6) {
+                        // run level select
+                        levelSelect();
+
+                        setTimeout(function() {
+                            stopAllMusic();
+                            splashMusic.play();
+                        }, 1000);
+
+                        // hide shop screen
+                        shopScreen.style.display = "none";
+                        moneyDisplay.style.display = "none";
                     }
 
+                    // 500ms delay
                     setTimeout(function() {
+                        // loop backwards through rectangles
                         for (let i = 5; i >= 0; i--) {
                             setTimeout(function() {
+                                // slide them starting from the end back off of the screen
                                 rects[i].style.animation = "slideDownFromMiddle 1s ease-in-out";
                                 rects[i].style.top = "100%";
+                            // add a delay between each one
                             }, ((5 - i) + 1) * 100);
                         }
                     }, 500);
+                // remove event listener after running
                 }, {once: true});
             }
 
             // game loop
             function draw() {
+                // break the draw loop if game is paused
                 if (pause) return;
 
-                if (tankHealth == 10) {
+                let healthValues 
+                
+                if (boughtUpgrades["health"])
+                    healthValues = [15, 12, 9, 6, 3, 0];
+                else
+                    healthValues = [10, 8, 6, 4, 2, 0];
+
+                // change health bar image depending on current HP
+                if (tankHealth == healthValues[0]) {
                     healthDisplay.src = health1;
-                } else if (tankHealth == 8) {
+                } else if (tankHealth == healthValues[1]) {
                     healthDisplay.src = health2;
-                } else if (tankHealth == 6) {
+                } else if (tankHealth == healthValues[2]) {
                     healthDisplay.src = health3;
-                } else if (tankHealth == 4) {
+                } else if (tankHealth == healthValues[3]) {
                     healthDisplay.src = health4;
-                } else if (tankHealth == 2) {
+                } else if (tankHealth == healthValues[4]) {
                     healthDisplay.src = health5;
                 }
 
+                // show health and money
                 healthDisplay.style.display = "block";
                 moneyDisplay.style.display = "block";
 
@@ -1269,7 +1733,13 @@
                             // draw block
                             ctx.drawImage(image, newXPos, yPos, blockSize, blockSize);
                             // record block data (coordinates, HP, block type, etc.)
-                            if (firstRedraw) blocks.push([newXPos, yPos, image, blockHP, false, false, [0, 0], false, [0, 0], 0, false]);
+                            if (firstRedraw) {
+                                if (image.src == bossTankSrc) {
+                                    blocks.push([newXPos, yPos, image, blockHP * 15, false, false, [0, 0], false, [0, 0], enemyFireRate, false]);
+                                } else {
+                                    blocks.push([newXPos, yPos, image, blockHP, false, false, [0, 0], false, [0, 0], enemyFireRate, false]);
+                                }
+                            }
 
                             // update position so the next line doesn't overlap
                             startingX -= blockSize;
@@ -1280,7 +1750,7 @@
                             let newXPos = xPos + blockSize * i;
 
                             ctx.drawImage(image, newXPos, yPos, blockSize, blockSize);
-                            if (firstRedraw) blocks.push([newXPos, yPos, image, blockHP, false, false, [0, 0], false, [0, 0], 0, false]);
+                            if (firstRedraw) blocks.push([newXPos, yPos, image, blockHP, false, false, [0, 0], false, [0, 0], enemyFireRate, false]);
 
                             startingX += blockSize;
                         } else if (direction == "up") {
@@ -1289,7 +1759,7 @@
                             let newYPos = yPos + blockSize * -i;
 
                             ctx.drawImage(image, xPos, newYPos, blockSize, blockSize);
-                            if (firstRedraw) blocks.push([xPos, newYPos, image, blockHP, false, false, [0, 0], false, [0, 0], 0, false]);
+                            if (firstRedraw) blocks.push([xPos, newYPos, image, blockHP, false, false, [0, 0], false, [0, 0], enemyFireRate, false]);
 
                             startingY -= blockSize;
                         } else {
@@ -1298,7 +1768,7 @@
                             let newYPos = yPos + blockSize * i;
 
                             ctx.drawImage(image, xPos, newYPos, blockSize, blockSize);
-                            if (firstRedraw) blocks.push([xPos, newYPos, image, blockHP, false, false, [0, 0], false, [0, 0], 0, false]);
+                            if (firstRedraw) blocks.push([xPos, newYPos, image, blockHP, false, false, [0, 0], false, [0, 0], enemyFireRate, false]);
 
                             startingY += blockSize;
                         }
@@ -1337,24 +1807,30 @@
                 // tutorial
                 function tutorial() {
                     // access elements
+
+                    // instruction pages
                     let instructions1 = document.getElementById("instructions1");
                     let instructions2 = document.getElementById("instructions2");
                     let instructions3 = document.getElementById("instructions3");
                     let instructions4 = document.getElementById("instructions4");
 
+                    // continue buttons
                     let continueButton = Array.from(document.getElementsByClassName("continueButton"))[0];
                     let continueButtonClone = Array.from(document.getElementsByClassName("continueButton"))[1];
 
+                    // instructions container
                     let instructionsDiv = Array.from(document.getElementsByClassName("instructionsDiv"))[0];
                     let instructionsDivClone = Array.from(document.getElementsByClassName("instructionsDiv"))[1];
                     
+                    // background 
                     let textBackground = Array.from(document.getElementsByClassName("textBackground"))[0];
                     let textBackgroundClone = Array.from(document.getElementsByClassName("textBackground"))[1];
                     
-                    // run after 1400ms
+                    // run after 1500 ms
                     setTimeout(function() {
+                        // trigger tutorial
                         startTutorial(instructions1, instructions2);
-                    }, 1400);
+                    }, 1500);
 
                     function startTutorial(inst1, inst2) {
                         // increment counter
@@ -1367,6 +1843,7 @@
                         // pause the game
                         pause = true;
 
+                        // wait until animation is over
                         document.body.addEventListener("animationend", function() {
                             // show elements
                             inst1.style.display = "block";
@@ -1376,48 +1853,61 @@
                             instructionsDiv.style.top = "0%";
                             instructionsDiv.style.animation = "slideUpFromBottom 1s ease-in-out";
 
-                            // comment all this later--------------------------------------------------------------------------------------------------------------
-
+                            // wait until animation is over
                             instructionsDiv.addEventListener("animationend", function() {
                                 setTimeout(function() {
+                                    // fade in continue button
                                     continueButton.classList.add("fadeIn");
                                     continueButton.style.display = "block";
                                 }, 200);
 
+                                // run next function
                                 continueClick(inst1, inst2);
 
+                            // remove event listener after running
                             }, {once: true});
+                        // remove event listener after running
                         }, {once: true});
                     }
 
+                    // run once continue button is clicked
                     function continueClick(inst1, inst2) {
                         continueButton.addEventListener("click", function() {
+                            // animate instructions off the screen
                             instructionsDiv.style.animation = "slideUpFromMiddle 1s ease-in-out";
 
+                            // animate in next instructions
                             instructionsDivClone.style.display = "block";
                             instructionsDivClone.style.top = "0%";
                             instructionsDivClone.style.animation = "slideUpFromBottom 1s ease-in-out";
                             inst2.style.display = "block";
                             
+                            // wait until animation is done
                             instructionsDiv.addEventListener("animationend", function() {
+                                // hide previous instructions
                                 instructionsDiv.style.display = "none";
                                 inst1.style.display = "none";
                                 continueButton.style.display = "none";
 
+                                // fade in continue button after 200ms
                                 setTimeout(function() {
                                     continueButtonClone.classList.add("fadeIn");
                                     continueButtonClone.style.display = "block";
                                 }, 200);
 
                                 continueButtonClone.addEventListener("click", function() {
+                                    // animate instructions away once continue button is clicked
                                     instructionsDivClone.style.animation = "slideUpFromMiddle 1s ease-in-out";
                                     instructionsDivClone.style.top = "-100%";
+
+                                    // continue with tutorial
                                     postContinueClick(inst1, inst2);
                                 }, {once: true});
                             }, {once: true});
                         }, {once: true});
                     }
 
+                    // i stopped commenting here 77777778777787777778777787777778777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
                     function postContinueClick(inst1, inst2) {
                         instructionsDivClone.addEventListener("animationend", function() {
                             instructionsDivClone.style.display = "none";
@@ -1435,6 +1925,9 @@
                                     setTimeout(() => startTutorial(instructions3, instructions4), 3000);
                                 else if (tutorialCounter == 2)
                                     setTimeout(() => startTutorial(instructions5, instructions6), 5000);
+                                else if (tutorialCounter == 3) {
+                                    tutorialFinished = true;
+                                }
                             }, {once: true});
                         }, {once: true});
                     }
@@ -1495,7 +1988,7 @@
                         gridLength = 12;
 
                         // start tutorial
-                        // tutorial();
+                        tutorial();
                         
                     // repeat for other levels
                     } else if (level == 2) {
@@ -1560,6 +2053,8 @@
 
                         gridWidth = 22;
                         gridLength = 16;
+
+                        tutorialFinished = false;
 
                     } else if (level == 3) {
                         startingY += blockSize * 8;
@@ -1655,7 +2150,9 @@
                         line(cardboard, startingX, startingY, 2, "right");
                         line(cardboard, startingX, startingY, 1, "down");
                         line(cardboard, startingX, startingY, 1, "left");
-                        line(enemy, startingX, startingY, 1, "down");
+                        startingY += blockSize;
+                        startingX += blockSize;
+                        line(bossTank, startingX, startingY, 1, "left");
                         startingY -= blockSize * 3;
                         line(enemy, startingX, startingY, 1, "up");
                         startingX -= blockSize * 2;
@@ -1809,7 +2306,7 @@
                         if (block[4] || block[2].src == shadowSrc) continue;
 
                         // push index to enemyIndexes it it's an enemy
-                        if (block[2].src == enemySrc) 
+                        if (block[2].src == enemySrc || block[2].src == bossTankSrc) 
                             enemyIndexes.push(i);
                     }
                 } else {
@@ -1873,7 +2370,7 @@
                 // loop through all blocks
                 for (let block of blocks) {
                     // skip iteration if the block is broken or it's an enemy or it's a shadow
-                    if (block[4] || block[2].src == enemySrc || block[2].src == shadowSrc) continue;
+                    if (block[4] || (block[2].src == enemySrc || block[2].src == bossTankSrc) || block[2].src == shadowSrc) continue;
 
                     // initialize block properties
                     let blockX = block[0];
@@ -1955,7 +2452,9 @@
                 // draw bullets
                 bullets.forEach((coordinates) => {
                     // check which type of bullet to draw
-                    if (coordinates[4]) {
+                    if (coordinates[5]) {
+                        ctx.drawImage(enemyBullet, coordinates[0], coordinates[1], enemyBulletSize * 3, enemyBulletSize * 3);
+                    } else if (coordinates[4]) {
                         ctx.drawImage(enemyBullet, coordinates[0], coordinates[1], enemyBulletSize, enemyBulletSize);
                     } else {
                         ctx.drawImage(bullet, coordinates[0], coordinates[1], bulletSize, bulletSize);
@@ -1985,9 +2484,9 @@
                                 continue;
                             }
 
-                            // check if it's a not walkable location
+                            // check if it's a walkable location
                             if (block[0] == i * blockSize + smallestX && block[1] == j * blockSize + smallestY &&
-                                block[2].src != enemySrc && block[2].src != shadowSrc) {
+                                (block[2].src != enemySrc && block[2].src != bossTankSrc) && block[2].src != shadowSrc) {
                                 // set the location to non walkable
                                 grid.setWalkableAt(i, j, false);
                                 break;
@@ -2002,10 +2501,6 @@
 
                 // loop through all enemies
                 for (let i of enemyIndexes) {
-                    // // temporary delete this later-                    --------------------------------------------------
-                    // defeatedEnemies = enemyIndexes.length;
-                    // break;
-
                     // skip iteration if enemy is destroyed
                     if (blocks[i][4]) {
                         defeatedEnemies++;
@@ -2026,15 +2521,44 @@
 
                     // check if tank enemy should proceed the tank
                     if ((inRange || blocks[i][5]) && !blocks[i][4]) {
+                        if (blocks[i][2].src == bossTankSrc && !bossSeen) {
+                            bossSeen = true;
+                            stopAllMusic();
+                            bossMusic.play();
+
+                            for (let block of blocks) {
+                                if (block[2].src == shadowSrc) block[4] = true;
+                            }
+                        }
+
                         // allow the enemy to continue chasing after it has seen you once
                         blocks[i][5] = true;
                         
                         // add a delay to decrease fire rate
                         if (blocks[i][9] == 0) {
                             // shoot at the tank
+                            if (blocks[i][2].src == bossTankSrc) {
+                                setTimeout(() => createBullet(enemyX, enemyY), 75);
+                                setTimeout(() => createBullet(enemyX, enemyY), 150);
+                                
+                                let random = Math.floor(Math.random() * 5) + 1;
+
+                                if (random == 5) {
+                                    for (let i = 1; i <= 10; i++) {
+                                        createBullet(enemyX - i * 10, enemyY);
+                                        createBullet(enemyX + i * 10, enemyY);
+                                        createBullet(enemyX, enemyY - i * 10);
+                                        createBullet(enemyX, enemyY + i * 10);
+                                    }
+                                } else if (random == 4) {
+                                    createBullet(enemyX - 50, enemyY, true);
+                                    createBullet(enemyX + 50, enemyY, true);
+                                }
+
+                            }
                             createBullet(enemyX, enemyY);
                             // reset the buffer
-                            blocks[i][9] = 65; //-----------------------------------------------------sdfhsdiuhgfsdiuhgsdiufhgidsfhgiudfshgiuodfshgoidufshgiudfshgiusfdhgiusdfhg
+                            blocks[i][9] = enemyFireRate; //-----------------------------------------------------sdfhsdiuhgfsdiuhgsdiufhgidsfhgiudfshgiuodfshgoidufshgiudfshgiusfdhgiusdfhg
                         }
                         
                         // increment firerate buffer
@@ -2127,13 +2651,16 @@
                     }
                 }
 
-                if (defeatedEnemies == enemyIndexes.length) {
+                if (defeatedEnemies == enemyIndexes.length && level != 4) {
                     pause = true;
                     brightnessDiv.style.animation = "dimBrightness 1s";
                     brightnessDiv.style.opacity = "0.7";
 
                     brightnessDiv.addEventListener("animationend", function() {
                         document.getElementById("level" + String(level) + "Button").style.color = "lawngreen";
+
+                        stopAllMusic();
+                        victorySong.play();
     
                         winScreen.style.animation = "slideUpFromBottom ease-in-out 1s";
                         winScreen.style.top = "0%";
@@ -2153,12 +2680,12 @@
 
                             function playAgain2EventListener() {
                                 pageTransition(2);
-                                menuButton.removeEventListener("click", menuButton2EventListener);
+                                menuButton2.removeEventListener("click", menuButton2EventListener);
                             }
 
                             function menuButton2EventListener() {
                                 pageTransition(3);
-                                playAgainButton.removeEventListener("click", playAgain2EventListener);
+                                playAgainButton2.removeEventListener("click", playAgain2EventListener);
                             }
 
                             playAgainButton2.addEventListener("click", playAgain2EventListener, {once: true});
@@ -2177,8 +2704,13 @@
 
                 // create movement
 
-                // move when key is pressed down
+                // listen for keypress
                 document.body.addEventListener("keydown", function(event) {
+                    // show pause menu when escape is clicked
+                    if (event.key == "Escape" && !pause && (tutorialFinished || level != 1))
+                        showPause();
+
+                    // move when WASD is pressed
                     if (event.key == "w") ySpeedUp = -5;
                     if (event.key == "a") xSpeedLeft = -5;
                     if (event.key == "s") ySpeedDown = 5;
@@ -2196,7 +2728,11 @@
                 // shoot bullets when mouse is clicked
                 document.addEventListener("click", function(event) {
                     // only create a bullet if the left mouse is clicked
-                    if (event.button == 0 && !pause) createBullet();
+                    if (event.button == 0 && !pause) {
+                        if (boughtUpgrades["doubleShot"])
+                            setTimeout(createBullet, 50);
+                        createBullet();
+                    }
                 });
 
                 // track mouse coordinates whem mouse is moved
@@ -2209,7 +2745,7 @@
                 draw();
             }
 
-            function createBullet(enemyXPos, enemyYPos) {
+            function createBullet(enemyXPos, enemyYPos, bossAttack) {
                 // initialize type of bullet
                 let enemyShot = Boolean(enemyXPos);
 
@@ -2250,7 +2786,7 @@
                 deltaY /= length;
 
                 // add the bullet to bullets
-                bullets.push([bulletX, bulletY, deltaX, deltaY, enemyShot]);             
+                bullets.push([bulletX, bulletY, deltaX, deltaY, enemyShot, bossAttack]);             
             }
 
             function updateBullet() {
@@ -2258,6 +2794,10 @@
                 for (let i = bullets.length - 1; i >= 0; i--) {
                     // initialize bullet
                     let bullet = bullets[i];
+                    
+                    let bulletSize2;
+                    if (bullets[i][5]) bulletSize2 = bulletSize * 3;
+                    else bulletSize2 = bulletSize
 
                     // remove bullet if it goes off the screen (helps with lag)
                     if (bullet[0] < 0 || bullet[0] > screen.innerWidth ||
@@ -2270,7 +2810,11 @@
                     let enemyShot = bullet[4];
 
                     // check the type of bullet
-                    if (enemyShot) {
+                    if (bullet[5]) {
+                        // update boss bullet position
+                        bullet[0] += (enemyBulletSpeed * bullet[2]) / 2;
+                        bullet[1] += (enemyBulletSpeed * bullet[3]) / 2;
+                    } else if (enemyShot) {
                         // update enemy bullet position
                         bullet[0] += enemyBulletSpeed * bullet[2];
                         bullet[1] += enemyBulletSpeed * bullet[3];
@@ -2289,10 +2833,17 @@
                     // Check for collisions
                     let collision = false;
                     
-                    if (middleX < bullet[0] + bulletSize && middleX + tankSize > bullet[0] &&
-                        middleY < bullet[1] + bulletSize && middleY + tankSize > bullet[1] && enemyShot) {
+                    if (middleX < bullet[0] + bulletSize2 && middleX + tankSize > bullet[0] &&
+                        middleY < bullet[1] + bulletSize2 && middleY + tankSize > bullet[1] && enemyShot) {
                         collision = true;
-                        tankHealth--;
+                        damageSound.pause();
+                        damageSound.currentTime = 0;
+                        damageSound.play();
+                        if (level != 1) {
+                            tankHealth--;
+                        } else {
+                            tankHealth -= 0.25;
+                        }
                         if (tankHealth <= 0) {
                             healthDisplay.src = health6;
                             pause = true;
@@ -2316,8 +2867,8 @@
                         let blockY = block[1] - y;
 
                         // hit detection
-                        if (blockX < bullet[0] + bulletSize && blockX + blockSize > bullet[0] &&
-                            blockY < bullet[1] + bulletSize && blockY + blockSize > bullet[1]) {
+                        if (blockX < bullet[0] + bulletSize2 && blockX + blockSize > bullet[0] &&
+                            blockY < bullet[1] + bulletSize2 && blockY + blockSize > bullet[1]) {
 
                             // automatically stop the bullet if hits a shadow
                             if (block[2].src == shadowSrc) {
@@ -2338,14 +2889,14 @@
 
                             // avoid enemy shots hitting the enemies
                             if (enemyShot) {
-                                if (block[2].src != enemySrc)
+                                if (block[2].src != enemySrc && block[2].src != bossTankSrc)
                                     collision = true;
                             } else {
                                 collision = true;
                             }
 
                             // check if block is damagable
-                            if (block[2].src == cardboardSrc || (block[2].src == enemySrc && !enemyShot)) {
+                            if (block[2].src == cardboardSrc || ((block[2].src == enemySrc || block[2].src == bossTankSrc) && !enemyShot)) {
 
                                 // create a red flash animation
                                 ctx.fillStyle = "red";
@@ -2356,12 +2907,15 @@
 
                                 // check block HP
                                 if (block[3] == 0) {
+                                    if (block[2].src == bossTankSrc)
+                                        endOfGame();
+
                                     // visually remove the block
                                     ctx.clearRect(blockX, blockY, blockSize, blockSize);
                                     // internally remove the block
                                     block[4] = true;
 
-                                    if (block[2].src == enemySrc)
+                                    if (block[2].src == enemySrc || block[2].src == bossTankSrc)
                                         moneyDisplay.innerText = "$" + (Number(moneyDisplay.innerText.slice(1)) + 50);
                                 }
                             }
@@ -2377,6 +2931,8 @@
             }
 
             function startSplash() {
+                splashMusic.play();
+
                 // access element
                 let clickAnywhereText = document.getElementById("clickAnywhereText");
 
@@ -2448,6 +3004,9 @@
             }
 
             function showLoseScreen() {
+                stopAllMusic();
+                loseSound.play();
+
                 loseScreen.style.animation = "slideUpFromBottom ease-in-out 1s";
                 loseScreen.style.top = "0%";
                 loseScreen.style.display = "block";
@@ -2500,6 +3059,8 @@
                 
                 levelSelectScreen.style.display = "block";
                 shopButton.style.display = "block";
+                healthDisplay.style.display = "none";
+                moneyDisplay.style.display = "none";
 
                 levelSelectButtons[0].addEventListener("click", button1);
                 levelSelectButtons[1].addEventListener("click", button2);
@@ -2523,26 +3084,50 @@
                 }
 
                 function button1() {
-                    pageTransition(4);
                     level = 1;
+                    pageTransition(4);
+
+                    setTimeout(function() {
+                        stopAllMusic();
+                        level1Music.play();
+                    }, 2000);
+
                     removeListeners();
                 }
 
                 function button2() {
-                    pageTransition(4);
                     level = 2;
+                    pageTransition(4);
+
+                    setTimeout(function() {
+                        stopAllMusic();
+                        level2Music.play();
+                    }, 2000);
+
                     removeListeners();
                 }
 
                 function button3() {
-                    pageTransition(4);
                     level = 3;
+                    pageTransition(4);
+
+                    setTimeout(function() {
+                        stopAllMusic();
+                        level3Music.play();
+                    }, 2000);
+
                     removeListeners();
                 } 
                 
                 function button4() {
-                    pageTransition(4);
                     level = 4;
+                    pageTransition(4);
+
+                    setTimeout(function() {
+                        stopAllMusic();
+                        level4Music.play();
+                    }, 2000);
+
                     removeListeners();
                 }
 
@@ -2588,16 +3173,58 @@
                 }, 1000);
             }
 
-            // levelSelect()
+            function showPause() {
+                pause = true;
+                brightnessDiv.style.animation = "dimBrightness 1s ease-in-out";
+                brightnessDiv.style.opacity = 0.7;
 
-            preSplashScreen.style.display = "none";
+                brightnessDiv.addEventListener("animationend", function() {
+                    pauseScreen.style.display = "block";
+                    pauseScreen.style.animation = "slideUpFromBottom 1s ease-in-out";
 
-            splashScreen.style.display = "none";
+                    let pauseMenuButton = document.getElementById("pauseMenuButton");
+                    let pauseRestartButton = document.getElementById("pauseRestartButton");
+                    let pauseBackButton = document.getElementById("pauseBackButton");
 
-            // start the game
-            // startGame();
+                    function pauseMenuListener() {
+                        pageTransition(3);
+                        pauseRestartButton.removeEventListener("click", pauseRestartListener);
+                        pauseBackButton.removeEventListener("click", pauseBackListener);
+                    }
+                    
+                    function pauseRestartListener() {
+                        if (level == 1) tutorialFinished = false;
 
-            showShop()
+                        pageTransition(2);
+                        pauseMenuButton.removeEventListener("click", pauseMenuListener);
+                        pauseBackButton.removeEventListener("click", pauseBackListener);
+                    }
+
+                    function pauseBackListener() {
+                        pauseMenuButton.removeEventListener("click", pauseMenuListener);
+                        pauseRestartButton.removeEventListener("click", pauseRestartListener);
+
+                        pauseScreen.style.animation = "slideUpFromMiddle 1s ease-in-out";
+                        pauseScreen.addEventListener("animationend", function() {
+                            pauseScreen.style.display = "none";
+
+                            brightnessDiv.style.animation = "undimBrightness 1s ease-in-out";
+                            brightnessDiv.style.opacity = 0;
+
+                            brightnessDiv.addEventListener("animationend", function() {
+                                pause = false;
+                                draw();
+                            }, {once: true});
+                        }, {once: true});
+                    }
+
+                    pauseMenuButton.addEventListener("click", pauseMenuListener, {once: true});
+                    pauseRestartButton.addEventListener("click", pauseRestartListener, {once: true});
+                    pauseBackButton.addEventListener("click", pauseBackListener, {once: true});
+
+                }, {once: true});
+            }
+
             function showShop() {
                 shopScreen.style.display = "block";
     
@@ -2614,8 +3241,10 @@
                 
                 upgrades.addEventListener("animationend", function() {
                     upgrades.style.animation = "lightFlicker 10s linear infinite";
-                    moneyDisplay.className = "fadeIn";
-                    moneyDisplay.style.display = "block";
+                    setTimeout(function() {
+                        moneyDisplay.className = "fadeIn";
+                        moneyDisplay.style.display = "block";
+                    }, 300);
                 }, {once: true});
 
                 let healthUpgrade = document.getElementById("healthUpgrade");
@@ -2623,13 +3252,135 @@
                 let fireRateUpgrade = document.getElementById("fireRateUpgrade");
                 let backButton = document.getElementById("backButton");
 
-                let money = Number(moneyDisplay.splice(1));
+                let money = Number(moneyDisplay.innerText.slice(1));
 
                 function healthListener() {
+                    let priceTag = document.getElementById("priceTagHealth");
+                    let price = Number(priceTag.innerText.slice(1));
 
+                    if (money >= price) {
+                        money -= price;
+                        priceTag.innerText = "SOLD OUT";
+                        priceTag.style.animation = "";
+                        cashSound.play();
+
+                        moneyDisplay.innerText = "$" + money;
+                        healthUpgrade.style.pointerEvents = "none";
+                        boughtUpgrades["health"] = true;
+                        fullTankHealth = 15;
+                    } else {
+                         // remove the animation
+                        healthUpgrade.style.animation = "";
+                        // trigger an update
+                        healthUpgrade.offsetHeight; 
+                        // add animation
+                        healthUpgrade.style.animation = "shake .13s 3";
+                    }
                 }
-            }            
+                
+                healthUpgrade.addEventListener("click", healthListener);
 
+                function doubleShotListener() {
+                    let priceTag = document.getElementById("priceTagDoubleShot");
+                    let price = Number(priceTag.innerText.slice(1));
+
+                    if (money >= price) {
+                        money -= price;
+                        priceTag.innerText = "SOLD OUT";
+                        priceTag.style.animation = "";
+                        cashSound.play();
+
+                        moneyDisplay.innerText = "$" + money;
+                        doubleShotUpgrade.style.pointerEvents = "none";
+                        boughtUpgrades["doubleShot"] = true;
+                    } else {
+                         // remove the animation
+                        doubleShotUpgrade.style.animation = "";
+                        // trigger an update
+                        doubleShotUpgrade.offsetHeight; 
+                        // add animation
+                        doubleShotUpgrade.style.animation = "shake .13s 3";
+                    }
+                }
+                
+                doubleShotUpgrade.addEventListener("click", doubleShotListener);
+
+                function fireRateListener() {
+                    let priceTag = document.getElementById("priceTagFireRate");
+                    let price = Number(priceTag.innerText.slice(1));
+
+                    if (money >= price) {
+                        money -= price;
+                        priceTag.innerText = "SOLD OUT";
+                        priceTag.style.animation = "";
+                        cashSound.play();
+
+                        moneyDisplay.innerText = "$" + money;
+                        fireRateUpgrade.style.pointerEvents = "none";
+                        boughtUpgrades["fireRate"] = true;
+                        enemyFireRate = 100;
+                    } else {
+                        fireRateUpgrade.style.animation = "";
+                        fireRateUpgrade.offsetHeight; 
+                        fireRateUpgrade.style.animation = "shake .13s 3";
+                    }
+                }
+                
+                fireRateUpgrade.addEventListener("click", fireRateListener);
+
+                function backButtonClicked() {
+                    healthUpgrade.removeEventListener("click", healthListener);
+                    doubleShotUpgrade.removeEventListener("click", doubleShotListener);
+                    fireRateUpgrade.removeEventListener("click", fireRateListener);
+
+                    pageTransition(6);
+                }
+
+                backButton.addEventListener("click", backButtonClicked, {once: true});
+
+            }
+
+            function endOfGame() {
+                stopAllMusic();
+                healthDisplay.style.display = "none";
+                moneyDisplay.style.display = "none";
+
+                setTimeout(function() {
+                    victorySong.play();
+                }, 2000);
+
+                setTimeout(function() {
+                    finalWinScreen.style.display = "block";
+
+                    finalWinScreen.style.animation = "slideDownFromTop 0.2s ease-in-out";
+                    finalWinScreen.style.top = "0%";
+
+                    for (let i = 0; i < 10; i++) {
+                        setTimeout(randomConfetti, 1000 + i * 300);
+                    }
+
+                    function randomConfetti() {
+                        confetti({particleCount: 400, zIndex: 99999999999,
+                        spread: 360, startVelocity: 50, gravity: 0.5,
+                        origin: {x: Math.random(), y: Math.random()},
+                        ticks: 800});
+                    }
+
+                    setTimeout(function() {
+                        let restartButton = document.getElementById("restartButton");
+                        restartButton.classList.add("fadeIn");
+                        restartButton.style.display = "block";
+
+                        restartButton.addEventListener("animationend", function() {
+                            restartButton.style.animation = "fadeInOut2 3s ease-in-out infinite"
+                        }, {once: true});
+
+                        restartButton.addEventListener("click", function() {
+                            location.reload();
+                        });
+                    }, 3000)
+                }, 3000)
+            }
         </script>
     </body>
 </html>
