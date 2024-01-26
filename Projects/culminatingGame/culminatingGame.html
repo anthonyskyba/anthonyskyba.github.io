@@ -1693,6 +1693,14 @@
                 // break the draw loop if game is paused
                 if (pause) return;
 
+                // cap fps at 60
+                let fps = 60;
+                
+                // infinite recursion
+                setTimeout(function() {
+                    requestAnimationFrame(draw);
+                }, 1000 / fps);
+
                 // declare health values
                 let healthValues 
                 
@@ -2491,9 +2499,6 @@
                 
                 // toggle off firstRedraw
                 firstRedraw = false;
-                
-                // infinite recursion
-                requestAnimationFrame(draw);
             }
 
             function updateGrid(width, length) {
