@@ -65,9 +65,9 @@
     </head>
     <body>
         <div id="gameElements">
-            <img class="background" id="background1" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/background.png?raw=true">
-            <img class="background" id="background2" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/background.png?raw=true">
-            <img id="amongus" src="https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true">
+            <img class="background" id="background1" src="background.png">
+            <img class="background" id="background2" src="background.png">
+            <img id="amongus" src="amongusPNG.png">
             <center>
                 <h3 id="score">Score: 0</h3>
             </center>
@@ -131,7 +131,7 @@
             if (bg1Parsed <= -1920) bg1Parsed = 1920;
             if (bg2Parsed <= -1920) bg2Parsed = 1920;
     
-            if ((keysDown["d"] || keysDown["a"]) && amongus.src == "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true" && parse(amongus.style.top) >= 434) {
+            if ((keysDown["d"] || keysDown["a"]) && amongus.src == "amongusPNG.png" && parse(amongus.style.top) >= 434) {
                 if (firstRun) {
                     setTimeout(function() {
                         amongus.style.height = "300px";
@@ -140,7 +140,7 @@
                 } else {
                     amongus.style.height = "300px";
                 }
-                amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongus.gif?raw=true";
+                amongus.src = "amongus.gif";
             }
 
             if (keysDown["d"]) {
@@ -170,7 +170,7 @@
                 } else {
                     amongus.style.height = "420px";
                 }
-                amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusJump.gif?raw=true";
+                amongus.src = "amongusJump.gif";
             }
 
             animationFrameId = requestAnimationFrame(horizontalMovement);
@@ -182,9 +182,9 @@
             let amongusTop = parse(amongus.style.top);
 
             if (amongusTop + velocity > 434) {
-                if (amongus.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true" && amongus.src != "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongus.gif?raw=true") {
+                if (amongus.src != "amongusPNG.png" && amongus.src != "amongus.gif") {
                     amongus.style.height = "285px";
-                    amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true";
+                    amongus.src = "amongusPNG.png";
                 }
                 requestAnimationFrame(verticalMovement);
                 return;
@@ -206,7 +206,7 @@
             coin.style.left = screen.width + "px";
             coin.style.top = Math.floor(Math.random() * screen.height - coin.height - 50) + "px";
             document.getElementById("gameElements").appendChild(coin);
-            coin.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/coin.gif?raw=true";
+            coin.src = "coin.gif";
 
             requestAnimationFrame(() => moveCoin(coin));
         }
@@ -275,7 +275,7 @@
                         cancelAnimationFrame(animationFrameId);
                         animationFrameId = null;
                         amongus.style.height = "285px";
-                        amongus.src = "https://github.com/anthonyskyba/anthonyskyba.github.io/blob/main/Projects/SkybaABunnyWalker/amongusPNG.png?raw=true";
+                        amongus.src = "amongusPNG.png";
                     }
                 }
             });
