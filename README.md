@@ -1,9 +1,3 @@
-# Test
-
-plain text
-# # test
-
-
-## subheader
-
-I'm learning Git!
+## local dev
+1. open txt
+2. index.html
